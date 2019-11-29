@@ -1,2 +1,2 @@
 # AnAvis
-Progetto Ingegneria del software
+Progetto ingegneria del software
