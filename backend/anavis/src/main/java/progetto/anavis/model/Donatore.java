@@ -14,9 +14,9 @@ public class Donatore {
 	private final UUID idDonatore;
 	private String nome, cognome, gruppoSanguigno;
 
-	public Donatore(@JsonProperty("idDonatore") UUID idDonatore, @JsonProperty("nome") String nome,
+	public Donatore(@JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno) {
-		this.idDonatore = idDonatore;
+		this.idDonatore = UUID.randomUUID();
 		this.nome = nome;
 		this.cognome = cognome;
 		this.gruppoSanguigno = gruppoSanguigno;

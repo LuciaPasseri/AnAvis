@@ -6,6 +6,10 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.minidev.json.JSONArray;
 import progetto.anavis.model.Donatore;
 import progetto.anavis.model.Prenotazione;
 import progetto.anavis.model.Questionario;
@@ -20,38 +24,26 @@ public class ServicePrenotazioni {
 
 	public ServicePrenotazioni() {
 		db = new ArrayList<>();
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 07", "15",
-				new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+"), new SedeAvis("Tolentino"),
-				TipoDonazione.PLASMA, new Questionario(null), true));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 10", "9 - 30",
-				new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+"), new SedeAvis("Civitanova"),
-				TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 11", "11",
-				new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+"), new SedeAvis("Camerino"),
-				TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
+		db.add(new Prenotazione("2019 - 12 - 07", "15", new Donatore("Lucia", "Passeri", "0+"),
+				new SedeAvis("Tolentino"), TipoDonazione.PLASMA, new Questionario(null), true));
+		db.add(new Prenotazione("2019 - 12 - 10", "9 - 30", new Donatore("Luca", "Cervioni", "A+"),
+				new SedeAvis("Civitanova"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
+		db.add(new Prenotazione("2019 - 12 - 11", "11", new Donatore("Pippo", "Franco", "AB+"),
+				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 	}
 
 	public String getPrenotazioni() {
-		String s = "Le prenotazioni sono: ";
-		for (Prenotazione prenotazione : db) {
-			s += prenotazione.getId();
-			s += " ";
-			s += prenotazione.getData();
-			s += " ";
-			s += prenotazione.getOrario();
-			s += " ";
-			s += prenotazione.getDonatore().getNome();
-			s += " ";
-			s += prenotazione.getDonatore().getCognome();
-			s += " ";
-			s += prenotazione.getSede().getCitta();
-			s += " ";
-			s += prenotazione.getTipoDonazione().name();
-			s += " ";
-			s += prenotazione.getDisponibilita();
-			s += " ";
-		}
-		return s;
+
+		ObjectMapper mapper = new ObjectMapper();
+		String s = null;
+        try {
+            s = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(db);
+        }
+        catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return s;
 	}
 
 	public Prenotazione getById(UUID id) {

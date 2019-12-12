@@ -20,15 +20,15 @@ public class Prenotazione {
 	private Questionario questionario;
 	private boolean disponibilita=false;
 
-	public Prenotazione(@JsonProperty("id") UUID id, @JsonProperty("data") String data,
+	public Prenotazione(@JsonProperty("data") String data,
 			@JsonProperty("orario") String orario) {
-		this.id = id;
+		this.id = UUID.randomUUID();
 		this.data = data;
 		this.orario = orario;
 	}
 	
-	public Prenotazione(UUID id, String data, String orario, Donatore donatore, SedeAvis sede, TipoDonazione tipoDonazione, Questionario questionario, boolean disponibilita) {
-		this.id=id;
+	public Prenotazione(String data, String orario, Donatore donatore, SedeAvis sede, TipoDonazione tipoDonazione, Questionario questionario, boolean disponibilita) {
+		this.id=UUID.randomUUID();
 		this.data=data;
 		this.orario=orario;
 		this.donatore=donatore;
