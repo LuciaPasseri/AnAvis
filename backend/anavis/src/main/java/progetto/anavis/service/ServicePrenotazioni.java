@@ -6,10 +6,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONArray;
 import progetto.anavis.model.Donatore;
 import progetto.anavis.model.Prenotazione;
 import progetto.anavis.model.Questionario;
@@ -32,18 +28,8 @@ public class ServicePrenotazioni {
 				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 	}
 
-	public String getPrenotazioni() {
-
-		ObjectMapper mapper = new ObjectMapper();
-		String s = null;
-        try {
-            s = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(db);
-        }
-        catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return s;
+	public List<Prenotazione> getPrenotazioni() {
+        return db;
 	}
 
 	public Prenotazione getById(UUID id) {
