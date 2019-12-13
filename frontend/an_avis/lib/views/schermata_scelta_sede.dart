@@ -1,6 +1,9 @@
-import 'package:an_avis/views/schermata_scelta_mese.dart';
+import 'package:an_avis/services/networking.dart';
+import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_listview.dart';
 import "package:flutter/material.dart";
+import "package:http/http.dart" as http;
+import "dart:convert";
 
 class SchermataSceltaSede extends StatefulWidget {
   @override
@@ -8,44 +11,25 @@ class SchermataSceltaSede extends StatefulWidget {
 }
 
 class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
-  List<PulsanteListView> sediAvis = List<PulsanteListView>();
   TextEditingController controller = new TextEditingController();
   String filter;
 
-  void _getSediAvis() {
-    sediAvis.add(PulsanteListView(
-        text: "Ancona",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Civitanova",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Macerata",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Tolentino",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Foligno",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Torino",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Milano",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Civitanova Alta",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Porto Potenza",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Camerino",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
-    sediAvis.add(PulsanteListView(
-        text: "Jesi",
-        function: () => Navigator.pushNamed(context, "/sceltaMese")));
+  Future<List<PulsanteListView>> _getSediAvis() async {
+    http.Response response =
+        await http.get("http://10.0.2.2:8080/prenotazioni");
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<PulsanteListView> sediAvis = [];
+      for (var d in data) {
+        sediAvis.add(PulsanteListView(
+            text: d["sede"]["citta"],
+            function: () => Navigator.pushNamed(context, "/sceltaMese")));
+      }
+      return sediAvis;
+    } else {
+      print(response.statusCode);
+      return null;
+    }
   }
 
   @override
@@ -111,19 +95,33 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: sediAvis.length,
-              itemBuilder: (BuildContext context, int index) {
-                return filter == null || filter == ""
-                    ? sediAvis[index]
-                    : sediAvis[index]
-                            .text
-                            .toLowerCase()
-                            .contains(filter.toLowerCase())
-                        ? sediAvis[index]
-                        : Container();
-              },
-            ),
+            child: FutureBuilder(
+                future: _getSediAvis(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return new RequestCircularLoading();
+                    case ConnectionState.active:
+                    case ConnectionState.waiting:
+                      return new RequestCircularLoading();
+                    case ConnectionState.done:
+                      if (snapshot.hasError)
+                        return new RequestCircularLoading();
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return filter == null || filter == ""
+                              ? snapshot.data[index]
+                              : snapshot.data[index].text
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase())
+                                  ? snapshot.data[index]
+                                  : Container();
+                        },
+                      );
+                  }
+                  return null;
+                }),
           ),
         ],
       ),

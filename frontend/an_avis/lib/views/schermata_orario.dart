@@ -94,6 +94,7 @@ class _SchermataOrarioState extends State<SchermataOrario> {
                 child: RaisedButton(
                   child: Icon(
                     Icons.check,
+                    color: Colors.white,
                     size: 40,
                   ),
                   shape: RoundedRectangleBorder(
@@ -110,6 +111,7 @@ class _SchermataOrarioState extends State<SchermataOrario> {
                 child: RaisedButton(
                   child: Icon(
                     Icons.clear,
+                    color: Colors.white,
                     size: 40,
                   ),
                   shape: RoundedRectangleBorder(
