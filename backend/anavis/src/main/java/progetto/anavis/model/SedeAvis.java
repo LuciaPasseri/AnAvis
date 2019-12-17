@@ -9,19 +9,28 @@ import javax.persistence.Id;
 public class SedeAvis {
 
 	@Id
-	private final UUID id;
+	private UUID id;
 	private String citta;
 
+	public SedeAvis() {
+		
+	}
 	public SedeAvis(String citta) {
 		this.citta = citta;
 		this.id = UUID.randomUUID();
+	}
+
+	public String getCitta() {
+		return citta;
+	}
+
+	public void setCitta(String citta) {
+		this.citta = citta;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public String getCitta() {
-		return citta;
-	}
+	
 }

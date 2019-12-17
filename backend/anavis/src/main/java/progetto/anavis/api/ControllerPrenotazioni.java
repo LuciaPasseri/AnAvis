@@ -1,5 +1,6 @@
 package progetto.anavis.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,7 @@ public class ControllerPrenotazioni {
 	private ServicePrenotazioni servicePrenotazioni = new ServicePrenotazioni();
 
 	@GetMapping("/prenotazioni")
-	public String getPrenotazioni() {
+	public List<Prenotazione> getPrenotazioni() {
 		 return servicePrenotazioni.getPrenotazioni();
 	}
 

@@ -25,6 +25,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry kind="lib" path="C:/Users/lucac/Desktop/Progetto_IDS/backend/anavis/javax.persistence-api-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lucia/Desktop/AnAvis/AnAvis/backend/anavis/javax.persistence-api-2.2.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>
