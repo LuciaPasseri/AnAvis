@@ -7,7 +7,11 @@ class ListQuestionario extends StatefulWidget {
 }
 
 class _ListQuestionarioState extends State<ListQuestionario> {
-  bool isSss = false;
+  bool buonaSalute = false;
+  bool ultimaDonazioneSalute = false;
+  bool allergie = false;
+  bool perditaPeso = false;
+  bool ricoveratoOspedale = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,77 +19,35 @@ class _ListQuestionarioState extends State<ListQuestionario> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       children: <Widget>[
-        Card(
-          elevation: 5,
-          margin: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "Hai bevuto ultimamente?",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: "Roboto",
-                    ),
-                  )),
-              Spacer(),
-              Checkbox(
-                value: isSss,
-                activeColor: Colors.blue[900],
-                onChanged: (value) {
-                  setState(() {
-                    isSss = value;
-                  });
-                },
-              ),
-              Checkbox(
-                value: !isSss,
-                activeColor: Colors.blue[900],
-                onChanged: (value) {
-                  setState(() {
-                    isSss = !value;
-                  });
-                },
-              ),
-            ],
-          ),
-        ), Card(
-          elevation: 5,
-          margin: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "Hai bevuto ultimamente?",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: "Roboto",
-                    ),
-                  )),
-              Spacer(),
-              Checkbox(
-                value: isSss,
-                activeColor: Colors.blue[900],
-                onChanged: (value) {
-                  setState(() {
-                    isSss = value;
-                  });
-                },
-              ),
-              Checkbox(
-                value: !isSss,
-                activeColor: Colors.blue[900],
-                onChanged: (value) {
-                  setState(() {
-                    isSss = !value;
-                  });
-                },
-              ),
-            ],
-          ),
-        ), DomandaQuestionario(value: isSss, optionalQuestion: true, question: "Hai il sangue infetto?",),
+        Column(
+          children: <Widget>[
+            DomandaQuestionario(
+                value: buonaSalute,
+                hasOptionalQuestion: false,
+                question: "È attualmente in buona salute?"),
+            DomandaQuestionario(
+                value: ricoveratoOspedale,
+                hasOptionalQuestion: true,
+                optionalQuestion: "Perché?",
+                question: "È mai stato ricoverato in\nospedale?"),
+            DomandaQuestionario(
+              value: ultimaDonazioneSalute,
+              hasOptionalQuestion: false,
+              question:
+                  "Si è rivolto di recente al suo\nmedico di famiglia o ha\nintenzionedi farlo?",
+            ),
+            DomandaQuestionario(
+              value: allergie,
+              hasOptionalQuestion: true,
+              question: "Ha attualmente manifestato\nallergie?",
+            ),
+            DomandaQuestionario(
+              value: perditaPeso,
+              hasOptionalQuestion: false,
+              question: "Ha notato perdita di peso negli\nultimi tempi?",
+            ),
+          ],
+        ),
       ],
     );
   }

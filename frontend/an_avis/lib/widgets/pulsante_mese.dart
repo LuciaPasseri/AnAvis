@@ -1,4 +1,3 @@
-import 'package:an_avis/views/schermata_scelta_data.dart';
 import "package:flutter/material.dart";
 
 class PulsanteMese extends StatelessWidget {
@@ -11,10 +10,7 @@ class PulsanteMese extends StatelessWidget {
   final String meseIntero;
 
   void _navigateToRoute(String meseIntero, BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SchermataSceltaData(meseIntero)));
+    Navigator.of(context).pushNamed("/sceltaData", arguments: meseIntero);
   }
 
   @override

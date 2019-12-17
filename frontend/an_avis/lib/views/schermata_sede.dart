@@ -41,7 +41,7 @@ class _SchermataSedeState extends State<SchermataSede> {
               Pulsante(
                   text: "Inserisci prenotazione",
                   function: () {
-                    Navigator.pushNamed(context, "/sceltaSede");
+                    Navigator.pushNamed(context, "/aggiuntaPrenotazione");
                   }),
               SizedBox(
                 height: 20,

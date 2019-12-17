@@ -4,11 +4,13 @@ class DomandaQuestionario extends StatefulWidget {
   DomandaQuestionario(
       {@required this.value,
       @required this.question,
-      @required this.optionalQuestion});
+      @required this.hasOptionalQuestion,
+      this.optionalQuestion});
 
   bool value;
   String question;
-  bool optionalQuestion;
+  bool hasOptionalQuestion;
+  String optionalQuestion;
   String optionalAnswer;
 
   @override
@@ -16,6 +18,7 @@ class DomandaQuestionario extends StatefulWidget {
 }
 
 class _DomandaQuestionarioState extends State<DomandaQuestionario> {
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,9 +29,10 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
           Row(
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.fromLTRB(10, 10, 5, 10),
+                  //padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    "Hai bevuto ultimamente?",
+                    widget.question,
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: "Roboto",
@@ -55,13 +59,19 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
               ),
             ],
           ),
-          widget.value && widget.optionalQuestion
+          widget.value && widget.hasOptionalQuestion
               ? Padding(
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Per favore rispondere alla domanda';
+                      }
+                      return null;
+                    },
                     cursorColor: Colors.blue[900],
                     decoration: InputDecoration(
-                      hintText: "Inserire il perché",
+                      hintText: widget.optionalQuestion,
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[900]),
                       ),

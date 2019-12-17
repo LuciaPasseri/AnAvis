@@ -1,11 +1,7 @@
-import 'package:an_avis/views/provvisoria_login.dart';
-import 'package:an_avis/views/schermata_donatori.dart';
-import 'package:an_avis/views/schermata_questionario.dart';
-import 'package:an_avis/views/schermata_scelta_data.dart';
-import 'package:an_avis/views/schermata_scelta_mese.dart';
-import 'package:an_avis/views/schermata_scelta_sede.dart';
-import 'package:an_avis/views/schermata_sede.dart';
+import 'package:an_avis/models/prenotazione.dart';
+import 'package:an_avis/services/route_generator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(AnAvis());
 
@@ -13,16 +9,16 @@ class AnAvis extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/",
-      routes: {
-        "/": (context) => SchermataLogin(),
-        "/donatore": (context) => SchermataDonatori(),
-        "/sede": (context) => SchermataSede(),
-        "/sceltaSede": (context) => SchermataSceltaSede(),
-        "/sceltaMese": (context) => SchermataSceltaMese(),
-        "/questionario": (context) => SchermataQuestionario(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (context) => PrenotazioneProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        initialRoute: "/",
+        onGenerateRoute: RouteGenerator.generateRoute,
+        )
     );
   }
 }
