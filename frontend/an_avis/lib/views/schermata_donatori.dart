@@ -41,7 +41,7 @@ class _SchermataDonatoriState extends State<SchermataDonatori> {
               Pulsante(
                   text: "Prenota donazione",
                   function: () {
-                    Navigator.pushNamed(context, "/sceltaSede");
+                    Navigator.pushNamed(context, "/sceltaTipoDonazione");
                   }),
             ],
           ),

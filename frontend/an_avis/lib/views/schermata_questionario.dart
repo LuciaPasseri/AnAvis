@@ -7,6 +7,8 @@ class SchermataQuestionario extends StatefulWidget {
 }
 
 class _SchermataQuestionarioState extends State<SchermataQuestionario> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,14 +36,26 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
             padding: EdgeInsets.fromLTRB(25, 20, 25, 10),
             child: Row(
               children: <Widget>[
-                Text("Domanda", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Roboto"),),
+                Text(
+                  "Domanda",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Roboto"),
+                ),
                 Spacer(),
-                Text("SI      NO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: "Roboto")),
+                Text("SI      NO",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Roboto")),
               ],
             ),
           ),
-          ListQuestionario(),
-          SizedBox(height: 15,),
+          Form(key: _formKey, child: ListQuestionario()),
+          SizedBox(
+            height: 15,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -58,7 +72,11 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
               ),
               ButtonTheme(
@@ -75,7 +93,8 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
                   onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName("/sceltaMese"));
+                    Navigator.popUntil(
+                        context, ModalRoute.withName("/sceltaMese"));
                   },
                 ),
               ),

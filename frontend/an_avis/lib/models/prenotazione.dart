@@ -1,17 +1,10 @@
 import "package:flutter/material.dart";
 
-class Prenotazione extends StatefulWidget {
-  const Prenotazione({
-    Key key,
-  }) : super(key: key);
+class PrenotazioneProvider extends ChangeNotifier {
+    String tipoDonazione;
 
-  @override
-  _PrenotazioneState createState() => _PrenotazioneState();
-}
+    setTipoDonazione(String tipo) {
+      tipoDonazione = tipo;
+    }
 
-class _PrenotazioneState extends State<Prenotazione> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }

@@ -1,9 +1,11 @@
-import 'package:an_avis/services/networking.dart';
+import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_listview.dart';
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
+
+import 'package:provider/provider.dart';
 
 class SchermataSceltaSede extends StatefulWidget {
   @override
@@ -51,6 +53,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<PrenotazioneProvider>(context).tipoDonazione);
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(

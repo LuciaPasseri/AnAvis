@@ -6,7 +6,7 @@ import "package:flutter/material.dart";
 class SchermataSceltaData extends StatefulWidget {
   final String meseIntero;
 
-  SchermataSceltaData(this.meseIntero);
+  SchermataSceltaData({this.meseIntero});
 
   @override
   _SchermataSceltaDataState createState() => _SchermataSceltaDataState();
