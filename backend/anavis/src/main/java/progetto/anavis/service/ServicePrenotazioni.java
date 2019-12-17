@@ -15,10 +15,13 @@ import progetto.anavis.model.TipoDonazione;
 @Service
 public class ServicePrenotazioni {
 
+	private static ServicePrenotazioni servicePrenotazioni = null;
+
 	// DB momentaneo
 	private List<Prenotazione> db;
+	private List<SedeAvis> sedi;
 
-	public ServicePrenotazioni() {
+	private ServicePrenotazioni() {
 		db = new ArrayList<>();
 		db.add(new Prenotazione("2019 - 12 - 07", "15", new Donatore("Lucia", "Passeri", "0+"),
 				new SedeAvis("Tolentino"), TipoDonazione.PLASMA, new Questionario(null), true));
@@ -28,8 +31,21 @@ public class ServicePrenotazioni {
 				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 	}
 
+	public static ServicePrenotazioni getInstance() {
+		if (servicePrenotazioni == null)
+			servicePrenotazioni = new ServicePrenotazioni();
+		return servicePrenotazioni;
+	}
+
 	public List<Prenotazione> getPrenotazioni() {
-        return db;
+		return db;
+	}
+	
+	public List<SedeAvis> getSedi(List<Prenotazione> db) {
+		for (Prenotazione prenotazione : db) {
+			sedi.add(prenotazione.getSede());
+		}
+		return sedi;
 	}
 
 	public Prenotazione getById(UUID id) {

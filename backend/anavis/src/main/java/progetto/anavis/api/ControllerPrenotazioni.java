@@ -17,7 +17,7 @@ import progetto.anavis.service.ServicePrenotazioni;
 @RestController
 public class ControllerPrenotazioni {
 
-	private ServicePrenotazioni servicePrenotazioni = new ServicePrenotazioni();
+	ServicePrenotazioni servicePrenotazioni = ServicePrenotazioni.getInstance();
 
 	@GetMapping("/prenotazioni")
 	public List<Prenotazione> getPrenotazioni() {
