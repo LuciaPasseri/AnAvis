@@ -2,6 +2,7 @@ import 'package:an_avis/views/provvisoria_login.dart';
 import 'package:an_avis/views/schermata_aggiunta_prenotazione.dart';
 import 'package:an_avis/views/schermata_donatori.dart';
 import 'package:an_avis/views/schermata_questionario.dart';
+import 'package:an_avis/views/schermata_registrazione_donatore.dart';
 import 'package:an_avis/views/schermata_scelta_data.dart';
 import 'package:an_avis/views/schermata_scelta_mese.dart';
 import 'package:an_avis/views/schermata_scelta_sede.dart';
@@ -23,6 +24,9 @@ class RouteGenerator {
       case '/aggiuntaPrenotazione':
         return MaterialPageRoute(
             builder: (_) => SchermataAggiuntaPrenotazione());
+      case '/registrazioneDonatore':
+        return MaterialPageRoute(
+            builder: (_) => SchermataRegistrazioneDonatore());
       case '/sceltaTipoDonazione':
         return MaterialPageRoute(
             builder: (_) => SchermataSceltaTipoDonazione());

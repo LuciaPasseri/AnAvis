@@ -57,7 +57,7 @@ class _SchermataSedeState extends State<SchermataSede> {
               Pulsante(
                   text: "Registra donatore",
                   function: () {
-                    Navigator.pushNamed(context, "/sceltaSede");
+                    Navigator.pushNamed(context, "/registrazioneDonatore");
                   }),
             ],
           ),

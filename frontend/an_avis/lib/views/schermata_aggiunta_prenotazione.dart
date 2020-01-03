@@ -1,13 +1,66 @@
-import 'package:an_avis/widgets/listview_questionario.dart';
+import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 
 class SchermataAggiuntaPrenotazione extends StatefulWidget {
   @override
-  _SchermataAggiuntaPrenotazioneState createState() => _SchermataAggiuntaPrenotazioneState();
+  _SchermataAggiuntaPrenotazioneState createState() =>
+      _SchermataAggiuntaPrenotazioneState();
 }
 
-class _SchermataAggiuntaPrenotazioneState extends State<SchermataAggiuntaPrenotazione> {
+class _SchermataAggiuntaPrenotazioneState
+    extends State<SchermataAggiuntaPrenotazione> {
   final _formKey = GlobalKey<FormState>();
+  DateTime _date;
+  String _tipoDonazione;
+  String _dropdownError;
+  TextEditingController _controllerDate = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controllerDate.dispose();
+  }
+
+  bool _validateForm() {
+    bool _isValid = _formKey.currentState.validate();
+    if (_tipoDonazione == null) {
+      setState(() => _dropdownError = "Inserire valore valido");
+      _isValid = false;
+    } else {
+      setState(() {
+        _dropdownError = null;
+      });
+    }
+    if (_isValid == true) {
+      _formKey.currentState.save();
+    }
+    return _isValid;
+  }
+
+  Future _selectDate() async {
+    final now = DateTime.now();
+    DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(now.year, now.month, now.day + 1),
+      firstDate: DateTime(now.year, now.month, now.day + 1),
+      lastDate: DateTime.now().add(Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: Colors.blue[900],
+            accentColor: Colors.red[900],
+          ),
+          child: child,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() => _date = picked);
+      _controllerDate.value =
+          TextEditingValue(text: DateFormat('dd-MM-yyyy').format(picked));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,78 +84,201 @@ class _SchermataAggiuntaPrenotazioneState extends State<SchermataAggiuntaPrenota
         ),
       ),
       body: Form(
+        key: _formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Per favore rispondere alla domanda';
-                }
-                return null;
-              },
-              cursorColor: Colors.blue[900],
-              decoration: InputDecoration(
-                hintText: "Inserire una data",
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
-                ),
-              ),
-            ),
-            TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Per favore rispondere alla domanda';
-                }
-                return null;
-              },
-              cursorColor: Colors.blue[900],
-              decoration: InputDecoration(
-                hintText: "Inserire un'orario",
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
-                ),
-              ),
-            ),TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Per favore rispondere alla domanda';
-                }
-                return null;
-              },
-              cursorColor: Colors.blue[900],
-              decoration: InputDecoration(
-                hintText: "Tipo donazione",
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
+            Padding(
+              padding: EdgeInsets.fromLTRB(25, 30, 25, 5),
+              child: InkWell(
+                onTap: () {
+                  _selectDate();
+                },
+                child: IgnorePointer(
+                  child: TextFormField(
+                    controller: _controllerDate,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Inserire valore valido';
+                      }
+                      return null;
+                    },
+                    cursorColor: Colors.blue[900],
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.calendar_today),
+                      hintText: "Inserire una data",
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Colors.blue[900], width: 2)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
                 ),
               ),
             ),
-            TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Per favore rispondere alla domanda';
-                }
-                return null;
-              },
-              cursorColor: Colors.blue[900],
-              decoration: InputDecoration(
-                hintText: "Inserire tipo",
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                    child: Theme(
+                      data: Theme.of(context)
+                          .copyWith(primaryColor: Colors.blue[900]),
+                      child: CustomTextField(
+                        text: "Ora",
+                        alignment: TextAlign.center,
+                        inputType: TextInputType.number,
+                        validator: (String value) {
+                          if (value.isEmpty ||
+                              !(int.parse(value) >= 0 &&
+                                  int.parse(value) <= 24)) {
+                            return 'Valore non valido';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            _date =
+                                _date.add(Duration(hours: int.parse(value)));
+                          });
+                        },
+                        icon: Icon(Icons.access_time),
+                      ),
+                    ),
+                  ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[900]),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    ":",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ),
                 ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                    child: CustomTextField(
+                      text: "Minuti",
+                      alignment: TextAlign.center,
+                      inputType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty ||
+                            !(int.parse(value) >= 0 &&
+                                int.parse(value) <= 59)) {
+                          return 'Valore non valido';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _date = _date.add(Duration(minutes: int.parse(value)));
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(25, 10, 25, 8),
+              child: FormField(
+                builder: (FormFieldState state) {
+                  return InputDecorator(
+                      decoration: InputDecoration(
+                        enabledBorder: _dropdownError != null
+                            ? OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 1),
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                            : null,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                        hint: Text(
+                          "Scegliere tipo di donazione",
+                          style: TextStyle(),
+                        ),
+                        value: _tipoDonazione,
+                        isDense: true,
+                        onChanged: (value) {
+                          setState(() {
+                            _tipoDonazione = value;
+                          });
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: "Sangue",
+                            child: Text("Sangue"),
+                          ),
+                          DropdownMenuItem(
+                            value: "Plasma",
+                            child: Text("Plasma"),
+                          )
+                        ],
+                      )));
+                },
               ),
+            ),
+            _dropdownError == null
+                ? SizedBox.shrink()
+                : Text(
+                    _dropdownError ?? "",
+                    style: TextStyle(color: Colors.red[700], fontSize: 12),
+                  ),
+            SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 100),
+                ButtonTheme(
+                  buttonColor: Colors.greenAccent[700],
+                  child: RaisedButton(
+                    child: Text(
+                      "Conferma",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    onPressed: () {
+                      if (_validateForm()) {
+                        print(_date.toString());
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 30),
+                ButtonTheme(
+                  buttonColor: Colors.red,
+                  child: RaisedButton(
+                    child: Text(
+                      "Annulla",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
