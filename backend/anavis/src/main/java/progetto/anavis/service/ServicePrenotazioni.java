@@ -15,11 +15,8 @@ import progetto.anavis.model.TipoDonazione;
 @Service
 public class ServicePrenotazioni {
 
-	private static ServicePrenotazioni servicePrenotazioni = null;
-
 	// DB momentaneo
-	private List<Prenotazione> db;
-	private List<SedeAvis> sedi;
+	public List<Prenotazione> db;
 
 	private ServicePrenotazioni() {
 		db = new ArrayList<>();
@@ -31,21 +28,8 @@ public class ServicePrenotazioni {
 				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 	}
 
-	public static ServicePrenotazioni getInstance() {
-		if (servicePrenotazioni == null)
-			servicePrenotazioni = new ServicePrenotazioni();
-		return servicePrenotazioni;
-	}
-
 	public List<Prenotazione> getPrenotazioni() {
 		return db;
-	}
-	
-	public List<SedeAvis> getSedi(List<Prenotazione> db) {
-		for (Prenotazione prenotazione : db) {
-			sedi.add(prenotazione.getSede());
-		}
-		return sedi;
 	}
 
 	public Prenotazione getById(UUID id) {
@@ -67,9 +51,10 @@ public class ServicePrenotazioni {
 		return prenotazione;
 	}
 
-	public void delete(UUID id, Prenotazione prenotazione) {
+	public String remove(UUID id, Prenotazione prenotazione) {
 		System.out.println("Eliminazione prenotazione [ID: " + id + "]");
 		db.remove(prenotazione);
+		return "Eliminazione avvenuta con successo";
 	}
 
 	// public void setAvvenutaPrenotazione(@JsonProperty("donatore") Donatore

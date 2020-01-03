@@ -2,21 +2,24 @@ package progetto.anavis.api;
 
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import progetto.anavis.model.SedeAvis;
 import progetto.anavis.service.ServiceSediAvis;
 
 
-@Controller
+@RestController
+@RequestMapping("/sedi")
 public class ControllerSediAvis {
 
-	ServiceSediAvis serviceSediAvis = ServiceSediAvis.getInstance();
+	@Autowired
+	ServiceSediAvis serviceSediAvis;
 	
-	@GetMapping("/get")
-	public List<String> getSedi(){
+	@GetMapping
+	public List<SedeAvis> getSedi(){
 		return serviceSediAvis.getSedi();
 	}
 	
