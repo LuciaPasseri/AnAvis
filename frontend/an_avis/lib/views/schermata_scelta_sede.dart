@@ -18,13 +18,13 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
 
   Future<List<PulsanteListView>> _getSediAvis() async {
     http.Response response =
-        await http.get("http://10.0.2.2:8080/prenotazioni");
+        await http.get("http://10.0.2.2:8080/sedi");
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<PulsanteListView> sediAvis = [];
       for (var d in data) {
         sediAvis.add(PulsanteListView(
-            text: d["sede"]["citta"],
+            text: d["citta"],
             function: () => Navigator.pushNamed(context, "/sceltaMese")));
       }
       return sediAvis;

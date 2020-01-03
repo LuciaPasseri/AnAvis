@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
+import "package:http/http.dart" as http;
 
 class SchermataAggiuntaPrenotazione extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class SchermataAggiuntaPrenotazione extends StatefulWidget {
 class _SchermataAggiuntaPrenotazioneState
     extends State<SchermataAggiuntaPrenotazione> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _date;
   String _tipoDonazione;
   String _dropdownError;
@@ -36,6 +39,32 @@ class _SchermataAggiuntaPrenotazioneState
       _formKey.currentState.save();
     }
     return _isValid;
+  }
+
+  Future<String> addPrenotation(BuildContext context) async {
+    var prenotation = json.encode({
+      "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
+      "orario": "${_date.hour} - ${_date.minute}",
+      "donatore": {},
+      "sede": "Tolentino",
+      "tipoDonazione": "PLASMA",
+      "disponibilità": "true",
+    });
+    var response = await http.post(
+      Uri.parse("http://10.0.2.2:8080/prenotazioni"),
+      body: prenotation,
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.green,
+        content: Text("Prenotazione aggiunta"),
+      ));
+    }
   }
 
   Future _selectDate() async {
@@ -65,6 +94,7 @@ class _SchermataAggiuntaPrenotazioneState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         bottom: PreferredSize(
             child: Container(
@@ -231,57 +261,26 @@ class _SchermataAggiuntaPrenotazioneState
                     _dropdownError ?? "",
                     style: TextStyle(color: Colors.red[700], fontSize: 12),
                   ),
-            SizedBox(
-              height: 12,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 100),
-                ButtonTheme(
-                  buttonColor: Colors.greenAccent[700],
-                  child: RaisedButton(
-                    child: Text(
-                      "Conferma",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                    onPressed: () {
-                      if (_validateForm()) {
-                        print(_date.toString());
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(width: 30),
-                ButtonTheme(
-                  buttonColor: Colors.red,
-                  child: RaisedButton(
-                    child: Text(
-                      "Annulla",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
+      ),
+      floatingActionButton: SizedBox(
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+            backgroundColor: Colors.blue[800],
+            child: Icon(
+              Icons.check,
+              size: 32,
+            ),
+            onPressed: () {
+              if (_validateForm()) {
+                addPrenotation(context);
+                Future.delayed(Duration(seconds: 1), () {
+                  Navigator.pop(context);
+                });
+              }
+            }),
       ),
     );
   }

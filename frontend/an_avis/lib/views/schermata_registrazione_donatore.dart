@@ -86,6 +86,7 @@ class _SchermataRegistrazioneDonatoreState
                       }
                       return null;
                     },
+                    inputType: TextInputType.text,
                   ),
                 ),
               ),
@@ -107,6 +108,7 @@ class _SchermataRegistrazioneDonatoreState
                       }
                       return null;
                     },
+                    inputType: TextInputType.text,
                   ),
                 ),
               ),
@@ -205,6 +207,7 @@ class _SchermataRegistrazioneDonatoreState
                     onSaved: (value) {
                       _email = value;
                     },
+                    inputType: TextInputType.emailAddress,
                   ),
                 ),
               ),
@@ -219,7 +222,6 @@ class _SchermataRegistrazioneDonatoreState
                     hiddenText: _hiddenText,
                     iconButton: IconButton(
                         icon: Icon(
-                          // Based on passwordVisible state choose the icon
                           _hiddenText ? Icons.visibility : Icons.visibility_off,
                           color: Theme.of(context).primaryColorDark,
                         ),
@@ -236,6 +238,7 @@ class _SchermataRegistrazioneDonatoreState
                     onSaved: (value) {
                       _password = value;
                     },
+                    inputType: TextInputType.text,
                   ),
                 ),
               ),

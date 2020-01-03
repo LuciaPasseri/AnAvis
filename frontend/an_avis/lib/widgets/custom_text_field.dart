@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
       {@required this.text,
       @required this.validator,
       @required this.onSaved,
-      @required this.icon,
+      this.icon,
       @required this.alignment,
       @required this.inputType,
       this.hiddenText,
