@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class SedeAvis {
 
@@ -16,7 +18,7 @@ public class SedeAvis {
 		
 	}
 	
-	public SedeAvis(String citta) {
+	public SedeAvis(@JsonProperty("citta") String citta) {
 		this.id = UUID.randomUUID();
 		this.citta = citta;
 	}

@@ -29,8 +29,8 @@ public class ControllerSedeAvis {
 	}
 	
 	@PostMapping
-	public SedeAvis create(@RequestBody String citta) {
-		return serviceSediAvis.creaSede(citta);
+	public SedeAvis create(@RequestBody SedeAvis sedeAvis) {
+		return serviceSediAvis.creaSede(sedeAvis);
 	}
 
 	@DeleteMapping("/{id}")

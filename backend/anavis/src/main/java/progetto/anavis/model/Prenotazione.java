@@ -5,8 +5,6 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 public class Prenotazione {
 
@@ -22,13 +20,6 @@ public class Prenotazione {
 	
 	public Prenotazione() {
 		
-	}
-
-	public Prenotazione(@JsonProperty("data") String data,
-			@JsonProperty("orario") String orario) {
-		this.id = UUID.randomUUID();
-		this.data = data;
-		this.orario = orario;
 	}
 	
 	public Prenotazione(String data, String orario, Donatore donatore, SedeAvis sede, TipoDonazione tipoDonazione, Questionario questionario, boolean disponibilita) {

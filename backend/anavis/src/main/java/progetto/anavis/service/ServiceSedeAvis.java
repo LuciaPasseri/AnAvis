@@ -24,8 +24,9 @@ public class ServiceSedeAvis {
 		return db;
 	}
 
-	public SedeAvis creaSede(String citta) {
-		return new SedeAvis(citta);
+	public SedeAvis creaSede(SedeAvis sedeAvis) {
+		db.add(sedeAvis);
+		return sedeAvis;
 	}
 
 	public SedeAvis getById(UUID id) {
