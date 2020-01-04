@@ -41,23 +41,24 @@ class _SchermataAggiuntaPrenotazioneState
     return _isValid;
   }
 
-  Future<String> addPrenotation(BuildContext context) async {
+  void addPrenotation(BuildContext context) async {
     var prenotation = json.encode({
       "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
-      "orario": "${_date.hour} - ${_date.minute}",
+      "orario": "${_date.hour} : ${_date.minute}",
       "donatore": {},
       "sede": "Tolentino",
-      "tipoDonazione": "PLASMA",
+      "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilità": "true",
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/prenotazioni"),
       body: prenotation,
       headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
+        "content-type": "application/json; charset=utf-8",
+        "accept": "application/json; charset=utf-8",
       },
     );
+    print(response.statusCode);
     if (response.statusCode == 200) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         duration: Duration(seconds: 2),
@@ -265,13 +266,13 @@ class _SchermataAggiuntaPrenotazioneState
         ),
       ),
       floatingActionButton: SizedBox(
-        height: 70,
-        width: 70,
+        height: 65,
+        width: 65,
         child: FloatingActionButton(
-            backgroundColor: Colors.blue[800],
+            backgroundColor: Colors.blue[900],
             child: Icon(
               Icons.check,
-              size: 32,
+              size: 30,
             ),
             onPressed: () {
               if (_validateForm()) {
