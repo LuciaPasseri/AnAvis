@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
-import 'package:intl/intl.dart';
+import "package:http/http.dart" as http;
 
 class SchermataRegistrazioneDonatore extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class SchermataRegistrazioneDonatore extends StatefulWidget {
 class _SchermataRegistrazioneDonatoreState
     extends State<SchermataRegistrazioneDonatore> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _nome;
   String _cognome;
   String _gruppoSanguigno;
@@ -41,9 +43,42 @@ class _SchermataRegistrazioneDonatoreState
     });
   }
 
+  void addDonator(BuildContext context) async {
+    var donator = json.encode({
+        "nome": "$_nome",
+        "cognome": "$_cognome",
+        "gruppoSanguigno": "$_gruppoSanguigno",
+        "email": "$_email",
+        "password": "$_password"
+    });
+    var response = await http.post(
+      Uri.parse("http://10.0.2.2:8080/donatori"),
+      body: donator,
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.green,
+        content: Text("Donatore aggiunto!"),
+      ));
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        content: Text("Errore"),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         bottom: PreferredSize(
@@ -100,7 +135,7 @@ class _SchermataRegistrazioneDonatoreState
                     text: "Inserire cognome",
                     alignment: TextAlign.left,
                     onSaved: (value) {
-                      _nome = value;
+                      _cognome = value;
                     },
                     validator: (value) {
                       if (value.isEmpty) {
@@ -200,7 +235,7 @@ class _SchermataRegistrazioneDonatoreState
                     icon: Icon(Icons.email),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return "Inserire vlaore valido";
+                        return "Inserire valore valido";
                       }
                       return null;
                     },
@@ -231,7 +266,7 @@ class _SchermataRegistrazioneDonatoreState
                     alignment: TextAlign.left,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return "Inserire vlaore valido";
+                        return "Inserire valore valido";
                       }
                       return null;
                     },
@@ -242,58 +277,27 @@ class _SchermataRegistrazioneDonatoreState
                   ),
                 ),
               ),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 100),
-                  ButtonTheme(
-                    buttonColor: Colors.greenAccent[700],
-                    child: RaisedButton(
-                      child: Text(
-                        "Conferma",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      onPressed: () {
-                        if (_validateForm()) {
-                          _formKey.currentState.save();
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 30),
-                  ButtonTheme(
-                    buttonColor: Colors.red,
-                    child: RaisedButton(
-                      child: Text(
-                        "Annulla",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
+      ),
+      floatingActionButton: SizedBox(
+        height: 65,
+        width: 65,
+        child: FloatingActionButton(
+            backgroundColor: Colors.blue[900],
+            child: Icon(
+              Icons.check,
+              size: 30,
+            ),
+            onPressed: () {
+              if (_validateForm()) {
+                addDonator(context);
+                Future.delayed(Duration(seconds: 1), () {
+                  Navigator.pop(context);
+                });
+              }
+            }),
       ),
     );
   }

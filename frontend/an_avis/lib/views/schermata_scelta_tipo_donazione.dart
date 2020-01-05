@@ -40,7 +40,7 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
               Pulsante(
                   text: "Sangue",
                   function: () {
-                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("Sangue");
+                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("SANGUE");
                     Navigator.of(context).pushNamed('/sceltaSede');
                   }),
               SizedBox(
@@ -49,7 +49,7 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
               Pulsante(
                   text: "Plasma",
                   function: () {
-                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("Plasma");
+                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("PLASMA");
                     Navigator.of(context).pushNamed("/sceltaSede");
                   }),
             ],

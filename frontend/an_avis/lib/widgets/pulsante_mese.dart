@@ -28,7 +28,7 @@ class PulsanteMese extends StatelessWidget {
         ),
       ),
       textColor: Colors.white,
-      color: Colors.blue[900],
+      color: Colors.blue[800],
       onPressed: () {
         _navigateToRoute(meseIntero, context);
       },

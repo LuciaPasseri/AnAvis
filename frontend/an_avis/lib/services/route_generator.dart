@@ -15,7 +15,7 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/':
+      case '/': 
         return MaterialPageRoute(builder: (_) => SchermataLogin());
       case '/donatore':
         return MaterialPageRoute(builder: (_) => SchermataDonatori());

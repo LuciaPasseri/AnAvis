@@ -17,8 +17,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
   String filter;
 
   Future<List<PulsanteListView>> _getSediAvis() async {
-    http.Response response =
-        await http.get("http://10.0.2.2:8080/sedi");
+    http.Response response = await http.get("http://10.0.2.2:8080/sedi");
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<PulsanteListView> sediAvis = [];
@@ -77,24 +76,28 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(20),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: "Roboto",
+            child: Theme(
+              data: Theme.of(context).copyWith(primaryColor: Colors.blue[800]),
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "Roboto",
+                ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                    prefixIcon: Icon(Icons.search),
+                    hintText: "Cerca sede",
+                    fillColor: Colors.red,
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.blueAccent, width: 32.0),
+                        borderRadius: BorderRadius.circular(25.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.blue[800], width: 2.0),
+                        borderRadius: BorderRadius.circular(25.0))),
+                controller: controller,
               ),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                  prefixIcon: Icon(Icons.search),
-                  hintText: "Cerca sede",
-                  fillColor: Colors.red,
-                  border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 32.0),
-                      borderRadius: BorderRadius.circular(25.0)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 32.0),
-                      borderRadius: BorderRadius.circular(25.0))),
-              controller: controller,
             ),
           ),
           Expanded(

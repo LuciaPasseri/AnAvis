@@ -93,8 +93,8 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
                   onPressed: () {
-                    Navigator.popUntil(
-                        context, ModalRoute.withName("/sceltaMese"));
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/donatore", (route) => route.isFirst);
                   },
                 ),
               ),
