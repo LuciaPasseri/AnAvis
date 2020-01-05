@@ -1,5 +1,7 @@
+import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/pulsante.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SchermataLogin extends StatefulWidget {
   @override
@@ -49,6 +51,7 @@ class _SchermataLoginState extends State<SchermataLogin> {
               Pulsante(
                   text: "Sede Avis",
                   function: () {
+                    Provider.of<SedeProvider>(context).setCitta("Tolentino");
                     Navigator.pushNamed(context, "/sede");
                   }),
             ],

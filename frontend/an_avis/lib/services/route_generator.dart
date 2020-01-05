@@ -1,6 +1,7 @@
 import 'package:an_avis/views/provvisoria_login.dart';
 import 'package:an_avis/views/schermata_aggiunta_prenotazione.dart';
 import 'package:an_avis/views/schermata_donatori.dart';
+import 'package:an_avis/views/schermata_prenotazioni.dart';
 import 'package:an_avis/views/schermata_questionario.dart';
 import 'package:an_avis/views/schermata_registrazione_donatore.dart';
 import 'package:an_avis/views/schermata_scelta_data.dart';
@@ -15,7 +16,7 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/': 
+      case '/':
         return MaterialPageRoute(builder: (_) => SchermataLogin());
       case '/donatore':
         return MaterialPageRoute(builder: (_) => SchermataDonatori());
@@ -24,6 +25,8 @@ class RouteGenerator {
       case '/aggiuntaPrenotazione':
         return MaterialPageRoute(
             builder: (_) => SchermataAggiuntaPrenotazione());
+      case '/prenotazioni':
+        return MaterialPageRoute(builder: (_) => SchermataPrenotazioni());
       case '/registrazioneDonatore':
         return MaterialPageRoute(
             builder: (_) => SchermataRegistrazioneDonatore());
