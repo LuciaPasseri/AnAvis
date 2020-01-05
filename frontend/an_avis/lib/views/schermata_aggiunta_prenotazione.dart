@@ -45,8 +45,7 @@ class _SchermataAggiuntaPrenotazioneState
     var prenotation = json.encode({
       "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
       "orario": "${_date.hour} : ${_date.minute}",
-      "donatore": {},
-      "sede": "Tolentino",
+      "sede": {"citta": "Tolentino"},
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilità": "true",
     });
@@ -63,7 +62,13 @@ class _SchermataAggiuntaPrenotazioneState
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
-        content: Text("Prenotazione aggiunta"),
+        content: Text("Prenotazione aggiunta!"),
+      ));
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        content: Text("Errore"),
       ));
     }
   }
@@ -214,7 +219,7 @@ class _SchermataAggiuntaPrenotazioneState
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(25, 10, 25, 8),
+              padding: EdgeInsets.fromLTRB(25, 0, 25, 8),
               child: FormField(
                 builder: (FormFieldState state) {
                   return InputDecorator(

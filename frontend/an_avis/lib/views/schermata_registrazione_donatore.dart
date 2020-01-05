@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
-import 'package:intl/intl.dart';
 import "package:http/http.dart" as http;
 
 class SchermataRegistrazioneDonatore extends StatefulWidget {
@@ -65,7 +64,13 @@ class _SchermataRegistrazioneDonatoreState
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
-        content: Text("Donatore aggiunto"),
+        content: Text("Donatore aggiunto!"),
+      ));
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        content: Text("Errore"),
       ));
     }
   }
@@ -130,7 +135,7 @@ class _SchermataRegistrazioneDonatoreState
                     text: "Inserire cognome",
                     alignment: TextAlign.left,
                     onSaved: (value) {
-                      _nome = value;
+                      _cognome = value;
                     },
                     validator: (value) {
                       if (value.isEmpty) {

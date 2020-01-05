@@ -1,6 +1,5 @@
 import 'package:an_avis/views/schermata_orario.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
-import 'package:an_avis/widgets/pulsante_listview.dart';
 import "package:flutter/material.dart";
 
 class SchermataSceltaData extends StatefulWidget {
