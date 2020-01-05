@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class Donatore {
 
@@ -16,7 +18,9 @@ public class Donatore {
 
 	}
 
-	public Donatore(String nome, String cognome, String gruppoSanguigno, String email, String password) {
+	public Donatore(@JsonProperty("nome") String nome, @JsonProperty("cognome") String cognome,
+			@JsonProperty("gruppoSanguigno") String gruppoSanguigno, @JsonProperty("email") String email,
+			@JsonProperty("password") String password) {
 		this.idDonatore = UUID.randomUUID();
 		this.nome = nome;
 		this.cognome = cognome;

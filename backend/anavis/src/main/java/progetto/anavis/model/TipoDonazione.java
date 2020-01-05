@@ -4,6 +4,6 @@ import javax.persistence.Entity;
 
 @Entity
 public enum TipoDonazione {
-	SANGUE,
+	SANGUE_INTERO,
 	PLASMA;
 }

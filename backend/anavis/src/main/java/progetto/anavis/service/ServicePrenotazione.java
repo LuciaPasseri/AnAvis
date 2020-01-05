@@ -23,9 +23,9 @@ public class ServicePrenotazione {
 		db.add(new Prenotazione("2019 - 12 - 07", "15", new Donatore("Lucia", "Passeri", "0+", "a@a.a", "aaa"),
 				new SedeAvis("Tolentino"), TipoDonazione.PLASMA, new Questionario(null), true));
 		db.add(new Prenotazione("2019 - 12 - 10", "9 - 30", new Donatore("Luca", "Cervioni", "A+", "b@b.b", "bbb"),
-				new SedeAvis("Civitanova"), TipoDonazione.SANGUE, new Questionario(null), true));
+				new SedeAvis("Civitanova"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 		db.add(new Prenotazione("2019 - 12 - 11", "11", new Donatore("Pippo", "Franco", "AB+", "c@c.c", "ccc"),
-				new SedeAvis("Camerino"), TipoDonazione.SANGUE, new Questionario(null), true));
+				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
 	}
 
 	public List<Prenotazione> getPrenotazioni() {
