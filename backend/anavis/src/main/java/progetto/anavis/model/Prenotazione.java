@@ -26,9 +26,9 @@ public class Prenotazione {
 
 	public Prenotazione(@JsonProperty("data") String data, @JsonProperty("orario") String orario,
 			@JsonProperty("donatore") Donatore donatore, @JsonProperty("sede") SedeAvis sede,
-			@JsonProperty("tipoDonazione") TipoDonazione tipoDonazione,
+			@JsonProperty(value = "tipoDonazione", defaultValue = "SANGUE_INTERO") TipoDonazione tipoDonazione,
 			@JsonProperty("questionario") Questionario questionario,
-			@JsonProperty("disponibilita") boolean disponibilita) {
+			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita) {
 		this.id = UUID.randomUUID();
 		this.data = data;
 		this.orario = orario;
@@ -37,6 +37,31 @@ public class Prenotazione {
 		this.tipoDonazione = tipoDonazione;
 		this.questionario = questionario;
 		this.disponibilita = disponibilita;
+	}
+
+	@JsonProperty("idPrenotazione")
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
+	public String getOrario() {
+		return orario;
+	}
+
+	public void setOrario(String orario) {
+		this.orario = orario;
 	}
 
 	public Donatore getDonatore() {
@@ -71,26 +96,12 @@ public class Prenotazione {
 		this.questionario = questionario;
 	}
 
-	public UUID getId() {
-		return id;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public String getOrario() {
-		return orario;
-	}
-
-	public String getDisponibilita() {
-		if (disponibilita == false)
-			return "disponibile";
-		else
-			return "non disponibile";
+	public boolean getDisponibilita() {
+		return disponibilita;
 	}
 
 	public void setDisponibilita(boolean disponibilita) {
 		this.disponibilita = disponibilita;
 	}
+
 }

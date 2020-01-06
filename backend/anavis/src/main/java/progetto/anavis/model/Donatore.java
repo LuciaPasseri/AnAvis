@@ -29,6 +29,7 @@ public class Donatore {
 		this.password = password;
 	}
 
+	@JsonProperty("idDonatore")
 	public UUID getIdDonatore() {
 		return idDonatore;
 	}

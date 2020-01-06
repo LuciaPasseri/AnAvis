@@ -29,12 +29,12 @@ public class ServiceSedeAvis {
 		return sedeAvis;
 	}
 
-	public SedeAvis getById(UUID id) {
-		return db.stream().filter(b -> b.getId().equals(id)).findFirst().orElse(null);
+	public SedeAvis getById(UUID idSede) {
+		return db.stream().filter(b -> b.getId().equals(idSede)).findFirst().orElse(null);
 	}
 
-	public String remove(UUID id, SedeAvis sedeAvis) {
-		System.out.println("Eliminazione sede Avis [ID: " + id + "]");
+	public String remove(UUID idSede, SedeAvis sedeAvis) {
+		System.out.println("Eliminazione sede Avis [ID: " + idSede + "]");
 		db.remove(sedeAvis);
 		return "Eliminazione avvenuta con successo";
 	}
