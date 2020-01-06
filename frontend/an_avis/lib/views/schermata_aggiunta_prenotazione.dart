@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import "package:http/http.dart" as http;
+import 'package:provider/provider.dart';
 
 class SchermataAggiuntaPrenotazione extends StatefulWidget {
   @override
@@ -45,7 +47,7 @@ class _SchermataAggiuntaPrenotazioneState
     var prenotation = json.encode({
       "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
       "orario": "${_date.hour} : ${_date.minute}",
-      "sede": {"citta": "Tolentino"},
+      "sede": {"citta": Provider.of<SedeProvider>(context).cittaSede},
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilità": "true",
     });

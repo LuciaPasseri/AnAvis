@@ -38,7 +38,7 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
                 height: 40,
               ),
               Pulsante(
-                  text: "Sangue",
+                  text: "Sangue intero",
                   function: () {
                     Provider.of<PrenotazioneProvider>(context).setTipoDonazione("SANGUE");
                     Navigator.of(context).pushNamed('/sceltaSede');
