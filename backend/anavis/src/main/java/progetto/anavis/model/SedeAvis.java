@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,18 +13,19 @@ public class SedeAvis {
 
 	@Id
 	private UUID idSede;
+	@NotBlank
 	private String citta;
 
 	public SedeAvis() {
 
 	}
 
-	public SedeAvis(@JsonProperty("citta") String citta) {
-		this.idSede = UUID.randomUUID();
+	public SedeAvis(@JsonProperty("idSede") UUID idSede, @JsonProperty("citta") String citta) {
+		this.idSede = idSede;
 		this.citta = citta;
 	}
 
-	@JsonProperty("idSede")
+	
 	public UUID getId() {
 		return idSede;
 	}

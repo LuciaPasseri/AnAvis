@@ -27,10 +27,16 @@ public class ControllerPrenotazione {
 	public List<Prenotazione> getPrenotazioni() {
 		 return servicePrenotazioni.getPrenotazioni();
 	}
+	
+	@GetMapping("/{id}")
+	public Prenotazione getPrenotazione(@PathVariable("id") UUID id){
+		return servicePrenotazioni.getById(id);
+	}
 
 	@PostMapping
 	public Prenotazione create(@RequestBody Prenotazione prenotazione) {
-		return servicePrenotazioni.creaPrenotazione(prenotazione);
+		UUID id= UUID.randomUUID();
+		return servicePrenotazioni.creaPrenotazione(id, prenotazione);
 	}
 
 //	@PutMapping("/{id}")

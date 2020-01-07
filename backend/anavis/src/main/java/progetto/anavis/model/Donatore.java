@@ -13,23 +13,25 @@ public class Donatore {
 	@Id
 	private UUID idDonatore;
 	private String nome, cognome, gruppoSanguigno, email, password;
+	private boolean prenota;
 
 	public Donatore() {
 
 	}
 
-	public Donatore(@JsonProperty("nome") String nome, @JsonProperty("cognome") String cognome,
-			@JsonProperty("gruppoSanguigno") String gruppoSanguigno, @JsonProperty("email") String email,
-			@JsonProperty("password") String password) {
-		this.idDonatore = UUID.randomUUID();
+	public Donatore(@JsonProperty("idDonatore") UUID id, @JsonProperty("nome") String nome,
+			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
+			@JsonProperty("email") String email, @JsonProperty("password") String password,
+			@JsonProperty("prenota") boolean prenota) {
+		this.idDonatore = id;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.gruppoSanguigno = gruppoSanguigno;
 		this.email = email;
 		this.password = password;
+		this.prenota = prenota;
 	}
 
-	@JsonProperty("idDonatore")
 	public UUID getIdDonatore() {
 		return idDonatore;
 	}
@@ -76,6 +78,14 @@ public class Donatore {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public boolean getPrenota() {
+		return prenota;
+	}
+	
+	public void setPrenota(boolean prenota) {
+		this.prenota = prenota;
 	}
 
 }

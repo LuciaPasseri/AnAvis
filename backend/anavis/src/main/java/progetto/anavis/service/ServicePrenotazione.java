@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import progetto.anavis.model.Donatore;
 import progetto.anavis.model.Prenotazione;
 import progetto.anavis.model.Questionario;
-import progetto.anavis.model.SedeAvis;
 import progetto.anavis.model.TipoDonazione;
 
 @Service
@@ -20,12 +19,12 @@ public class ServicePrenotazione {
 
 	private ServicePrenotazione() {
 		db = new ArrayList<>();
-		db.add(new Prenotazione("2019 - 12 - 07", "15", new Donatore("Lucia", "Passeri", "0+", "a@a.a", "aaa"),
-				new SedeAvis("Tolentino"), TipoDonazione.PLASMA, new Questionario(null), true));
-		db.add(new Prenotazione("2019 - 12 - 10", "9 - 30", new Donatore("Luca", "Cervioni", "A+", "b@b.b", "bbb"),
-				new SedeAvis("Civitanova"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
-		db.add(new Prenotazione("2019 - 12 - 11", "11", new Donatore("Pippo", "Franco", "AB+", "c@c.c", "ccc"),
-				new SedeAvis("Camerino"), TipoDonazione.SANGUE_INTERO, new Questionario(null), true));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 07", "15", new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true),
+				"Tolentino", TipoDonazione.PLASMA, new Questionario(null), true));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 10", "9 - 30", new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true),
+				"Civitanova", TipoDonazione.SANGUE, new Questionario(null), true));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 11", "11", new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true),
+				"Camerino", TipoDonazione.SANGUE, new Questionario(null), true));
 	}
 
 	public List<Prenotazione> getPrenotazioni() {
@@ -36,8 +35,8 @@ public class ServicePrenotazione {
 		return db.stream().filter(b -> b.getId().equals(id)).findFirst().orElse(null);
 	}
 
-	public Prenotazione creaPrenotazione(Prenotazione prenotazione) {
-		System.out.println("Creazione prenotazione: " + prenotazione.toString());
+	public Prenotazione creaPrenotazione(UUID id, Prenotazione prenotazione) {
+		prenotazione.setId(id);
 		// aggiunge le prenotazioni con i tutti i campi compilati
 		// TODO: fare in modo che vengano aggiunte le prenotazioni "libere" ed
 		// assegnarle ai donatori tramite l'update

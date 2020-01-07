@@ -27,9 +27,15 @@ public class ControllerDonatore {
 		 return serviceDonatore.getDonatori();
 	}
 
+	@GetMapping("/{id}")
+	public Donatore getDonatore(@PathVariable("id") UUID idDonatore){
+		return serviceDonatore.getById(idDonatore);
+	}
+	
 	@PostMapping
 	public Donatore create(@RequestBody Donatore donatore) {
-		return serviceDonatore.creaDonatore(donatore);
+		UUID idDonatore = UUID.randomUUID();
+		return serviceDonatore.creaDonatore(idDonatore, donatore);
 	}
 
 //	@PutMapping("/{id}")

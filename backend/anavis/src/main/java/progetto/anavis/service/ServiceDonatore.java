@@ -15,9 +15,9 @@ public class ServiceDonatore {
 
 	private ServiceDonatore() {
 		db = new ArrayList<>();
-		db.add(new Donatore("Lucia", "Passeri", "0+", "a@a.a", "aaa"));
-		db.add(new Donatore("Luca", "Cervioni", "A+", "b@b.b", "bbb"));
-		db.add(new Donatore("Pippo", "Franco", "AB+", "c@c.c", "ccc"));
+		db.add(new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true));
+		db.add(new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true));
+		db.add(new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true));
 	}
 
 	public List<Donatore> getDonatori() {
@@ -28,8 +28,8 @@ public class ServiceDonatore {
 		return db.stream().filter(b -> b.getIdDonatore().equals(id)).findFirst().orElse(null);
 	}
 
-	public Donatore creaDonatore(Donatore donatore) {
-		System.out.println("Creazione donatore: " + donatore.toString());
+	public Donatore creaDonatore(UUID id, Donatore donatore) {
+		donatore.setIdDonatore(id);
 		// aggiunge le prenotazioni con i tutti i campi compilati
 		// TODO: fare in modo che vengano aggiunte le prenotazioni "libere" ed
 		// assegnarle ai donatori tramite l'update

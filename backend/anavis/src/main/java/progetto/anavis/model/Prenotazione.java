@@ -24,22 +24,21 @@ public class Prenotazione {
 
 	}
 
-	public Prenotazione(@JsonProperty("data") String data, @JsonProperty("orario") String orario,
-			@JsonProperty("donatore") Donatore donatore, @JsonProperty("sede") SedeAvis sede,
+	public Prenotazione(@JsonProperty("idPrenotazione") UUID id, @JsonProperty("data") String data, @JsonProperty("orario") String orario,
+			@JsonProperty("donatore") Donatore donatore, @JsonProperty("sede") String citta,
 			@JsonProperty(value = "tipoDonazione", defaultValue = "SANGUE_INTERO") TipoDonazione tipoDonazione,
 			@JsonProperty("questionario") Questionario questionario,
 			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita) {
-		this.id = UUID.randomUUID();
+		this.id = id;
 		this.data = data;
 		this.orario = orario;
 		this.donatore = donatore;
-		this.sede = sede;
+		this.sede = new SedeAvis(UUID.randomUUID(), citta);
 		this.tipoDonazione = tipoDonazione;
 		this.questionario = questionario;
 		this.disponibilita = disponibilita;
 	}
-
-	@JsonProperty("idPrenotazione")
+	
 	public UUID getId() {
 		return id;
 	}
