@@ -19,13 +19,13 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	public PrenotazioneDataAccessService() {
 		db = new ArrayList<>();
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 07", "15",
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-07", "15",
 				new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true), "Tolentino",
 				TipoDonazione.PLASMA, new Questionario(null), false));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 10", "9 - 30",
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-10", "9 - 30",
 				new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true), "Civitanova",
 				TipoDonazione.SANGUE, new Questionario(null), false));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019 - 12 - 11", "11",
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-11", "11",
 				new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true), "Camerino",
 				TipoDonazione.SANGUE, new Questionario(null), false));
 	}
