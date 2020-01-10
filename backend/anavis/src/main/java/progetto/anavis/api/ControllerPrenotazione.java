@@ -3,6 +3,10 @@ package progetto.anavis.api;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,23 +33,22 @@ public class ControllerPrenotazione {
 	}
 	
 	@GetMapping("/{id}")
-	public Prenotazione getPrenotazione(@PathVariable("id") UUID id){
+	public Prenotazione getPrenotazione(@NotBlank@PathVariable("id") UUID id){
 		return servicePrenotazioni.getById(id);
 	}
 
 	@PostMapping
-	public Prenotazione create(@RequestBody Prenotazione prenotazione) {
-		UUID id= UUID.randomUUID();
-		return servicePrenotazioni.creaPrenotazione(id, prenotazione);
+	public Prenotazione create(@Valid@NotNull@RequestBody Prenotazione prenotazione) {
+		return servicePrenotazioni.creaPrenotazione(prenotazione);
 	}
 
-//	@PutMapping("/{id}")
-//	public Prenotazione update(@PathVariable("id") UUID id) {
-//		return servicePrenotazioni.update(id, servicePrenotazioni.getById(id));
-//	}
-//
 	@DeleteMapping("/{id}")
-	public void remove(@PathVariable("id") UUID id) {
-		servicePrenotazioni.remove(id, servicePrenotazioni.getById(id));
+	public void delete(@NotBlank@PathVariable("id") UUID id) {
+		servicePrenotazioni.delete(id);
+	}
+
+	@PutMapping("/{id}")
+	public Prenotazione update(@NotBlank@PathVariable("id") UUID id, @Valid@NotNull@RequestBody Prenotazione prenotazione) {
+		return servicePrenotazioni.update(id, prenotazione);
 	}
 }

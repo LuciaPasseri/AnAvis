@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ControllerSedeAvis {
 	}
 
 	@GetMapping("/{id}")
-	public SedeAvis getSede(@PathVariable("id") UUID idSede) {
+	public SedeAvis getSede(@NotBlank@PathVariable("id") UUID idSede) {
 		return serviceSediAvis.getById(idSede);
 	}
 
@@ -42,12 +43,12 @@ public class ControllerSedeAvis {
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable("id") UUID idSede) {
+	public void delete(@NotBlank@PathVariable("id") UUID idSede) {
 		serviceSediAvis.delete(idSede);
 	}
 
 	@PutMapping("/{id}")
-	public SedeAvis update(@PathVariable("id") UUID id, @Valid@NotNull@RequestBody SedeAvis sede) {
+	public SedeAvis update(@NotBlank@PathVariable("id") UUID id, @Valid@NotNull@RequestBody SedeAvis sede) {
 		return serviceSediAvis.update(id, sede);
 	}
 

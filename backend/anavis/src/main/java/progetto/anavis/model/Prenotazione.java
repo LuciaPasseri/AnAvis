@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,12 +14,15 @@ public class Prenotazione {
 
 	@Id
 	private UUID id;
-	private String data;
-	private String orario;
+	@NotBlank
+	private String data, orario;
 	private Donatore donatore;
+	@NotNull
 	private SedeAvis sede;
+	@NotNull
 	private TipoDonazione tipoDonazione;
 	private Questionario questionario;
+	@NotNull
 	private boolean disponibilita = false;
 
 	public Prenotazione() {

@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,6 +16,7 @@ public class Donatore {
 	private UUID idDonatore;
 	@NotBlank
 	private String nome, cognome, gruppoSanguigno, email, password;
+	@NotNull
 	private boolean puoPrenotare;
 
 	public Donatore() {
