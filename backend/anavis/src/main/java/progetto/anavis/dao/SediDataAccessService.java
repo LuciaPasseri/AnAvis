@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import progetto.anavis.model.SedeAvis;
 
-@Repository("fake")
-public class FakeSedeDaService implements SedeAvisDao {
+@Repository("SediDataAccess")
+public class SediDataAccessService implements SedeAvisDao {
 
-	public List<SedeAvis> db;
-	public SedeAvis sede;
+	private List<SedeAvis> db;
+	private SedeAvis sede;
 
-	public FakeSedeDaService() {
+	private SediDataAccessService() {
 		db = new ArrayList<>();
 		db.add(new SedeAvis(UUID.randomUUID(), "Tolentino"));
 		db.add(new SedeAvis(UUID.randomUUID(), "Civitanova"));
@@ -23,7 +23,7 @@ public class FakeSedeDaService implements SedeAvisDao {
 
 	@Override
 	public SedeAvis creaSede(UUID id, SedeAvis sedeAvis) {
-		sede = new SedeAvis(id, sedeAvis.getCitta());
+		this.sede = new SedeAvis(id, sedeAvis.getCitta());
 		db.add(sede);
 		return sede;
 	}

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,8 +13,9 @@ public class Donatore {
 
 	@Id
 	private UUID idDonatore;
+	@NotBlank
 	private String nome, cognome, gruppoSanguigno, email, password;
-	private boolean prenota;
+	private boolean puoPrenotare;
 
 	public Donatore() {
 
@@ -22,14 +24,14 @@ public class Donatore {
 	public Donatore(@JsonProperty("idDonatore") UUID id, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
 			@JsonProperty("email") String email, @JsonProperty("password") String password,
-			@JsonProperty("prenota") boolean prenota) {
+			@JsonProperty("puoPrenotare") boolean puoPrenotare) {
 		this.idDonatore = id;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.gruppoSanguigno = gruppoSanguigno;
 		this.email = email;
 		this.password = password;
-		this.prenota = prenota;
+		this.puoPrenotare = puoPrenotare;
 	}
 
 	public UUID getIdDonatore() {
@@ -80,12 +82,12 @@ public class Donatore {
 		this.password = password;
 	}
 	
-	public boolean getPrenota() {
-		return prenota;
+	public boolean getPuoPrenotare() {
+		return puoPrenotare;
 	}
 	
-	public void setPrenota(boolean prenota) {
-		this.prenota = prenota;
+	public void setPuoPrenotare(boolean puoPrenotare) {
+		this.puoPrenotare = puoPrenotare;
 	}
 
 }

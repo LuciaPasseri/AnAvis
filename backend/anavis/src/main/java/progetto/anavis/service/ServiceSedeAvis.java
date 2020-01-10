@@ -11,8 +11,6 @@ import progetto.anavis.model.SedeAvis;
 
 @Service
 public class ServiceSedeAvis {
-
-	public List<SedeAvis> db;
 	
 	@Autowired
 	SedeAvisDao sedeAvisDao;
@@ -20,13 +18,13 @@ public class ServiceSedeAvis {
 	public List<SedeAvis> getSedi() {
 		return sedeAvisDao.getSedi();
 	}
+	
+	public SedeAvis getById(UUID idSede) {
+		return sedeAvisDao.getById(idSede);
+	}
 
 	public SedeAvis creaSede(SedeAvis sede) {
 		return sedeAvisDao.addSede(sede);
-	}
-
-	public SedeAvis getById(UUID idSede) {
-		return sedeAvisDao.getById(idSede);
 	}
 
 	public void delete(UUID idSede) {
