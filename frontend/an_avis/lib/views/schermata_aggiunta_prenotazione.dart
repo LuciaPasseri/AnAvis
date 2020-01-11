@@ -43,13 +43,27 @@ class _SchermataAggiuntaPrenotazioneState
     return _isValid;
   }
 
+  String _getOra(int ora) {
+    if (ora.toString().length == 1) {
+      return "0" + ora.toString();
+    } else
+      return ora.toString();
+  }
+
+  String _getMinuti(int minuti) {
+    if (minuti.toString().length == 1) {
+      return "0" + minuti.toString();
+    } else
+      return minuti.toString();
+  }
+
   void addPrenotation(BuildContext context) async {
     var prenotation = json.encode({
       "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
-      "orario": "${_date.hour} : ${_date.minute}",
-      "sede": {"citta": Provider.of<SedeProvider>(context).cittaSede},
+      "orario": _getOra(_date.hour) + " : " + _getMinuti(_date.minute),
+      "sede": Provider.of<SedeProvider>(context).getCittaSede(),
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
-      "disponibilità": "true",
+      "disponibilita": true,
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/prenotazioni"),
@@ -284,7 +298,7 @@ class _SchermataAggiuntaPrenotazioneState
             onPressed: () {
               if (_validateForm()) {
                 addPrenotation(context);
-                Future.delayed(Duration(seconds: 1), () {
+                Future.delayed(Duration(seconds: 2), () {
                   Navigator.pop(context);
                 });
               }

@@ -19,7 +19,8 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
       var data = jsonDecode(response.body);
       List<Card> prenotazioni = [];
       for (var d in data) {
-        if (d["sede"]["citta"] == Provider.of<SedeProvider>(context).cittaSede)
+        if (d["sede"]["citta"] ==
+            Provider.of<SedeProvider>(context).getCittaSede())
           prenotazioni.add(Card(
             margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
             elevation: 4,
@@ -61,8 +62,16 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                             Text(d["orario"]),
                           ],
                         ),
-                        //!d["disponibilità"]
-                        true
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Tipo: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(d["tipoDonazione"].toLowerCase()),
+                          ],
+                        ),
+                        !d["disponibilita"]
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -80,22 +89,47 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                 ],
                               )
                             : Text("Prenotazione ancora disponibile"),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              "Tipo: ",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(d["tipoDonazione"]),
-                          ],
-                        ),
                       ],
                     ),
                     Spacer(),
                     IconButton(
-                      icon: Icon(Icons.cancel, color: Colors.red[700], size: 26,),
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.red[700],
+                        size: 26,
+                      ),
                       onPressed: () {
-                        print("wewe, rimossa");
+                        setState(() {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: new Text("Cancellare prenotazione?"),
+                                content: new Text(
+                                    "Così facendo la prenotazione verrà eliminata dal sistema."),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Chiudi"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Accetta"),
+                                    onPressed: () {
+                                      setState(() {
+                                        http.delete(
+                                            "http://10.0.2.2:8080/prenotazioni/${d["idPrenotazione"]}");
+                                      });
+                                      print("wewe, rimossa");
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        });
                       },
                     ),
                   ],
@@ -111,7 +145,6 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<PrenotazioneProvider>(context).tipoDonazione);
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
@@ -145,12 +178,18 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                 return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: <Widget>[
-                        SizedBox(height: 10),
-                        snapshot.data[index],
-                      ],
-                    );
+                    if (snapshot.data.length == 0) {
+                      return Center(
+                        child: Text("Nessuna prenotazione disponibile"),
+                      );
+                    } else {
+                      return Column(
+                        children: <Widget>[
+                          SizedBox(height: 10),
+                          snapshot.data[index],
+                        ],
+                      );
+                    }
                   },
                 );
             }

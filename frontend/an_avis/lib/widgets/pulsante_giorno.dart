@@ -12,25 +12,32 @@ class PulsanteGiorno extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
-      buttonColor: Colors.blue[50],
-      minWidth: 300.0,
-      height: 60.0,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: RaisedButton(
-            elevation: 12,
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.red[900],
-                fontWeight: FontWeight.bold,
-                fontFamily: "Roboto",
-              ),
-            ),
-            onPressed: function),
+    return Card(
+      margin: EdgeInsets.fromLTRB(5, 5, 5, 10),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      child: InkWell(
+        onTap: function,
+        child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.calendar_today,
+                  color: Colors.blue[900],
+                ),
+                SizedBox(width: 15),
+                Text(
+                  text,
+                  style: TextStyle(fontSize: 17),
+                ),
+                Spacer(),
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.blue[900],
+                )
+              ],
+            )),
       ),
     );
   }

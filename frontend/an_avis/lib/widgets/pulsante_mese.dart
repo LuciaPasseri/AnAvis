@@ -1,36 +1,37 @@
+import 'package:an_avis/models/prenotazione.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 
 class PulsanteMese extends StatelessWidget {
   const PulsanteMese({
     @required this.meseTag,
-    @required this.meseIntero,
+    @required this.meseNumero,
   });
 
   final String meseTag;
-  final String meseIntero;
-
-  void _navigateToRoute(String meseIntero, BuildContext context) {
-    Navigator.of(context).pushNamed("/sceltaData", arguments: meseIntero);
-  }
+  final String meseNumero;
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      elevation: 10,
+      elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15), side: BorderSide(color: Colors.blue[800], width: 2),
       ),
       child: Text(
         meseTag,
         style: TextStyle(
           fontFamily: "Roboto",
-          fontSize: 21,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.red[800],
         ),
       ),
       textColor: Colors.white,
-      color: Colors.blue[800],
+      color: Colors.white,
       onPressed: () {
-        _navigateToRoute(meseIntero, context);
+        Provider.of<PrenotazioneProvider>(context).setMese(meseNumero);
+        Navigator.of(context).pushNamed("/sceltaData");
       },
     );
   }

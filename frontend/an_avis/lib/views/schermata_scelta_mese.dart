@@ -1,5 +1,7 @@
+import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/pulsante_mese.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SchermataSceltaMese extends StatefulWidget {
   @override
@@ -38,18 +40,18 @@ class _SchermataSceltaMeseState extends State<SchermataSceltaMese> {
               mainAxisSpacing: 15,
               crossAxisCount: 3,
               children: <Widget>[
-                PulsanteMese(meseTag: "GEN", meseIntero: "Gennaio"),
-                PulsanteMese(meseTag: "FEB", meseIntero: "Febbraio"),
-                PulsanteMese(meseTag: "MAR", meseIntero: "Marzo"),
-                PulsanteMese(meseTag: "APR", meseIntero: "Aprile"),
-                PulsanteMese(meseTag: "MAG", meseIntero: "Maggio"),
-                PulsanteMese(meseTag: "GIU", meseIntero: "Giugno"),
-                PulsanteMese(meseTag: "LUG", meseIntero: "Luglio"),
-                PulsanteMese(meseTag: "AGO", meseIntero: "Agosto"),
-                PulsanteMese(meseTag: "SET", meseIntero: "Settembre"),
-                PulsanteMese(meseTag: "OTT", meseIntero: "Ottobre"),
-                PulsanteMese(meseTag: "NOV", meseIntero: "Novembre"),
-                PulsanteMese(meseTag: "DIC", meseIntero: "Dicembre"),
+                PulsanteMese(meseTag: "GEN", meseNumero: "01"),
+                PulsanteMese(meseTag: "FEB", meseNumero: "02"),
+                PulsanteMese(meseTag: "MAR", meseNumero: "03"),
+                PulsanteMese(meseTag: "APR", meseNumero: "04"),
+                PulsanteMese(meseTag: "MAG", meseNumero: "05"),
+                PulsanteMese(meseTag: "GIU", meseNumero: "06"),
+                PulsanteMese(meseTag: "LUG", meseNumero: "07"),
+                PulsanteMese(meseTag: "AGO", meseNumero: "08"),
+                PulsanteMese(meseTag: "SET", meseNumero: "09"),
+                PulsanteMese(meseTag: "OTT", meseNumero: "10"),
+                PulsanteMese(meseTag: "NOV", meseNumero: "11"),
+                PulsanteMese(meseTag: "DIC", meseNumero: "12"),
               ],
             ),
           ),
