@@ -28,7 +28,7 @@ public class ControllerDonatore {
 	ServiceDonatore serviceDonatore;
 
 	@GetMapping
-	public List<Donatore> getPrenotazioni() {
+	public List<Donatore> getDonatori() {
 		 return serviceDonatore.getDonatori();
 	}
 
