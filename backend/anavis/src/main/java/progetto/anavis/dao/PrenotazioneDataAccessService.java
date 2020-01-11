@@ -56,13 +56,8 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	@Override
 	public Prenotazione update(UUID id, Prenotazione prenotazione) {
-		getById(id).setData(prenotazione.getData());
-		getById(id).setOrario(prenotazione.getOrario());
-		getById(id).setDonatore(prenotazione.getDonatore());
-		getById(id).setSede(prenotazione.getSede());
-		getById(id).setTipoDonazione(prenotazione.getTipoDonazione());
-		getById(id).setQuestionario(prenotazione.getQuestionario());
-		getById(id).setDisponibilita(prenotazione.getDisponibilita());
+		db.set(db.indexOf(getById(id)), prenotazione);
+		prenotazione.setId(id);
 		return getById(id);
 	}
 

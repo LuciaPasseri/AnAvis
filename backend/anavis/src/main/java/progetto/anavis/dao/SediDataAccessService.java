@@ -45,8 +45,8 @@ public class SediDataAccessService implements SedeAvisDao {
 
 	@Override
 	public SedeAvis update(UUID idSede, SedeAvis sede) {
-		if (!getById(idSede).equals(null))
-			getById(idSede).setCitta(sede.getCitta());
+		db.set(db.indexOf(getById(idSede)), sede);
+		sede.setId(idSede);
 		return getById(idSede);
 	}
 

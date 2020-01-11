@@ -46,14 +46,8 @@ public class DonatoreDataAccessService implements DonatoreDao {
 
 	@Override
 	public Donatore update(UUID id, Donatore donatore) {
-		if (!getById(id).equals(null)) {
-			getById(id).setNome(donatore.getNome());
-			getById(id).setCognome(donatore.getCognome());
-			getById(id).setGruppoSanguigno(donatore.getGruppoSanguigno());
-			getById(id).setEmail(donatore.getEmail());
-			getById(id).setPassword(donatore.getPassword());
-			getById(id).setPuoPrenotare(donatore.getPuoPrenotare());
-		}
+		db.set(db.indexOf(getById(id)), donatore);
+		donatore.setIdDonatore(id);
 		return getById(id);
 	}
 
