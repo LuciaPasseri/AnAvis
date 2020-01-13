@@ -7,46 +7,38 @@ class ListQuestionario extends StatefulWidget {
 }
 
 class _ListQuestionarioState extends State<ListQuestionario> {
-  bool buonaSalute = false;
-  bool ultimaDonazioneSalute = false;
-  bool allergie = false;
-  bool perditaPeso = false;
-  bool ricoveratoOspedale = false;
-
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
+    return Column(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            DomandaQuestionario(
-                value: buonaSalute,
-                hasOptionalQuestion: false,
-                question: "È attualmente in buona salute?"),
-            DomandaQuestionario(
-                value: ricoveratoOspedale,
-                hasOptionalQuestion: true,
-                optionalQuestion: "Perché?",
-                question: "È mai stato ricoverato in\nospedale?"),
-            DomandaQuestionario(
-              value: ultimaDonazioneSalute,
-              hasOptionalQuestion: false,
-              question:
-                  "Si è rivolto di recente al suo\nmedico di famiglia o ha\nintenzionedi farlo?",
-            ),
-            DomandaQuestionario(
-              value: allergie,
-              hasOptionalQuestion: true,
-              question: "Ha attualmente manifestato\nallergie?",
-            ),
-            DomandaQuestionario(
-              value: perditaPeso,
-              hasOptionalQuestion: false,
-              question: "Ha notato perdita di peso negli\nultimi tempi?",
-            ),
-          ],
+        DomandaQuestionario(
+            tagValue: "buonaSalute",
+            hasOptionalQuestion: false,
+            question: "È attualmente in buona salute?"),
+        DomandaQuestionario(
+          tagValue: "ricoveratoOspedale",
+          hasOptionalQuestion: true,
+          optionalQuestion: "Perché?",
+          question: "È mai stato ricoverato in\nospedale?",
+          tagOptionalAnswer: "motivoRicovero",
+        ),
+        DomandaQuestionario(
+          tagValue: "ultimaDonazioneSalute",
+          hasOptionalQuestion: false,
+          question:
+              "Si è rivolto di recente al suo\nmedico di famiglia o ha\nintenzionedi farlo?",
+        ),
+        DomandaQuestionario(
+          tagValue: "allergie",
+          hasOptionalQuestion: true,
+          optionalQuestion: "Quali?",
+          question: "Ha attualmente manifestato\nallergie?",
+          tagOptionalAnswer: "qualiAllergie",
+        ),
+        DomandaQuestionario(
+          tagValue: "perditaPeso",
+          hasOptionalQuestion: false,
+          question: "Ha notato perdita di peso negli\nultimi tempi?",
         ),
       ],
     );

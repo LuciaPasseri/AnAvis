@@ -38,11 +38,8 @@ class RouteGenerator {
       case '/sceltaMese':
         return MaterialPageRoute(builder: (_) => SchermataSceltaMese());
       case '/sceltaData':
-        if (args is String) {
           return MaterialPageRoute(
-              builder: (_) => SchermataSceltaData(meseIntero: args));
-        }
-        return _errorRoute();
+              builder: (_) => SchermataSceltaData());
       case '/questionario':
         return MaterialPageRoute(builder: (_) => SchermataQuestionario());
       default:

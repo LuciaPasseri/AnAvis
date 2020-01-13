@@ -1,3 +1,4 @@
+import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/pulsante.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,11 @@ class _SchermataLoginState extends State<SchermataLogin> {
               Pulsante(
                   text: "Donatore",
                   function: () {
+                    Provider.of<DonatoreProvider>(context).setNome("Matteo");
+                    Provider.of<DonatoreProvider>(context).setCognome("Bianchi");
+                    Provider.of<DonatoreProvider>(context).setGruppoSanguigno("A+");
+                    Provider.of<DonatoreProvider>(context).setEmail("matteo.bianchi@gmail.com");
+                    Provider.of<DonatoreProvider>(context).setPassword("abcd123");
                     Navigator.pushNamed(context, "/donatore");
                   }),
               SizedBox(

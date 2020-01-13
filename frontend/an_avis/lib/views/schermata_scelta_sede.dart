@@ -24,7 +24,11 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
       for (var d in data) {
         sediAvis.add(PulsanteListView(
             text: d["citta"],
-            function: () => Navigator.pushNamed(context, "/sceltaMese")));
+            function: () {
+              Provider.of<PrenotazioneProvider>(context)
+                  .setCittaSede(d["citta"]);
+              Navigator.pushNamed(context, "/sceltaMese");
+            }));
       }
       return sediAvis;
     } else {
@@ -52,7 +56,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<PrenotazioneProvider>(context).tipoDonazione);
+    print(Provider.of<PrenotazioneProvider>(context).getTipoDonazione());
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
