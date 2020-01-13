@@ -3,8 +3,10 @@ import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
+import 'package:flutter_svg/svg.dart';
 import "package:http/http.dart" as http;
 import 'package:provider/provider.dart';
+import 'package:flushbar/flushbar.dart';
 
 class SchermataSceltaData extends StatefulWidget {
   @override
@@ -12,8 +14,8 @@ class SchermataSceltaData extends StatefulWidget {
 }
 
 class _SchermataSceltaDataState extends State<SchermataSceltaData> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _oraSelezionata;
+  bool isEmpty = true;
 
   String _getData(String data) {
     List<String> temp = data.split("-");
@@ -37,7 +39,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
     return true;
   }
 
-   bool _checkDuplicateHour(List<DropdownMenuItem<String>> list, String ora) {
+  bool _checkDuplicateHour(List<DropdownMenuItem<String>> list, String ora) {
     for (var item in list) {
       if (item.value == ora) return false;
     }
@@ -60,6 +62,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
             _getAnno(d["data"]) == DateTime.now().year &&
             _getMese(d["data"]) ==
                 Provider.of<PrenotazioneProvider>(context).getMese()) {
+          isEmpty = false;
           giorniPrenotazioni.add(PulsanteGiorno(
             text: _getData(d["data"]) +
                 " " +
@@ -75,185 +78,174 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                 builder: (context) {
                   return StatefulBuilder(
                       builder: (BuildContext context, setState) {
-                    return Scaffold(
-                      key: _scaffoldKey,
-                      body: Container(
-                        height: 380,
-                        color: Color(0xFF737373),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: new BorderRadius.only(
-                                  topLeft: const Radius.circular(20.0),
-                                  topRight: const Radius.circular(20.0))),
-                          padding: EdgeInsets.all(35),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 5,
+                    return Container(
+                      height: 390,
+                      color: Color(0xFF737373),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(20.0),
+                                topRight: const Radius.circular(20.0))),
+                        padding: EdgeInsets.all(35),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Scegli l'orario",
+                              style: TextStyle(
+                                fontFamily: "Roboto",
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                "Scegli l'orario",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(25),
+                              child: FutureBuilder(
+                                  future: _getOrari(),
+                                  builder: (BuildContext mainContext,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                        return new RequestCircularLoading();
+                                      case ConnectionState.active:
+                                      case ConnectionState.waiting:
+                                        return new RequestCircularLoading();
+                                      case ConnectionState.done:
+                                        if (snapshot.hasError)
+                                          return new RequestCircularLoading();
+                                        return DropdownButton(
+                                          style: TextStyle(
+                                            fontFamily: "Roboto",
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                          isExpanded: true,
+                                          value: _oraSelezionata,
+                                          items: snapshot.data,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _oraSelezionata = value;
+                                            });
+                                          },
+                                        );
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                            ButtonTheme(
+                              minWidth: 300,
+                              height: 50,
+                              buttonColor: Colors.blue[800],
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(25),
-                                child: FutureBuilder(
-                                    future: _getOrari(),
-                                    builder: (BuildContext mainContext,
-                                        AsyncSnapshot snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                          return new RequestCircularLoading();
-                                        case ConnectionState.active:
-                                        case ConnectionState.waiting:
-                                          return new RequestCircularLoading();
-                                        case ConnectionState.done:
-                                          if (snapshot.hasError)
-                                            return new RequestCircularLoading();
-                                          return DropdownButton(
-                                            style: TextStyle(
-                                              fontFamily: "Roboto",
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                            isExpanded: true,
-                                            value: _oraSelezionata,
-                                            items: snapshot.data,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _oraSelezionata = value;
-                                              });
-                                            },
-                                          );
-                                      }
-                                      return null;
-                                    }),
-                              ),
-                              ButtonTheme(
-                                minWidth: 300,
-                                height: 50,
-                                buttonColor: Colors.blue[800],
-                                child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                                child: Text(
+                                  "Compila questionario",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                                  child: Text(
-                                    "Compila questionario",
-                                    style: TextStyle(
-                                      fontFamily: "Roboto",
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, "/questionario");
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 60,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ButtonTheme(
+                                  buttonColor: Colors.greenAccent[700],
+                                  child: RaisedButton(
+                                    child: Icon(
+                                      Icons.check,
                                       color: Colors.white,
+                                      size: 40,
                                     ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, "/questionario");
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                height: 80,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  ButtonTheme(
-                                    buttonColor: Colors.greenAccent[700],
-                                    child: RaisedButton(
-                                      child: Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(100)),
-                                      ),
-                                      onPressed: () {
-                                        if (!(_oraSelezionata == null) &&
-                                            Provider.of<PrenotazioneProvider>(
-                                                        context)
-                                                    .getQuestionarioCompilato() !=
-                                                null) {
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                    ),
+                                    onPressed: () {
+                                      if (_oraSelezionata != null &&
                                           Provider.of<PrenotazioneProvider>(
-                                                  context)
-                                              .setQuestionarioCompilato(null);
-                                          _scaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                            duration: Duration(seconds: 2),
-                                            backgroundColor: Colors.green,
-                                            content: Text(
-                                                "Prenotazione confermata!"),
-                                          ));
-                                          Future.delayed(Duration(seconds: 2),
-                                              () {
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                "/donatore",
-                                                (route) => route.isFirst);
-                                          });
-                                        } else if (Provider.of<
-                                                        PrenotazioneProvider>(
-                                                    context)
-                                                .getQuestionarioCompilato() ==
-                                            null) {
-                                          _scaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                            duration: Duration(seconds: 3),
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                                "Compilare prima il questionario!"),
-                                          ));
-                                        } else {
-                                          _scaffoldKey.currentState
-                                              .showSnackBar(SnackBar(
-                                            duration: Duration(seconds: 3),
-                                            backgroundColor: Colors.red,
-                                            content:
-                                                Text("Inserire un orario!"),
-                                          ));
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  ButtonTheme(
-                                    buttonColor: Colors.red,
-                                    child: RaisedButton(
-                                      child: Icon(
-                                        Icons.clear,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(100)),
-                                      ),
-                                      onPressed: () {
+                                                      context)
+                                                  .getQuestionarioCompilato() !=
+                                              null) {
                                         Provider.of<PrenotazioneProvider>(
                                                 context)
                                             .setQuestionarioCompilato(null);
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            "/donatore",
-                                            (route) => route.isFirst);
-                                      },
-                                    ),
+                                        Flushbar(
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: Colors.green,
+                                          message: "Prenotazione confermata!",
+                                        ).show(context);
+                                        Future.delayed(Duration(seconds: 2),
+                                            () {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              "/donatore",
+                                              (route) => route.isFirst);
+                                        });
+                                      } else if (Provider.of<
+                                                  PrenotazioneProvider>(context)
+                                              .getQuestionarioCompilato() ==
+                                          null) {
+                                        Flushbar(
+                                          duration: Duration(seconds: 3),
+                                          backgroundColor: Colors.red,
+                                          message:
+                                              "Compilare prima il questionario!",
+                                        ).show(context);
+                                      } else {
+                                        Flushbar(
+                                          duration: Duration(seconds: 3),
+                                          backgroundColor: Colors.red,
+                                          message: "Inserire un orario!",
+                                        ).show(context);
+                                      }
+                                    },
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ButtonTheme(
+                                  buttonColor: Colors.red,
+                                  child: RaisedButton(
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                    ),
+                                    onPressed: () {
+                                      Provider.of<PrenotazioneProvider>(context)
+                                          .setQuestionarioCompilato(null);
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          "/donatore",
+                                          (route) => route.isFirst);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -339,12 +331,36 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                       case ConnectionState.done:
                         if (snapshot.hasError)
                           return new RequestCircularLoading();
-                        return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return snapshot.data[index];
-                          },
-                        );
+                        if (isEmpty) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  "assets/images/no_data.svg",
+                                  height: 240,
+                                  width: 240,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Card(
+                                    elevation: 3,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                            "Nessuna prenotazione disponibile"))),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return snapshot.data[index];
+                            },
+                          );
+                        }
                     }
                     return null;
                   }),

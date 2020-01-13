@@ -1,4 +1,5 @@
 import 'package:an_avis/models/prenotazione.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import "package:flutter/material.dart";
@@ -12,7 +13,11 @@ class SchermataPrenotazioni extends StatefulWidget {
 }
 
 class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
+  bool isEmpty = true;
+  int countPrenotazioni;
+
   Future<List<Card>> _getPrenotazioni() async {
+    countPrenotazioni = 0;
     http.Response response =
         await http.get("http://10.0.2.2:8080/prenotazioni");
     if (response.statusCode == 200) {
@@ -20,7 +25,9 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
       List<Card> prenotazioni = [];
       for (var d in data) {
         if (d["sede"]["citta"] ==
-            Provider.of<SedeProvider>(context).getCittaSede())
+            Provider.of<SedeProvider>(context).getCittaSede()) {
+          countPrenotazioni++;
+          isEmpty = false;
           prenotazioni.add(Card(
             margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
             elevation: 4,
@@ -103,6 +110,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
+                              //countPrenotazioni = countPrenotazioni - countPrenotazioni;
                               return AlertDialog(
                                 title: new Text("Cancellare prenotazione?"),
                                 content: new Text(
@@ -119,7 +127,9 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                     onPressed: () {
                                       setState(() {
                                         http.delete(
-                                            "http://10.0.2.2:8080/prenotazioni/${d["idPrenotazione"]}");
+                                            "http://10.0.2.2:8080/prenotazioni/${d["id"]}");
+                                            countPrenotazioni--;
+                                            if (countPrenotazioni == 0) {isEmpty = true;}
                                       });
                                       print("wewe, rimossa");
                                       Navigator.of(context).pop();
@@ -135,6 +145,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                   ],
                 )),
           ));
+        }
       }
       return prenotazioni;
     } else {
@@ -175,23 +186,41 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                 return new RequestCircularLoading();
               case ConnectionState.done:
                 if (snapshot.hasError) return new RequestCircularLoading();
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (snapshot.data.length == 0) {
-                      return Center(
-                        child: Text("Nessuna prenotazione disponibile"),
-                      );
-                    } else {
+                if (isEmpty && countPrenotazioni == 0) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          "assets/images/no_data.svg",
+                          height: 240,
+                          width: 240,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Card(
+                          elevation: 3,
+                            child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child:
+                                    Text("Nessuna prenotazione disponibile"))),
+                      ],
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
                       return Column(
                         children: <Widget>[
                           SizedBox(height: 10),
                           snapshot.data[index],
                         ],
                       );
-                    }
-                  },
-                );
+                    },
+                  );
+                }
             }
             return null;
           }),

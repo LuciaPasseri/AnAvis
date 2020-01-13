@@ -131,7 +131,7 @@ class _SchermataRegistrazioneDonatoreState
                   data: Theme.of(context)
                       .copyWith(primaryColor: Colors.blue[900]),
                   child: CustomTextField(
-                    icon: Icon(Icons.person),
+                    icon: Icon(Icons.person_outline),
                     text: "Inserire cognome",
                     alignment: TextAlign.left,
                     onSaved: (value) {

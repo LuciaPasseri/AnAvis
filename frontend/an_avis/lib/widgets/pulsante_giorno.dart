@@ -33,7 +33,7 @@ class PulsanteGiorno extends StatelessWidget {
                 ),
                 Spacer(),
                 Icon(
-                  Icons.check_circle,
+                  Icons.expand_less,
                   color: Colors.blue[900],
                 )
               ],
