@@ -1,0 +1,54 @@
+package progetto.anavis.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Repository;
+
+import progetto.anavis.model.Questionario;
+
+@Repository("QuestionarioDataAccess")
+public class QuestionarioDataAccessService implements QuestionarioDao {
+
+	private List<Questionario> db;
+	private Questionario questionario;
+	private UUID idPren = UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0");
+
+	private QuestionarioDataAccessService() {
+		db = new ArrayList<>();
+		db.add(new Questionario(idPren, "2019-12-15", true, false, null, true, false, null, false));
+	}
+
+	@Override
+	public Questionario creaQuestionario(UUID id, Questionario quest) {
+		questionario = new Questionario(id, quest.getData(), quest.isBuonaSalute(), quest.isRicoveratoOspedale(),
+				quest.getMotiviRicovero(), quest.isCondizioniSaluteRecenti(), quest.isAllergie(),
+				quest.getQualiAllergie(), quest.isPerditaPeso());
+		db.add(questionario);
+		return questionario;
+	}
+
+	@Override
+	public List<Questionario> getQuestionari() {
+		return db;
+	}
+
+	@Override
+	public Questionario getById(UUID idQuestionario) {
+		return db.stream().filter(p -> p.getIdPrenotazione().equals(idQuestionario)).findFirst().orElse(null);
+	}
+
+	@Override
+	public void deleteById(UUID idQuestionario) {
+		db.remove(getById(idQuestionario));
+	}
+
+	@Override
+	public Questionario update(UUID id, Questionario questionario) {
+		db.set(db.indexOf(getById(id)), questionario);
+		questionario.setIdPrenotazione(id);
+		return getById(id);
+	}
+
+}

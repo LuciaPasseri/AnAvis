@@ -6,9 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
-import progetto.anavis.model.Donatore;
 import progetto.anavis.model.Prenotazione;
-import progetto.anavis.model.Questionario;
 import progetto.anavis.model.TipoDonazione;
 
 @Repository("PrenotazioneDataAccess")
@@ -19,22 +17,18 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	public PrenotazioneDataAccessService() {
 		db = new ArrayList<>();
-		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-07", "15 : 00",
-				new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true), "Tolentino",
-				TipoDonazione.PLASMA, new Questionario(null), false));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-10", "9 : 30",
-				new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true), "Civitanova",
-				TipoDonazione.SANGUE, new Questionario(null), false));
-		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-11", "11 : 00",
-				new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true), "Camerino",
-				TipoDonazione.SANGUE, new Questionario(null), false));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-07", "15 : 00", UUID.randomUUID(), UUID.randomUUID(),
+				TipoDonazione.PLASMA, false));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-10", "9 : 30", UUID.randomUUID(), UUID.randomUUID(),
+				TipoDonazione.SANGUE, false));
+		db.add(new Prenotazione(UUID.randomUUID(), "2019-12-11", "11 : 00", UUID.randomUUID(), UUID.randomUUID(),
+				TipoDonazione.SANGUE, false));
 	}
 
 	@Override
 	public Prenotazione creaPrenotazione(UUID id, Prenotazione prenotazione) {
-		prenot = new Prenotazione(id, prenotazione.getData(), prenotazione.getOrario(), prenotazione.getDonatore(),
-				prenotazione.getSede().getCitta(), prenotazione.getTipoDonazione(), prenotazione.getQuestionario(),
-				prenotazione.getDisponibilita());
+		prenot = new Prenotazione(id, prenotazione.getData(), prenotazione.getOrario(), prenotazione.getIdDonatore(),
+				prenotazione.getIdSede(), prenotazione.getTipoDonazione(), prenotazione.getDisponibilita());
 		db.add(prenot);
 		return prenot;
 	}

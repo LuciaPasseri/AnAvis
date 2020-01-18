@@ -16,12 +16,10 @@ public class Prenotazione {
 	private UUID id;
 	@NotBlank
 	private String data, orario;
-	private Donatore donatore;
 	@NotNull
-	private SedeAvis sede;
+	private UUID idDonatore, idSede;
 	@NotNull
 	private TipoDonazione tipoDonazione;
-	private Questionario questionario;
 	@NotNull
 	private boolean disponibilita = false;
 
@@ -29,21 +27,20 @@ public class Prenotazione {
 
 	}
 
-	public Prenotazione(@JsonProperty("idPrenotazione") UUID id, @JsonProperty("data") String data, @JsonProperty("orario") String orario,
-			@JsonProperty("donatore") Donatore donatore, @JsonProperty("sede") String citta,
+	public Prenotazione(@JsonProperty("idPrenotazione") UUID id, @JsonProperty("data") String data,
+			@JsonProperty("orario") String orario, @JsonProperty("idDonatore") UUID idD,
+			@JsonProperty("idSede") UUID idS,
 			@JsonProperty(value = "tipoDonazione", defaultValue = "SANGUE_INTERO") TipoDonazione tipoDonazione,
-			@JsonProperty("questionario") Questionario questionario,
 			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita) {
 		this.id = id;
 		this.data = data;
 		this.orario = orario;
-		this.donatore = donatore;
-		this.sede = new SedeAvis(UUID.randomUUID(), citta);
+		this.idDonatore = idD;
+		this.idSede = idS;
 		this.tipoDonazione = tipoDonazione;
-		this.questionario = questionario;
 		this.disponibilita = disponibilita;
 	}
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -68,20 +65,20 @@ public class Prenotazione {
 		this.orario = orario;
 	}
 
-	public Donatore getDonatore() {
-		return donatore;
+	public UUID getIdDonatore() {
+		return idDonatore;
 	}
 
-	public void setDonatore(Donatore donatore) {
-		this.donatore = donatore;
+	public void setIdDonatore(UUID idD) {
+		this.idDonatore = idD;
 	}
 
-	public SedeAvis getSede() {
-		return sede;
+	public UUID getIdSede() {
+		return idSede;
 	}
 
-	public void setSede(SedeAvis sede) {
-		this.sede = sede;
+	public void setIdSede(UUID idS) {
+		this.idSede = idS;
 	}
 
 	public TipoDonazione getTipoDonazione() {
@@ -90,14 +87,6 @@ public class Prenotazione {
 
 	public void setTipoDonazione(TipoDonazione tipoDonazione) {
 		this.tipoDonazione = tipoDonazione;
-	}
-
-	public Questionario getQuestionario() {
-		return questionario;
-	}
-
-	public void setQuestionario(Questionario questionario) {
-		this.questionario = questionario;
 	}
 
 	public boolean getDisponibilita() {

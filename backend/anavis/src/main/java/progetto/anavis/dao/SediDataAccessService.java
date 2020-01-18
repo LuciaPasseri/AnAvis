@@ -13,10 +13,11 @@ public class SediDataAccessService implements SedeAvisDao {
 
 	private List<SedeAvis> db;
 	private SedeAvis sede;
+	private UUID idTole= UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e");
 
 	private SediDataAccessService() {
 		db = new ArrayList<>();
-		db.add(new SedeAvis(UUID.randomUUID(), "Tolentino"));
+		db.add(new SedeAvis(idTole, "Tolentino"));
 		db.add(new SedeAvis(UUID.randomUUID(), "Civitanova"));
 		db.add(new SedeAvis(UUID.randomUUID(), "Camerino"));
 	}

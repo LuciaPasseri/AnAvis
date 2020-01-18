@@ -13,12 +13,14 @@ public class DonatoreDataAccessService implements DonatoreDao {
 
 	private List<Donatore> db;
 	private Donatore dona;
+	private UUID idM= UUID.fromString("09da317e-11ec-414d-a0ee-f2a3fcd92a6a");
 
 	public DonatoreDataAccessService() {
 		db = new ArrayList<>();
 		db.add(new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true));
 		db.add(new Donatore(UUID.randomUUID(), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true));
 		db.add(new Donatore(UUID.randomUUID(), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true));
+		db.add(new Donatore(idM, "Matteo", "Bianchi", "A+", "matteo.bianchi@gmail.com", "abcd123", true));
 	}
 
 	@Override

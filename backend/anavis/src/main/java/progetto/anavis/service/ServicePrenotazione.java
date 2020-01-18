@@ -14,7 +14,7 @@ public class ServicePrenotazione {
 
 	@Autowired
 	PrenotazioneDao prenotazioneDao;
-	
+
 	public List<Prenotazione> getPrenotazioni() {
 		return prenotazioneDao.getPrenotazioni();
 	}
@@ -26,7 +26,7 @@ public class ServicePrenotazione {
 	public Prenotazione creaPrenotazione(Prenotazione prenotazione) {
 		return prenotazioneDao.addPrenotazione(prenotazione);
 	}
-	
+
 	public void delete(UUID id) {
 		prenotazioneDao.deleteById(id);
 	}

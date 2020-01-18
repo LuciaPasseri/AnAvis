@@ -17,39 +17,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import progetto.anavis.model.SedeAvis;
-import progetto.anavis.service.ServiceSedeAvis;
+import progetto.anavis.model.Questionario;
+import progetto.anavis.service.ServiceQuestionario;
 
 @RestController
-@RequestMapping("/sedi")
-public class ControllerSedeAvis {
+@RequestMapping("/questionari")
+public class ControllerQuestionario {
 
 	@Autowired
-	ServiceSedeAvis serviceSediAvis;
-
+	ServiceQuestionario serviceQuestionario;
+	
 	@GetMapping
-	public List<SedeAvis> getSedi() {
-		return serviceSediAvis.getSedi();
+	public List<Questionario> getQuestionari(){
+		return serviceQuestionario.getQuestionari();
 	}
+	
 
 	@GetMapping("/{id}")
-	public SedeAvis getSede(@NotBlank@PathVariable("id") UUID idSede) {
-		return serviceSediAvis.getById(idSede);
+	public Questionario getQuestionario(@NotBlank@PathVariable("id") UUID id){
+		return serviceQuestionario.getById(id);
 	}
 
 	@PostMapping
-	public SedeAvis create(@Valid@NotNull@RequestBody SedeAvis sedeAvis) {
-		return serviceSediAvis.creaSede(sedeAvis);
+	public Questionario create(@Valid@NotNull@RequestBody Questionario questionario) {
+		return serviceQuestionario.creaQuestionario(questionario);
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@NotBlank@PathVariable("id") UUID idSede) {
-		serviceSediAvis.delete(idSede);
+	public void delete(@NotBlank@PathVariable("id") UUID id) {
+		serviceQuestionario.delete(id);
 	}
 
 	@PutMapping("/{id}")
-	public SedeAvis update(@NotBlank@PathVariable("id") UUID id, @NotNull@RequestBody SedeAvis sede) {
-		return serviceSediAvis.update(id, sede);
+	public Questionario update(@NotBlank@PathVariable("id") UUID id, @Valid@NotNull@RequestBody Questionario questionario) {
+		return serviceQuestionario.update(id, questionario);
 	}
-
 }

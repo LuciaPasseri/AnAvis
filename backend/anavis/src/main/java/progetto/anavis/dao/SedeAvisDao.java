@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import progetto.anavis.model.SedeAvis;
 
-public interface SedeAvisDao {
+public interface SedeAvisDao{
 
 	public SedeAvis creaSede(UUID id, SedeAvis sedeAvis);
 
