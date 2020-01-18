@@ -110,7 +110,6 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              //countPrenotazioni = countPrenotazioni - countPrenotazioni;
                               return AlertDialog(
                                 title: new Text("Cancellare prenotazione?"),
                                 content: new Text(

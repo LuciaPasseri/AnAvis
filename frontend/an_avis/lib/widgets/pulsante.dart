@@ -14,17 +14,17 @@ class Pulsante extends StatelessWidget {
   Widget build(BuildContext context) {
     return ButtonTheme(
       buttonColor: Colors.blue[800],
-      minWidth: 330.0,
-      height: 60.0,
+      minWidth: 310.0,
+      height: 55.0,
       child: RaisedButton(
-          elevation: 15,
+          elevation: 8,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 23,
+              fontSize: 21,
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontFamily: "Roboto",

@@ -1,14 +1,22 @@
 import "package:flutter/material.dart";
 
 class SedeProvider extends ChangeNotifier {
-    String _cittaSede;
+  String _idSede;
+  String _cittaSede;
 
-    setCitta(String citta) {
-      _cittaSede = citta;
-    }
+  setId(String id) {
+    _idSede = id;
+  }
 
-    String getCittaSede() {
-      return _cittaSede;
-    }
+  setCitta(String citta) {
+    _cittaSede = citta;
+  }
 
+  String getId() {
+    return _idSede;
+  }
+
+  String getCittaSede() {
+    return _cittaSede;
+  }
 }

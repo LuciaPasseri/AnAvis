@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 class PrenotazioneProvider extends ChangeNotifier {
   String _tipoDonazione;
-  String _cittaSede;
+  String _idSede;
   String _data;
   String _mese;
   String _giorno;
@@ -12,8 +12,8 @@ class PrenotazioneProvider extends ChangeNotifier {
     _tipoDonazione = tipo;
   }
 
-  setCittaSede(String citta) {
-    _cittaSede = citta;
+  setIdSede(String id) {
+    _idSede = id;
   }
 
   setMese(String mese) {
@@ -40,8 +40,8 @@ class PrenotazioneProvider extends ChangeNotifier {
     return _tipoDonazione;
   }
 
-  String getCittaSede() {
-    return _cittaSede;
+  String getIdSede() {
+    return _idSede;
   }
 
   String getMese() {

@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 class QuestionarioProvider extends ChangeNotifier {
   bool _buonaSalute;
   bool _ricoveratoOspedale = false;
-  bool _ultimaDonazioneSalute = false;
+  bool _condizioniSaluteRecenti = false;
   bool _allergie = false;
   bool _perditaPeso = false;
   String _motivoRicovero;
@@ -17,8 +17,8 @@ class QuestionarioProvider extends ChangeNotifier {
     _ricoveratoOspedale = value;
   }
 
-  setUltimaDonazioneSalute(bool value) {
-    _ultimaDonazioneSalute = value;
+  setCondizioniSaluteRecenti(bool value) {
+    _condizioniSaluteRecenti = value;
   }
 
   setAllergie(bool value) {
@@ -45,8 +45,8 @@ class QuestionarioProvider extends ChangeNotifier {
     return _ricoveratoOspedale;
   }
 
-  bool getUltimaDonazioneSalute() {
-    return _ultimaDonazioneSalute;
+  bool getCondizioniSaluteRecenti() {
+    return _condizioniSaluteRecenti;
   }
 
   bool getAllergie() {

@@ -22,7 +22,7 @@ class PulsanteMese extends StatelessWidget {
         meseTag,
         style: TextStyle(
           fontFamily: "Roboto",
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.red[800],
         ),
