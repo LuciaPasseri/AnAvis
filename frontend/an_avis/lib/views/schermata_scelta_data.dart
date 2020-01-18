@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/prenotazione.dart';
+import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
@@ -16,6 +18,53 @@ class SchermataSceltaData extends StatefulWidget {
 class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   String _oraSelezionata;
   bool isEmpty = true;
+
+  void setPrenotazione() async {
+    String idPrenotazione;
+    var responseGet = await http.get("http://10.0.2.2:8080/prenotazioni");
+    if (responseGet.statusCode == 200) {
+      var data = jsonDecode(responseGet.body);
+      for (var d in data) {
+        if (d["idSede"] ==
+                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
+            d["data"] == Provider.of<PrenotazioneProvider>(context).getData() &&
+            d["orario"] == _oraSelezionata) {
+          idPrenotazione = d["id"];
+        }
+      }
+    }
+    var prenotation = json.encode({
+      "data": Provider.of<PrenotazioneProvider>(context).getData(),
+      "orario": _oraSelezionata,
+      "idDonatore": {Provider.of<DonatoreProvider>(context).getId()},
+      "idSede": Provider.of<PrenotazioneProvider>(context).getIdSede(),
+      "tipoDonazione":
+          Provider.of<PrenotazioneProvider>(context).getTipoDonazione(),
+      "disponibilita": false,
+    });
+    var responsePut = await http.put(
+      Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
+      body: prenotation,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "accept": "application/json; charset=utf-8",
+      },
+    );
+    print(responsePut.statusCode);
+    if (responsePut.statusCode == 200) {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.green,
+        message: "Prenotazione confermata!",
+      ).show(context);
+    } else {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        message: "Errore",
+      ).show(context);
+    }
+  }
 
   String _getData(String data) {
     List<String> temp = data.split("-");
@@ -57,8 +106,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
             d["tipoDonazione"] ==
                 Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
             _checkDuplicateDay(giorniPrenotazioni, _getData(d["data"])) &&
-            d["sede"]["citta"] ==
-                Provider.of<PrenotazioneProvider>(context).getCittaSede() &&
+            d["idSede"] ==
+                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
             _getAnno(d["data"]) == DateTime.now().year &&
             _getMese(d["data"]) ==
                 Provider.of<PrenotazioneProvider>(context).getMese()) {
@@ -186,6 +235,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                         Provider.of<PrenotazioneProvider>(
                                                 context)
                                             .setQuestionarioCompilato(null);
+                                        //WEWE TODO
+                                        //setPrenotazione();
                                         Flushbar(
                                           duration: Duration(seconds: 2),
                                           backgroundColor: Colors.green,
@@ -274,8 +325,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
             _checkDuplicateHour(orari, d["orario"]) &&
             d["tipoDonazione"] ==
                 Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
-            d["sede"]["citta"] ==
-                Provider.of<PrenotazioneProvider>(context).getCittaSede() &&
+            d["idSede"] ==
+                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
             d["data"] == Provider.of<PrenotazioneProvider>(context).getData()) {
           orari.add(DropdownMenuItem(
             child: Text(d["orario"]),

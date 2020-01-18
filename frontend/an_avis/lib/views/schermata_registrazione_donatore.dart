@@ -104,7 +104,7 @@ class _SchermataRegistrazioneDonatoreState
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                padding: EdgeInsets.fromLTRB(35, 30, 35, 0),
                 child: Theme(
                   data: Theme.of(context)
                       .copyWith(primaryColor: Colors.blue[900]),
@@ -126,7 +126,7 @@ class _SchermataRegistrazioneDonatoreState
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
+                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
                 child: Theme(
                   data: Theme.of(context)
                       .copyWith(primaryColor: Colors.blue[900]),
@@ -148,7 +148,7 @@ class _SchermataRegistrazioneDonatoreState
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
+                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
                 child: FormField(
                   builder: (FormFieldState state) {
                     return InputDecorator(
@@ -225,7 +225,7 @@ class _SchermataRegistrazioneDonatoreState
                       ),
                     ),
               Padding(
-                padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
+                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
                 child: Theme(
                   data: Theme.of(context)
                       .copyWith(primaryColor: Colors.blue[900]),
@@ -247,7 +247,7 @@ class _SchermataRegistrazioneDonatoreState
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
+                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
                 child: Theme(
                   data: Theme.of(context)
                       .copyWith(primaryColor: Colors.blue[900]),

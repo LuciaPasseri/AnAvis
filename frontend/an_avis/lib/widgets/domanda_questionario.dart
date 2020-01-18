@@ -30,9 +30,9 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
       case "ricoveratoOspedale":
         Provider.of<QuestionarioProvider>(context).setRicoveratoOspedale(value);
         break;
-      case "ultimaDonazioneSalute":
+      case "condizioniSaluteRecenti":
         Provider.of<QuestionarioProvider>(context)
-            .setUltimaDonazioneSalute(value);
+            .setCondizioniSaluteRecenti(value);
         break;
       case "perditaPeso":
         Provider.of<QuestionarioProvider>(context).setPerditaPeso(value);

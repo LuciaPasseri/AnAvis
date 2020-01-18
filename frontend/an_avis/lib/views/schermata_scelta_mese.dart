@@ -33,9 +33,9 @@ class _SchermataSceltaMeseState extends State<SchermataSceltaMese> {
       body: Center(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 5),
             child: GridView.count(
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(45),
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
               crossAxisCount: 3,

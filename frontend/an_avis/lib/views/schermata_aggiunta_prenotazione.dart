@@ -140,7 +140,7 @@ class _SchermataAggiuntaPrenotazioneState
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(25, 30, 25, 5),
+              padding: EdgeInsets.fromLTRB(35, 40, 35, 5),
               child: InkWell(
                 onTap: () {
                   _selectDate();
@@ -174,7 +174,7 @@ class _SchermataAggiuntaPrenotazioneState
               children: <Widget>[
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                    padding: EdgeInsets.fromLTRB(35, 25, 30, 10),
                     child: Theme(
                       data: Theme.of(context)
                           .copyWith(primaryColor: Colors.blue[900]),
@@ -213,7 +213,7 @@ class _SchermataAggiuntaPrenotazioneState
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 25, 25, 10),
+                    padding: EdgeInsets.fromLTRB(30, 25, 35, 10),
                     child: CustomTextField(
                       text: "Minuti",
                       alignment: TextAlign.center,
@@ -235,7 +235,7 @@ class _SchermataAggiuntaPrenotazioneState
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(25, 0, 25, 8),
+              padding: EdgeInsets.fromLTRB(35, 0, 35, 8),
               child: FormField(
                 builder: (FormFieldState state) {
                   return InputDecorator(
@@ -266,7 +266,7 @@ class _SchermataAggiuntaPrenotazioneState
                         items: [
                           DropdownMenuItem(
                             value: "Sangue",
-                            child: Text("Sangue"),
+                            child: Text("Sangue intero"),
                           ),
                           DropdownMenuItem(
                             value: "Plasma",

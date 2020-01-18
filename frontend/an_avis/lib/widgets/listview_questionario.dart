@@ -23,7 +23,7 @@ class _ListQuestionarioState extends State<ListQuestionario> {
           tagOptionalAnswer: "motivoRicovero",
         ),
         DomandaQuestionario(
-          tagValue: "ultimaDonazioneSalute",
+          tagValue: "condizioniSaluteRecenti",
           hasOptionalQuestion: false,
           question:
               "Si è rivolto di recente al suo\nmedico di famiglia o ha\nintenzionedi farlo?",
