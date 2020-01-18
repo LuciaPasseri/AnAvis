@@ -27,6 +27,8 @@ dependencies:
   provider: ^3.2.0
   intl: ^0.16.0
   random_string: ^2.0.0
+  flutter_svg: ^0.15.0
+  flushbar: ^1.9.1
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +45,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
 
   fonts:
   - family: Roboto
