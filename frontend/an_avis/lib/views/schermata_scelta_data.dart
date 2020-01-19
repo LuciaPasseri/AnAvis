@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/prenotazione.dart';
-import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
@@ -17,7 +16,7 @@ class SchermataSceltaData extends StatefulWidget {
 
 class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   String _oraSelezionata;
-  bool isEmpty = true;
+  bool _isEmpty = true;
 
   void setPrenotazione() async {
     String idPrenotazione;
@@ -33,7 +32,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         }
       }
     }
-    var prenotation = json.encode({
+    var prenotazione = json.encode({
       "data": Provider.of<PrenotazioneProvider>(context).getData(),
       "orario": _oraSelezionata,
       "idDonatore": {Provider.of<DonatoreProvider>(context).getId()},
@@ -44,7 +43,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
     });
     var responsePut = await http.put(
       Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
-      body: prenotation,
+      body: prenotazione,
       headers: {
         "content-type": "application/json; charset=utf-8",
         "accept": "application/json; charset=utf-8",
@@ -81,14 +80,14 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
     return int.parse(temp[0]);
   }
 
-  bool _checkDuplicateDay(List<PulsanteGiorno> list, String giorno) {
+  bool _checkGiornoDoppio(List<PulsanteGiorno> list, String giorno) {
     for (var pulsante in list) {
       if (pulsante.text.substring(0, 2) == giorno) return false;
     }
     return true;
   }
 
-  bool _checkDuplicateHour(List<DropdownMenuItem<String>> list, String ora) {
+  bool _checkOrarioDoppio(List<DropdownMenuItem<String>> list, String ora) {
     for (var item in list) {
       if (item.value == ora) return false;
     }
@@ -105,13 +104,13 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         if (d["disponibilita"] &&
             d["tipoDonazione"] ==
                 Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
-            _checkDuplicateDay(giorniPrenotazioni, _getData(d["data"])) &&
+            _checkGiornoDoppio(giorniPrenotazioni, _getData(d["data"])) &&
             d["idSede"] ==
                 Provider.of<PrenotazioneProvider>(context).getIdSede() &&
             _getAnno(d["data"]) == DateTime.now().year &&
             _getMese(d["data"]) ==
                 Provider.of<PrenotazioneProvider>(context).getMese()) {
-          isEmpty = false;
+          _isEmpty = false;
           giorniPrenotazioni.add(PulsanteGiorno(
             text: _getData(d["data"]) +
                 " " +
@@ -120,8 +119,6 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
               Provider.of<PrenotazioneProvider>(context)
                   .setGiorno(((_getData(d["data"]))));
               Provider.of<PrenotazioneProvider>(context).setData();
-              print(Provider.of<PrenotazioneProvider>(context).getMese());
-              print(Provider.of<PrenotazioneProvider>(context).getData());
               showModalBottomSheet(
                 context: context,
                 builder: (context) {
@@ -139,9 +136,6 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                         padding: EdgeInsets.all(35),
                         child: Column(
                           children: <Widget>[
-                            SizedBox(
-                              height: 5,
-                            ),
                             Text(
                               "Scegli l'orario",
                               style: TextStyle(
@@ -151,7 +145,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.fromLTRB(100, 25, 100, 35),
                               child: FutureBuilder(
                                   future: _getOrari(),
                                   builder: (BuildContext mainContext,
@@ -165,21 +159,35 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                       case ConnectionState.done:
                                         if (snapshot.hasError)
                                           return new RequestCircularLoading();
-                                        return DropdownButton(
-                                          style: TextStyle(
-                                            fontFamily: "Roboto",
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                            border: Border.all(
+                                                color: Colors.blue[900],
+                                                style: BorderStyle.solid,
+                                                width: 2),
                                           ),
-                                          isExpanded: true,
-                                          value: _oraSelezionata,
-                                          items: snapshot.data,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _oraSelezionata = value;
-                                            });
-                                          },
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton(
+                                              style: TextStyle(
+                                                fontFamily: "Roboto",
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                              isExpanded: true,
+                                              value: _oraSelezionata,
+                                              items: snapshot.data,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _oraSelezionata = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
                                         );
                                     }
                                     return null;
@@ -209,7 +217,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                               ),
                             ),
                             SizedBox(
-                              height: 60,
+                              height: 50,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -307,6 +315,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
           ));
         }
       }
+      giorniPrenotazioni.sort((a, b) => a.getDay().compareTo(b.getDay()));
       return giorniPrenotazioni;
     } else {
       print(response.statusCode);
@@ -322,18 +331,32 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       List<DropdownMenuItem<String>> orari = [];
       for (var d in data) {
         if (d["disponibilita"] &&
-            _checkDuplicateHour(orari, d["orario"]) &&
+            _checkOrarioDoppio(orari, d["orario"]) &&
             d["tipoDonazione"] ==
                 Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
             d["idSede"] ==
                 Provider.of<PrenotazioneProvider>(context).getIdSede() &&
             d["data"] == Provider.of<PrenotazioneProvider>(context).getData()) {
           orari.add(DropdownMenuItem(
-            child: Text(d["orario"]),
+            child:
+                Padding(padding: EdgeInsets.all(0), child: Text(d["orario"])),
             value: d["orario"],
           ));
         }
       }
+      orari.sort((a, b) {
+        List<String> oraEMinutiA = a.value.split(" : ");
+        List<String> oraEMinutiB = b.value.split(" : ");
+        int oraA = int.parse(oraEMinutiA[0]);
+        int minutiA = int.parse(oraEMinutiA[1]);
+        int oraB = int.parse(oraEMinutiB[0]);
+        int minutiB = int.parse(oraEMinutiB[1]);
+        if ((oraA == oraB &&
+            minutiA > minutiB) || oraA > oraB) {
+          return 1;
+        } else
+          return -1;
+      });
       return orari;
     } else {
       print(response.statusCode);
@@ -382,7 +405,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                       case ConnectionState.done:
                         if (snapshot.hasError)
                           return new RequestCircularLoading();
-                        if (isEmpty) {
+                        if (_isEmpty) {
                           return Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

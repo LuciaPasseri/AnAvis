@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
@@ -16,7 +17,7 @@ class _SchermataAggiuntaPrenotazioneState
     extends State<SchermataAggiuntaPrenotazione> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  DateTime _date;
+  DateTime _data;
   String _tipoDonazione;
   String _dropdownError;
   TextEditingController _controllerDate = TextEditingController();
@@ -57,17 +58,20 @@ class _SchermataAggiuntaPrenotazioneState
       return minuti.toString();
   }
 
-  void addPrenotation(BuildContext context) async {
-    var prenotation = json.encode({
-      "data": "${DateFormat('yyyy-MM-dd').format(_date)}",
-      "orario": _getOra(_date.hour) + " : " + _getMinuti(_date.minute),
-      "sede": Provider.of<SedeProvider>(context).getCittaSede(),
+  void addPrenotazione(BuildContext context) async {
+    var prenotazione = json.encode({
+      //DA MODIFICAREEE 
+      "data": "${DateFormat('yyyy-MM-dd').format(_data)}",
+      "orario": _getOra(_data.hour) + " : " + _getMinuti(_data.minute),
+      "idSede": Provider.of<SedeProvider>(context).getId(),
+      //MOMENTANEOOOOO
+      "idDonatore": Provider.of<DonatoreProvider>(context).getId(),
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilita": true,
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/prenotazioni"),
-      body: prenotation,
+      body: prenotazione,
       headers: {
         "content-type": "application/json; charset=utf-8",
         "accept": "application/json; charset=utf-8",
@@ -89,9 +93,9 @@ class _SchermataAggiuntaPrenotazioneState
     }
   }
 
-  Future _selectDate() async {
+  Future _selezionaData() async {
     final now = DateTime.now();
-    DateTime picked = await showDatePicker(
+    DateTime data = await showDatePicker(
       context: context,
       initialDate: DateTime(now.year, now.month, now.day + 1),
       firstDate: DateTime(now.year, now.month, now.day + 1),
@@ -106,10 +110,10 @@ class _SchermataAggiuntaPrenotazioneState
         );
       },
     );
-    if (picked != null) {
-      setState(() => _date = picked);
+    if (data != null) {
+      setState(() => _data = data);
       _controllerDate.value =
-          TextEditingValue(text: DateFormat('dd-MM-yyyy').format(picked));
+          TextEditingValue(text: DateFormat('dd-MM-yyyy').format(data));
     }
   }
 
@@ -143,7 +147,7 @@ class _SchermataAggiuntaPrenotazioneState
               padding: EdgeInsets.fromLTRB(35, 40, 35, 5),
               child: InkWell(
                 onTap: () {
-                  _selectDate();
+                  _selezionaData();
                 },
                 child: IgnorePointer(
                   child: TextFormField(
@@ -192,8 +196,8 @@ class _SchermataAggiuntaPrenotazioneState
                         },
                         onSaved: (value) {
                           setState(() {
-                            _date =
-                                _date.add(Duration(hours: int.parse(value)));
+                            _data =
+                                _data.add(Duration(hours: int.parse(value)));
                           });
                         },
                         icon: Icon(Icons.access_time),
@@ -227,7 +231,7 @@ class _SchermataAggiuntaPrenotazioneState
                         return null;
                       },
                       onSaved: (value) {
-                        _date = _date.add(Duration(minutes: int.parse(value)));
+                        _data = _data.add(Duration(minutes: int.parse(value)));
                       },
                     ),
                   ),
@@ -297,7 +301,7 @@ class _SchermataAggiuntaPrenotazioneState
             ),
             onPressed: () {
               if (_validateForm()) {
-                addPrenotation(context);
+                addPrenotazione(context);
                 Future.delayed(Duration(seconds: 2), () {
                   Navigator.pop(context);
                 });

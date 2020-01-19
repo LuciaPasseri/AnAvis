@@ -43,17 +43,17 @@ class _SchermataRegistrazioneDonatoreState
     });
   }
 
-  void addDonator(BuildContext context) async {
-    var donator = json.encode({
-        "nome": "$_nome",
-        "cognome": "$_cognome",
-        "gruppoSanguigno": "$_gruppoSanguigno",
-        "email": "$_email",
-        "password": "$_password"
+  void addDonatore(BuildContext context) async {
+    var donatore = json.encode({
+      "nome": "$_nome",
+      "cognome": "$_cognome",
+      "gruppoSanguigno": "$_gruppoSanguigno",
+      "email": "$_email",
+      "password": "$_password"
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/donatori"),
-      body: donator,
+      body: donatore,
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -116,7 +116,7 @@ class _SchermataRegistrazioneDonatoreState
                       _nome = value;
                     },
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value._isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -138,7 +138,7 @@ class _SchermataRegistrazioneDonatoreState
                       _cognome = value;
                     },
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value._isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -234,7 +234,7 @@ class _SchermataRegistrazioneDonatoreState
                     alignment: TextAlign.left,
                     icon: Icon(Icons.email),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value._isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -265,7 +265,7 @@ class _SchermataRegistrazioneDonatoreState
                         }),
                     alignment: TextAlign.left,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value._isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -292,7 +292,7 @@ class _SchermataRegistrazioneDonatoreState
             ),
             onPressed: () {
               if (_validateForm()) {
-                addDonator(context);
+                addDonatore(context);
                 Future.delayed(Duration(seconds: 1), () {
                   Navigator.pop(context);
                 });

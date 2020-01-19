@@ -13,8 +13,8 @@ class SchermataSceltaSede extends StatefulWidget {
 }
 
 class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
-  TextEditingController controller = new TextEditingController();
-  String filter;
+  TextEditingController _controller = new TextEditingController();
+  String _filtro;
 
   Future<List<PulsanteListView>> _getSediAvis() async {
     http.Response response = await http.get("http://10.0.2.2:8080/sedi");
@@ -25,8 +25,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
         sediAvis.add(PulsanteListView(
             text: d["citta"],
             function: () {
-              Provider.of<PrenotazioneProvider>(context)
-                  .setIdSede(d["id"]);
+              Provider.of<PrenotazioneProvider>(context).setIdSede(d["id"]);
               Navigator.pushNamed(context, "/sceltaMese");
             }));
       }
@@ -41,16 +40,16 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
   initState() {
     super.initState();
     _getSediAvis();
-    controller.addListener(() {
+    _controller.addListener(() {
       setState(() {
-        filter = controller.text;
+        _filtro = _controller.text;
       });
     });
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -85,7 +84,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
               child: Container(
                 height: 42,
                 width: 350,
-                              child: TextField(
+                child: TextField(
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: "Roboto",
@@ -103,7 +102,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
                           borderSide:
                               BorderSide(color: Colors.blue[800], width: 2.0),
                           borderRadius: BorderRadius.circular(25.0))),
-                  controller: controller,
+                  controller: _controller,
                 ),
               ),
             ),
@@ -124,11 +123,11 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
                       return ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return filter == null || filter == ""
+                          return _filtro == null || _filtro == ""
                               ? snapshot.data[index]
                               : snapshot.data[index].text
                                       .toLowerCase()
-                                      .contains(filter.toLowerCase())
+                                      .contains(_filtro.toLowerCase())
                                   ? snapshot.data[index]
                                   : Container();
                         },

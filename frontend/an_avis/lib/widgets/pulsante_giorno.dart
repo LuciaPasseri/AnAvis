@@ -10,6 +10,10 @@ class PulsanteGiorno extends StatelessWidget {
   final String text;
   final Function function;
 
+  int getDay() {
+    return int.parse(text.split(" ")[0]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
