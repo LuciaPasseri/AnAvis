@@ -1,7 +1,5 @@
-import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/pulsante_mese.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SchermataSceltaMese extends StatefulWidget {
   @override

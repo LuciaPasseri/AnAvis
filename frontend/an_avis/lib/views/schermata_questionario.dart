@@ -1,5 +1,4 @@
 import 'package:an_avis/models/prenotazione.dart';
-import 'package:an_avis/models/questionario.dart';
 import 'package:an_avis/widgets/listview_questionario.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';

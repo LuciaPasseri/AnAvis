@@ -46,6 +46,7 @@ class _SchermataLoginState extends State<SchermataLogin> {
                   function: () {
                     Provider.of<DonatoreProvider>(context)
                         .setId("09da317e-11ec-414d-a0ee-f2a3fcd92a6a");
+                    print(Provider.of<DonatoreProvider>(context).getId());
                     Provider.of<DonatoreProvider>(context).setNome("Matteo");
                     Provider.of<DonatoreProvider>(context)
                         .setCognome("Bianchi");
@@ -55,6 +56,9 @@ class _SchermataLoginState extends State<SchermataLogin> {
                         .setEmail("matteo.bianchi@gmail.com");
                     Provider.of<DonatoreProvider>(context)
                         .setPassword("abcd123");
+                    Provider.of<SedeProvider>(context)
+                        .setId("330c20eb-b8be-489b-a8f8-967385aa675e");
+                    Provider.of<SedeProvider>(context).setCitta("Tolentino");
                     Navigator.pushNamed(context, "/donatore");
                   }),
               SizedBox(
@@ -63,7 +67,20 @@ class _SchermataLoginState extends State<SchermataLogin> {
               Pulsante(
                   text: "Sede Avis",
                   function: () {
-                    Provider.of<SedeProvider>(context).setId("330c20eb-b8be-489b-a8f8-967385aa675e");
+                    Provider.of<DonatoreProvider>(context)
+                        .setId("09da317e-11ec-414d-a0ee-f2a3fcd92a6a");
+                    print(Provider.of<DonatoreProvider>(context).getId());
+                    Provider.of<DonatoreProvider>(context).setNome("Matteo");
+                    Provider.of<DonatoreProvider>(context)
+                        .setCognome("Bianchi");
+                    Provider.of<DonatoreProvider>(context)
+                        .setGruppoSanguigno("A+");
+                    Provider.of<DonatoreProvider>(context)
+                        .setEmail("matteo.bianchi@gmail.com");
+                    Provider.of<DonatoreProvider>(context)
+                        .setPassword("abcd123");
+                    Provider.of<SedeProvider>(context)
+                        .setId("330c20eb-b8be-489b-a8f8-967385aa675e");
                     Provider.of<SedeProvider>(context).setCitta("Tolentino");
                     Navigator.pushNamed(context, "/sede");
                   }),
