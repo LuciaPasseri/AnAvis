@@ -26,7 +26,7 @@ public class Donatore {
 	public Donatore(@JsonProperty("idDonatore") UUID id, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
 			@JsonProperty("email") String email, @JsonProperty("password") String password,
-			@JsonProperty("puoPrenotare") boolean puoPrenotare) {
+			@JsonProperty(value = "puoPrenotare", defaultValue = "false") boolean puoPrenotare) {
 		this.idDonatore = id;
 		this.nome = nome;
 		this.cognome = cognome;
