@@ -17,7 +17,7 @@ public class Prenotazione {
 	@NotBlank
 	private String data, orario;
 	@NotNull
-	private UUID idDonatore, idSede;
+	private UUID idDonatore, idSede, idQuestionario;
 	@NotNull
 	private TipoDonazione tipoDonazione;
 	@NotNull
@@ -31,7 +31,7 @@ public class Prenotazione {
 			@JsonProperty("orario") String orario, @JsonProperty("idDonatore") UUID idD,
 			@JsonProperty("idSede") UUID idS,
 			@JsonProperty(value = "tipoDonazione", defaultValue = "SANGUE_INTERO") TipoDonazione tipoDonazione,
-			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita) {
+			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita, @JsonProperty(value="idQuestionario") UUID idQ) {
 		this.id = id;
 		this.data = data;
 		this.orario = orario;
@@ -39,6 +39,7 @@ public class Prenotazione {
 		this.idSede = idS;
 		this.tipoDonazione = tipoDonazione;
 		this.disponibilita = disponibilita;
+		this.idQuestionario = idQ;
 	}
 
 	public UUID getId() {
@@ -95,6 +96,14 @@ public class Prenotazione {
 
 	public void setDisponibilita(boolean disponibilita) {
 		this.disponibilita = disponibilita;
+	}
+	
+	public UUID getIdQuestionario() {
+		return idQuestionario;
+	}
+	
+	public void setIdQuestionario(UUID idQuestionario) {
+		this.idQuestionario = idQuestionario;
 	}
 
 }
