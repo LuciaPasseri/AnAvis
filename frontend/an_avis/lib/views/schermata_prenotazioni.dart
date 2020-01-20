@@ -21,7 +21,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
 
   dynamic _getDonatore(String idDonatore) {
     for (var donatore in _dataDonatori) {
-      if (donatore["id"] == idDonatore) {
+      if (donatore["idDonatore"] == idDonatore) {
         return donatore;
       }
     }
@@ -60,6 +60,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
           prenotazioni.add(CardPrenotazione(
               parent: this,
               prenotazione: prenotazione,
+              donatore: donatore,
               data: prenotazione["data"],
               orario: prenotazione["orario"],
               context: context));
@@ -250,7 +251,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                               return !_isFiltered
                                   ? snapshot.data[index]
                                   : snapshot.data[index].data ==
-                                          DateFormat('yyyy-MM-dd').format(_data)
+                                          DateFormat('dd-MM-yyyy').format(_data)
                                       ? snapshot.data[index]
                                       : Container();
                             },
@@ -269,12 +270,14 @@ class CardPrenotazione extends StatelessWidget {
   CardPrenotazione(
       {@required this.parent,
       @required this.prenotazione,
+      @required this.donatore,
       @required this.context,
       @required this.data,
       @required this.orario});
 
   final _SchermataPrenotazioniState parent;
   final dynamic prenotazione;
+  final dynamic donatore;
   final BuildContext context;
   final String data;
   final String orario;
@@ -338,13 +341,12 @@ class CardPrenotazione extends StatelessWidget {
                               "Prenotazione effettuata da: ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            //AAAAAAAAAAAAAAAAAAAAAA
-                            /*Text(donatore["nome"] +
+                            Text(donatore["nome"] +
                                 " " +
                                 donatore["cognome"] +
                                 " (" +
                                 donatore["gruppoSanguigno"] +
-                                ")"),*/
+                                ")"),
                           ],
                         )
                       : Text("Prenotazione ancora disponibile"),

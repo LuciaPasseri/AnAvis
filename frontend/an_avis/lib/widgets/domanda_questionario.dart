@@ -6,22 +6,23 @@ class DomandaQuestionario extends StatefulWidget {
   DomandaQuestionario(
       {@required this.question,
       @required this.hasOptionalQuestion,
-      this.optionalQuestion,
-      this.tagValue,
-      this.tagOptionalAnswer});
+      final this.optionalQuestion,
+      final this.tagValue,
+      final this.tagOptionalAnswer});
 
-  bool value = false;
-  String tagValue;
-  String question;
-  bool hasOptionalQuestion;
-  String optionalQuestion;
-  String tagOptionalAnswer;
+  final String tagValue;
+  final String question;
+  final bool hasOptionalQuestion;
+  final String optionalQuestion;
+  final String tagOptionalAnswer;
 
   @override
   _DomandaQuestionarioState createState() => _DomandaQuestionarioState();
 }
 
 class _DomandaQuestionarioState extends State<DomandaQuestionario> {
+  bool _value = false;
+
   _setValueByTag(bool value) {
     switch (widget.tagValue) {
       case "buonaSalute":
@@ -75,27 +76,27 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
                   )),
               Spacer(),
               Checkbox(
-                value: widget.value,
+                value: _value,
                 activeColor: Colors.blue[900],
                 onChanged: (value) {
                   setState(() {
-                    widget.value = value;
+                    _value = value;
                     _setValueByTag(value);
                   });
                 },
               ),
               Checkbox(
-                value: !widget.value,
+                value: !_value,
                 activeColor: Colors.blue[900],
                 onChanged: (value) {
                   setState(() {
-                    widget.value = !value;
+                    _value = !value;
                   });
                 },
               ),
             ],
           ),
-          widget.value && widget.hasOptionalQuestion
+          _value && widget.hasOptionalQuestion
               ? Padding(
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                   child: TextFormField(

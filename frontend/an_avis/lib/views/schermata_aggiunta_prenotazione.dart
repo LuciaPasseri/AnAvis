@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import "package:flutter/material.dart";
@@ -60,12 +59,9 @@ class _SchermataAggiuntaPrenotazioneState
 
   void addPrenotazione(BuildContext context) async {
     var prenotazione = json.encode({
-      //DA MODIFICAREEE 
-      "data": "${DateFormat('yyyy-MM-dd').format(_data)}",
+      "data": "${DateFormat('dd-MM-yyyy').format(_data)}",
       "orario": _getOra(_data.hour) + " : " + _getMinuti(_data.minute),
       "idSede": Provider.of<SedeProvider>(context).getId(),
-      //MOMENTANEOOOOO
-      "idDonatore": Provider.of<DonatoreProvider>(context).getId(),
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilita": true,
     });

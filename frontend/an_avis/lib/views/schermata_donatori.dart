@@ -43,6 +43,15 @@ class _SchermataDonatoriState extends State<SchermataDonatori> {
                   function: () {
                     Navigator.pushNamed(context, "/sceltaTipoDonazione");
                   }),
+              SizedBox(
+                height: 25,
+              ),
+              Pulsante(
+                text: "Visualizza prenotazione",
+                function: () {
+                  Navigator.pushNamed(context, "/prenotazioneEffettuata");
+                },
+              ),
             ],
           ),
         ),

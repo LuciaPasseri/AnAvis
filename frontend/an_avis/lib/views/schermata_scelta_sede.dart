@@ -1,6 +1,6 @@
 import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
-import 'package:an_avis/widgets/pulsante_listview.dart';
+import 'package:an_avis/widgets/pulsante_sede.dart';
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
@@ -16,19 +16,20 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
   TextEditingController _controller = new TextEditingController();
   String _filtro;
 
-  Future<List<PulsanteListView>> _getSediAvis() async {
+  Future<List<PulsanteSede>> _getSediAvis() async {
     http.Response response = await http.get("http://10.0.2.2:8080/sedi");
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      List<PulsanteListView> sediAvis = [];
+      List<PulsanteSede> sediAvis = [];
       for (var d in data) {
-        sediAvis.add(PulsanteListView(
+        sediAvis.add(PulsanteSede(
             text: d["citta"],
             function: () {
               Provider.of<PrenotazioneProvider>(context).setIdSede(d["id"]);
               Navigator.pushNamed(context, "/sceltaMese");
             }));
       }
+      sediAvis.sort((a, b) => a.text.compareTo(b.text));
       return sediAvis;
     } else {
       print(response.statusCode);
@@ -107,35 +108,33 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
               ),
             ),
           ),
-          Expanded(
-            child: FutureBuilder(
-                future: _getSediAvis(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                      return new RequestCircularLoading();
-                    case ConnectionState.active:
-                    case ConnectionState.waiting:
-                      return new RequestCircularLoading();
-                    case ConnectionState.done:
-                      if (snapshot.hasError)
-                        return new RequestCircularLoading();
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return _filtro == null || _filtro == ""
-                              ? snapshot.data[index]
-                              : snapshot.data[index].text
-                                      .toLowerCase()
-                                      .contains(_filtro.toLowerCase())
-                                  ? snapshot.data[index]
-                                  : Container();
-                        },
-                      );
-                  }
-                  return null;
-                }),
-          ),
+          FutureBuilder(
+              future: _getSediAvis(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return new RequestCircularLoading();
+                  case ConnectionState.active:
+                  case ConnectionState.waiting:
+                    return new RequestCircularLoading();
+                  case ConnectionState.done:
+                    if (snapshot.hasError) return new RequestCircularLoading();
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _filtro == null || _filtro == ""
+                            ? snapshot.data[index]
+                            : snapshot.data[index].text
+                                    .toLowerCase()
+                                    .contains(_filtro.toLowerCase())
+                                ? snapshot.data[index]
+                                : Container();
+                      },
+                    );
+                }
+                return null;
+              }),
         ],
       ),
     );
