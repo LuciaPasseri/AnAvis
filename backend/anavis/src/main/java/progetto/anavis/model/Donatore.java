@@ -23,7 +23,7 @@ public class Donatore {
 
 	}
 
-	public Donatore(@JsonProperty("idDonatore") UUID id, @JsonProperty("nome") String nome,
+	public Donatore(@JsonProperty("id") UUID id, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
 			@JsonProperty("email") String email, @JsonProperty("password") String password,
 			@JsonProperty(value = "puoPrenotare", defaultValue = "false") boolean puoPrenotare) {
