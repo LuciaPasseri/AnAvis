@@ -5,11 +5,8 @@ import java.util.UUID;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document()
 public class SedeAvis {
 
 	@Id

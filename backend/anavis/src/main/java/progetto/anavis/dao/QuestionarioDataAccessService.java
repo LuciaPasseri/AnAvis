@@ -14,7 +14,7 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 	private List<Questionario> db;
 	private Questionario questionario;
 
-	private QuestionarioDataAccessService() {
+	public QuestionarioDataAccessService() {
 		db = new ArrayList<>();
 		db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), "07-12-2019", false, false, null, true, false, null, false));
 		db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), "10-12-2019", true, false, null, true, false, null, false));

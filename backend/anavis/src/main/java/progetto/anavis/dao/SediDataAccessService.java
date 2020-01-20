@@ -14,7 +14,7 @@ public class SediDataAccessService implements SedeAvisDao {
 	private List<SedeAvis> db;
 	private SedeAvis sede;
 	
-	private SediDataAccessService() {
+	public SediDataAccessService() {
 		db = new ArrayList<>();
 		db.add(new SedeAvis(UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e"), "Tolentino"));
 		db.add(new SedeAvis(UUID.fromString("1a60b7bc-1afd-451c-bb06-368c0b6142c6"), "Civitanova"));

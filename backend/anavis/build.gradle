@@ -22,11 +22,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '2.2.4.RELEASE'
-	compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.0.0.RELEASE'
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.2.3.RELEASE'
-	
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
