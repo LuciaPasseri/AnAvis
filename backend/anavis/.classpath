@@ -26,5 +26,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="lib" path="C:/Users/Lucia/Desktop/AnAvis/AnAvis/backend/anavis/javax.persistence-api-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lucia/Desktop/AnAvis/AnAvis/backend/anavis/spring-data-mongodb-1.2.3.release.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

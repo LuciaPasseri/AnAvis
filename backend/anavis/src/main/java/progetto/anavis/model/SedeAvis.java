@@ -2,13 +2,14 @@ package progetto.anavis.model;
 
 import java.util.UUID;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
+@Document()
 public class SedeAvis {
 
 	@Id
