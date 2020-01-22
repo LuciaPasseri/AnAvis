@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Donatore {
 
 	@Id
-	private UUID idDonatore;
+	private UUID id;
 	@NotBlank
 	private String nome, cognome, gruppoSanguigno, email, password;
 	@NotNull
@@ -23,11 +23,11 @@ public class Donatore {
 
 	}
 
-	public Donatore(@JsonProperty("id") UUID id, @JsonProperty("nome") String nome,
+	public Donatore(@JsonProperty("id") UUID idDonatore, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
 			@JsonProperty("email") String email, @JsonProperty("password") String password,
 			@JsonProperty(value = "puoPrenotare", defaultValue = "false") boolean puoPrenotare) {
-		this.idDonatore = id;
+		this.id = idDonatore;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.gruppoSanguigno = gruppoSanguigno;
@@ -37,11 +37,11 @@ public class Donatore {
 	}
 
 	public UUID getIdDonatore() {
-		return idDonatore;
+		return id;
 	}
 
 	public void setIdDonatore(UUID idDonatore) {
-		this.idDonatore = idDonatore;
+		this.id = idDonatore;
 	}
 
 	public String getNome() {
