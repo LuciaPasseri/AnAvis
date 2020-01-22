@@ -9,31 +9,31 @@ class DonatoreProvider extends ChangeNotifier {
   String _password;
   bool _puoPrenotare;
 
-  setId(String id) {
+  void setId(String id) {
     _idDonatore = id;
   }
 
-  setNome(String nome) {
+  void setNome(String nome) {
     this._nome = nome;
   }
 
-  setCognome(String cognome) {
+  void setCognome(String cognome) {
     this._cognome = cognome;
   }
 
-  setGruppoSanguigno(String gruppoSanguigno) {
+  void setGruppoSanguigno(String gruppoSanguigno) {
     this._gruppoSanguigno = gruppoSanguigno;
   }
 
-  setEmail(String email) {
+  void setEmail(String email) {
     this._email = email;
   }
 
-  setPassword(String password) {
+  void setPassword(String password) {
     this._password = password;
   }
 
-  setPuoPrenotare(bool puoPrenotare) {
+  void setPuoPrenotare(bool puoPrenotare) {
     this._puoPrenotare = puoPrenotare;
   }
 

@@ -8,31 +8,31 @@ class PrenotazioneProvider extends ChangeNotifier {
   String _giorno;
   bool _questionarioCompilato;
 
-  setTipoDonazione(String tipo) {
+  void setTipoDonazione(String tipo) {
     _tipoDonazione = tipo;
   }
 
-  setIdSede(String id) {
+  void setIdSede(String id) {
     _idSede = id;
-  }
+  } 
 
-  setMese(String mese) {
+  void setMese(String mese) {
     this._mese = mese;
   }
 
-  setGiorno(String giorno) {
+  void setGiorno(String giorno) {
     this._giorno = giorno;
   }
 
-  setData() {
-    _data = DateTime.now().year.toString() +
+  void setData() {
+    _data = _giorno.toString() +
         "-" +
         _mese.toString() +
         "-" +
-        _giorno.toString();
+        DateTime.now().year.toString();
   }
 
-  setQuestionarioCompilato(bool value) {
+  void setQuestionarioCompilato(bool value) {
     _questionarioCompilato = value;
   }
 

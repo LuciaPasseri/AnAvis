@@ -49,7 +49,8 @@ class _SchermataRegistrazioneDonatoreState
       "cognome": "$_cognome",
       "gruppoSanguigno": "$_gruppoSanguigno",
       "email": "$_email",
-      "password": "$_password"
+      "password": "$_password",
+      "puoPrenotare": true,
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/donatori"),
@@ -116,7 +117,7 @@ class _SchermataRegistrazioneDonatoreState
                       _nome = value;
                     },
                     validator: (value) {
-                      if (value._isEmpty) {
+                      if (value.isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -138,7 +139,7 @@ class _SchermataRegistrazioneDonatoreState
                       _cognome = value;
                     },
                     validator: (value) {
-                      if (value._isEmpty) {
+                      if (value.isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -234,7 +235,7 @@ class _SchermataRegistrazioneDonatoreState
                     alignment: TextAlign.left,
                     icon: Icon(Icons.email),
                     validator: (value) {
-                      if (value._isEmpty) {
+                      if (value.isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;
@@ -265,7 +266,7 @@ class _SchermataRegistrazioneDonatoreState
                         }),
                     alignment: TextAlign.left,
                     validator: (value) {
-                      if (value._isEmpty) {
+                      if (value.isEmpty) {
                         return "Inserire valore valido";
                       }
                       return null;

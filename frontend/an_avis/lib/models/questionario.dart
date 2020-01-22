@@ -6,34 +6,34 @@ class QuestionarioProvider extends ChangeNotifier {
   bool _condizioniSaluteRecenti = false;
   bool _allergie = false;
   bool _perditaPeso = false;
-  String _motivoRicovero;
+  String _motiviRicovero;
   String _qualiAllergie;
 
-  setBuonaSalute(bool value) {
+  void setBuonaSalute(bool value) {
     _buonaSalute = value;
   }
 
-  setRicoveratoOspedale(bool value) {
+  void setRicoveratoOspedale(bool value) {
     _ricoveratoOspedale = value;
   }
 
-  setCondizioniSaluteRecenti(bool value) {
+  void setCondizioniSaluteRecenti(bool value) {
     _condizioniSaluteRecenti = value;
   }
 
-  setAllergie(bool value) {
+  void setAllergie(bool value) {
     _allergie = value;
   }
 
-  setPerditaPeso(bool value) {
+  void setPerditaPeso(bool value) {
     _perditaPeso = value;
   }
 
-  setMotivoRicovero(String motivo) {
-    _motivoRicovero = motivo;
+  void setMotiviRicovero(String motivo) {
+    _motiviRicovero = motivo;
   }
 
-  setQualiAllergie(String allergie) {
+  void setQualiAllergie(String allergie) {
     _qualiAllergie = allergie;
   }
 
@@ -57,8 +57,8 @@ class QuestionarioProvider extends ChangeNotifier {
     return _perditaPeso;
   }
 
-  String getMotivoRicovero() {
-    return _motivoRicovero;
+  String getMotiviRicovero() {
+    return _motiviRicovero;
   }
 
   String getQualiAllergie() {

@@ -1,3 +1,4 @@
+import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/models/questionario.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,38 +27,45 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
   _setValueByTag(bool value) {
     switch (widget.tagValue) {
       case "buonaSalute":
-        Provider.of<QuestionarioProvider>(context).setBuonaSalute(value);
+        Provider.of<QuestionarioProvider>(context, listen: false).setBuonaSalute(value);
         break;
       case "ricoveratoOspedale":
-        Provider.of<QuestionarioProvider>(context).setRicoveratoOspedale(value);
+        Provider.of<QuestionarioProvider>(context, listen: false).setRicoveratoOspedale(value);
         break;
       case "condizioniSaluteRecenti":
-        Provider.of<QuestionarioProvider>(context)
+        Provider.of<QuestionarioProvider>(context, listen: false)
             .setCondizioniSaluteRecenti(value);
         break;
       case "perditaPeso":
-        Provider.of<QuestionarioProvider>(context).setPerditaPeso(value);
+        Provider.of<QuestionarioProvider>(context, listen: false).setPerditaPeso(value);
         break;
       case "allergie":
-        Provider.of<QuestionarioProvider>(context).setAllergie(value);
+        Provider.of<QuestionarioProvider>(context, listen: false).setAllergie(value);
         break;
     }
   }
 
   _setOptionalAnswerByTag(String value) {
     switch (widget.tagOptionalAnswer) {
-      case "motivoRicovero":
-        Provider.of<QuestionarioProvider>(context).setMotivoRicovero(value);
+      case "motiviRicovero":
+        Provider.of<QuestionarioProvider>(context, listen: false).setMotiviRicovero(value);
         break;
       case "qualiAllergie":
-        Provider.of<QuestionarioProvider>(context).setQualiAllergie(value);
+        Provider.of<QuestionarioProvider>(context, listen: false).setQualiAllergie(value);
         break;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _setValueByTag(false);
+    _setOptionalAnswerByTag("");
+    Provider.of<PrenotazioneProvider>(context, listen: false).setQuestionarioCompilato(null);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 5,
       margin: EdgeInsets.all(10),
@@ -80,9 +88,9 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
                 activeColor: Colors.blue[900],
                 onChanged: (value) {
                   setState(() {
-                    _value = value;
-                    _setValueByTag(value);
+                    _value = value;_setValueByTag(value);
                   });
+                  
                 },
               ),
               Checkbox(
@@ -90,8 +98,9 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
                 activeColor: Colors.blue[900],
                 onChanged: (value) {
                   setState(() {
-                    _value = !value;
+                    _value = !value;_setValueByTag(!value);
                   });
+                  
                 },
               ),
             ],

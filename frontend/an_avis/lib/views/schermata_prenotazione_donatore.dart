@@ -1,5 +1,7 @@
+import 'package:an_avis/models/donatore.dart';
+import 'package:an_avis/widgets/targhetta_prenotazione.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
@@ -16,6 +18,7 @@ class _SchermataPrenotazioneDonatoreState
     extends State<SchermataPrenotazioneDonatore> {
   dynamic _dataDonatori;
   dynamic _dataSedi;
+  dynamic _prenotazione;
   bool _isEmpty = true;
 
   dynamic _getDonatore(String idDonatore) {
@@ -48,231 +51,236 @@ class _SchermataPrenotazioneDonatoreState
       _dataDonatori = jsonDecode(responseDonatori.body);
       _dataSedi = jsonDecode(responseSedi.body);
       for (var prenotazione in dataPrenotazioni) {
-        if (prenotazione["idSede"] ==
-            Provider.of<SedeProvider>(context).getId()) {
+        if (prenotazione["idDonatore"] ==
+            Provider.of<DonatoreProvider>(context).getId()) {
           var donatore = _getDonatore(prenotazione["idDonatore"]);
           var sede = _getSede(prenotazione["idSede"]);
           if (donatore != null) {
+            _prenotazione = prenotazione;
             _isEmpty = false;
-            return Column(
-              children: <Widget>[
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    elevation: 6,
+                    margin: EdgeInsets.fromLTRB(20, 15, 20, 30),
+                    child: Padding(
+                      padding: EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Donazione prenotata per il:",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          TargettaPrenotazione(
+                            isType: false,
+                            data: prenotazione,
+                            label: "Data",
+                            icon: Icons.calendar_today,
+                            edgeInsets1: EdgeInsets.fromLTRB(5, 15, 0, 0),
+                            edgeInsets2: EdgeInsets.fromLTRB(8.5, 0, 8.5, 0),
+                            jsonTag: "data",
+                          ),
+                          TargettaPrenotazione(
+                            isType: false,
+                            data: prenotazione,
+                            label: "Orario",
+                            icon: Icons.access_time,
+                            edgeInsets1: EdgeInsets.only(left: 5),
+                            edgeInsets2: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            jsonTag: "orario",
+                          ),
+                          TargettaPrenotazione(
+                            isType: false,
+                            data: sede,
+                            label: "Sede",
+                            icon: Icons.domain,
+                            edgeInsets1: EdgeInsets.only(left: 5),
+                            edgeInsets2: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                            jsonTag: "citta",
+                          ),
+                          TargettaPrenotazione(
+                            isType: true,
+                            data: prenotazione,
+                            label: "Tipo",
+                            icon: Icons.invert_colors,
+                            edgeInsets1: EdgeInsets.only(left: 5),
+                            edgeInsets2: EdgeInsets.fromLTRB(9, 0, 9, 0),
+                            jsonTag: "tipoDonazione",
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Spacer(),
+                              RaisedButton(
+                                  elevation: 4,
+                                  color: Colors.red[900],
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "Disdici",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(
+                                        Icons.clear,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("Disdire prenotazione?"),
+                                          content: new Text(
+                                              "Così facendo la prenotazione verrà disdetta."),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text("Chiudi"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            FlatButton(
+                                                child: Text("Accetta"),
+                                                onPressed: () async {
+                                                  var prenotazione =
+                                                      json.encode({
+                                                    "data":
+                                                        _prenotazione["data"],
+                                                    "orario":
+                                                        _prenotazione["orario"],
+                                                    "idSede":
+                                                        _prenotazione["idSede"],
+                                                    "tipoDonazione":
+                                                        _prenotazione[
+                                                            "tipoDonazione"],
+                                                    "disponibilita": true,
+                                                    "id": _prenotazione["id"],
+                                                  });
+                                                  http.Response
+                                                      putPrenotazione =
+                                                      await http.put(
+                                                    Uri.parse(
+                                                        "http://10.0.2.2:8080/prenotazioni/${_prenotazione["id"]}"),
+                                                    body: prenotazione,
+                                                    headers: {
+                                                      "content-type":
+                                                          "application/json; charset=utf-8",
+                                                      "accept":
+                                                          "application/json; charset=utf-8",
+                                                    },
+                                                  );
+                                                  Navigator.of(context).pop();
+                                                  if (putPrenotazione
+                                                          .statusCode ==
+                                                      200) {
+                                                    Flushbar(
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                      message:
+                                                          "Prenotazione cancellata",
+                                                    ).show(context);
+                                                    setState(() {
+                                                      _isEmpty = true;
+                                                    });
+                                                  }
+                                                })
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  elevation: 4,
-                  margin: EdgeInsets.fromLTRB(25, 15, 20, 30),
-                  child: Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Donazione prenotata per il:",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.calendar_today,
-                                color: Colors.blue[900],
-                                size: 24,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                prenotazione["data"],
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    elevation: 6,
+                    margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    color: Colors.red[900],
+                    child: Padding(
+                      padding: EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Informazioni donatore",
+                            style: TextStyle(fontSize: 22, color: Colors.white),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.access_time,
-                                color: Colors.blue[900],
-                                size: 24,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Orario: " + prenotazione["orario"],
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.domain,
-                                color: Colors.blue[900],
-                                size: 24,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Sede: " + sede["citta"],
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.invert_colors,
-                                color: Colors.blue[900],
-                                size: 24,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Tipo donazione: " +
-                                    prenotazione["tipoDonazione"].toLowerCase(),
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 60,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Spacer(),
-                            Ink(
-                              padding: EdgeInsets.all(0),
-                              decoration: ShapeDecoration(
-                                color: Colors.red[900],
-                                shape: CircleBorder(),
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.clear,
-                                  size: 25,
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.white,
                                 ),
-                                color: Colors.white,
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: new Text(
-                                            "Cancellare prenotazione?"),
-                                        content: new Text(
-                                            "Così facendo la prenotazione verrà eliminata dal sistema."),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: Text("Chiudi"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: Text("Accetta"),
-                                            onPressed: () {
-                                              setState(() {
-                                                _isEmpty = true;
-                                                http.delete(
-                                                    "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}");
-                                              });
-                                              Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  "Nome e cognome: " +
+                                      donatore["nome"] +
+                                      " " +
+                                      donatore["cognome"],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.invert_colors,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  "Gruppo sanguigno: " +
+                                      donatore["gruppoSanguigno"],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 85,
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
-                  ),
-                  elevation: 4,
-                  margin: EdgeInsets.fromLTRB(25, 15, 20, 30),
-                  color: Colors.red[900],
-                  child: Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Informazioni donatore",
-                          style: TextStyle(fontSize: 24, color: Colors.white),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Nome e cognome: " +
-                                    donatore["nome"] +
-                                    " " +
-                                    donatore["cognome"],
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.invert_colors,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Gruppo sanguigno: " +
-                                    donatore["gruppoSanguigno"],
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           }
         }
