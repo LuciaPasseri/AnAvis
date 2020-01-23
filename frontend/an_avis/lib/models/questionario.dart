@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
 class QuestionarioProvider extends ChangeNotifier {
-  bool _buonaSalute;
+  bool _buonaSalute = false;
   bool _ricoveratoOspedale = false;
   bool _condizioniSaluteRecenti = false;
   bool _allergie = false;

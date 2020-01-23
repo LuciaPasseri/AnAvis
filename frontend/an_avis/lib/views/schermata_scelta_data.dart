@@ -37,15 +37,15 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       }
     }
     var prenotazione = json.encode({
-      "data": Provider.of<PrenotazioneProvider>(context).getData(),
+      "data": "${Provider.of<PrenotazioneProvider>(context).getData()}",
       "orario": _oraSelezionata,
-      "idDonatore": {Provider.of<DonatoreProvider>(context).getId()},
-      "idSede": Provider.of<PrenotazioneProvider>(context).getIdSede(),
+      "idDonatore": "${Provider.of<DonatoreProvider>(context).getId()}",
+      "idSede": "${Provider.of<PrenotazioneProvider>(context).getIdSede()}",
       "tipoDonazione":
-          Provider.of<PrenotazioneProvider>(context).getTipoDonazione(),
+          "${Provider.of<PrenotazioneProvider>(context).getTipoDonazione()}",
       "disponibilita": false,
-      "idQuestionario": idQuestionario,
-      "id": idPrenotazione,
+      "idQuestionario": "$idQuestionario",
+      "id": "$idPrenotazione"
     });
     var responsePut = await http.put(
       Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
@@ -61,8 +61,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       "ricoveratoOspedale":
           Provider.of<QuestionarioProvider>(context).getRicoveroOspedale(),
       "allergie": Provider.of<QuestionarioProvider>(context).getAllergie(),
-      "condizioniSaluteRecenti": Provider.of<QuestionarioProvider>(context)
-          .getCondizioniSaluteRecenti(),
+      "condizioniSaluteRecenti":
+          Provider.of<QuestionarioProvider>(context).getCondizioniSaluteRecenti(),
       "perditaPeso":
           Provider.of<QuestionarioProvider>(context).getPerditaPeso(),
       "motiviRicovero":
@@ -388,6 +388,9 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   @override
   Widget build(BuildContext context) {
+    print("BuonaSal " + Provider.of<QuestionarioProvider>(context).getBuonaSalute().toString());
+    print("Ricovero " + Provider.of<QuestionarioProvider>(context).getRicoveroOspedale().toString());
+    print("Allergie " + Provider.of<QuestionarioProvider>(context).getAllergie().toString());
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
