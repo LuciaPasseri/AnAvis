@@ -3,6 +3,7 @@ package progetto.anavis.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -60,6 +61,11 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 		db.set(db.indexOf(getById(id)), prenotazione);
 		prenotazione.setId(id);
 		return getById(id);
+	}
+
+	@Override
+	public List<Prenotazione> getByCitta(UUID idCitta) { 
+		return db.stream().filter(p->p.getIdSede().equals(idCitta)).collect(Collectors.toList());
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,9 +13,8 @@ public class Questionario {
 
 	@Id
 	private UUID id;
-	@NotBlank
 	private String motiviRicovero, qualiAllergie;
-	@NotBlank
+	@NotNull
 	private boolean buonaSalute, ricoveratoOspedale, condizioniSaluteRecenti, allergie, perditaPeso;
 
 	public Questionario() {

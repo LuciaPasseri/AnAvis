@@ -29,26 +29,32 @@ public class ControllerPrenotazione {
 
 	@GetMapping
 	public List<Prenotazione> getPrenotazioni() {
-		 return servicePrenotazioni.getPrenotazioni();
+		return servicePrenotazioni.getPrenotazioni();
 	}
-	
+
 	@GetMapping("/{id}")
-	public Prenotazione getPrenotazione(@NotBlank@PathVariable("id") UUID id){
+	public Prenotazione getPrenotazione(@NotBlank @PathVariable("id") UUID id) {
 		return servicePrenotazioni.getById(id);
 	}
 
 	@PostMapping
-	public Prenotazione create(@Valid@NotNull@RequestBody Prenotazione prenotazione) {
+	public Prenotazione create(@Valid @NotNull @RequestBody Prenotazione prenotazione) {
 		return servicePrenotazioni.creaPrenotazione(prenotazione);
 	}
 
 	@DeleteMapping("/{id}")
-	public void delete(@NotBlank@PathVariable("id") UUID id) {
+	public void delete(@NotBlank @PathVariable("id") UUID id) {
 		servicePrenotazioni.delete(id);
 	}
 
 	@PutMapping("/{id}")
-	public Prenotazione update(@NotBlank@PathVariable("id") UUID id, @Valid@NotNull@RequestBody Prenotazione prenotazione) {
+	public Prenotazione update(@NotBlank @PathVariable("id") UUID id,
+			@Valid @NotNull @RequestBody Prenotazione prenotazione) {
 		return servicePrenotazioni.update(id, prenotazione);
+	}
+
+	@GetMapping("/citta/{id}")
+	public List<Prenotazione> getByCitta(@NotBlank @PathVariable("id") UUID id) {
+		return servicePrenotazioni.getByCitta(id);
 	}
 }

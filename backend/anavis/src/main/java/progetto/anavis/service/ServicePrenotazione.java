@@ -34,5 +34,9 @@ public class ServicePrenotazione {
 	public Prenotazione update(UUID id, Prenotazione prenotazione) {
 		return prenotazioneDao.update(id, prenotazione);
 	}
+	
+	public List<Prenotazione> getByCitta(UUID idCitta){
+		return prenotazioneDao.getByCitta(idCitta);
+	}
 
 }

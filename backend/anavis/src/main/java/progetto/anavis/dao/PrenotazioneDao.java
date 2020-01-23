@@ -22,4 +22,6 @@ public interface PrenotazioneDao {
 	
 	public Prenotazione update (UUID id, Prenotazione prenotazione);
 	
+	public List<Prenotazione> getByCitta (UUID idCitta);
+	
 }
