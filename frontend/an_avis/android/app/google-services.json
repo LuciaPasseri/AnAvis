@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "206133881500",
+    "firebase_url": "https://anavis-8ef14.firebaseio.com",
+    "project_id": "anavis-8ef14",
+    "storage_bucket": "anavis-8ef14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206133881500:android:ee0f16a7c08bed5b3d5b59",
+        "android_client_info": {
+          "package_name": "it.unicam.cs.ids.an_avis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206133881500-g3n85nhcadsshuh979i2mmkv8o3anfq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVh9I7Sl3pg_k6CS4nNjQqp506jWCMhCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206133881500-g3n85nhcadsshuh979i2mmkv8o3anfq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
