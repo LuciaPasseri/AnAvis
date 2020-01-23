@@ -20,7 +20,7 @@ class _ListQuestionarioState extends State<ListQuestionario> {
           hasOptionalQuestion: true,
           optionalQuestion: "Perché?",
           question: "È mai stato ricoverato in\nospedale?",
-          tagOptionalAnswer: "motivoRicovero",
+          tagOptionalAnswer: "motiviRicovero",
         ),
         DomandaQuestionario(
           tagValue: "condizioniSaluteRecenti",

@@ -33,9 +33,9 @@ class _SchermataSceltaMeseState extends State<SchermataSceltaMese> {
           child: Padding(
             padding: EdgeInsets.only(top: 5),
             child: GridView.count(
-              padding: const EdgeInsets.all(45),
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
+              padding: const EdgeInsets.all(50),
+              crossAxisSpacing: 18,
+              mainAxisSpacing: 18,
               crossAxisCount: 3,
               children: <Widget>[
                 PulsanteMese(meseTag: "GEN", meseNumero: "01"),

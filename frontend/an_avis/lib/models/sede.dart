@@ -4,11 +4,11 @@ class SedeProvider extends ChangeNotifier {
   String _idSede;
   String _cittaSede;
 
-  setId(String id) {
+  void setId(String id) {
     _idSede = id;
   }
 
-  setCitta(String citta) {
+  void setCitta(String citta) {
     _cittaSede = citta;
   }
 

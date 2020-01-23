@@ -21,7 +21,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
 
   dynamic _getDonatore(String idDonatore) {
     for (var donatore in _dataDonatori) {
-      if (donatore["idDonatore"] == idDonatore) {
+      if (donatore["id"] == idDonatore) {
         return donatore;
       }
     }
@@ -378,15 +378,14 @@ class CardPrenotazione extends StatelessWidget {
                             FlatButton(
                               child: Text("Accetta"),
                               onPressed: () {
-                                this.parent.setState(() {
                                   http.delete(
                                       "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}");
                                   parent.decrementCountPrenotazioni();
                                   if (parent.getCountPrenotazioni() == 0) {
-                                    parent.setIsEmpty(true);
+                                    this.parent.setState(() {
+                                      parent.setIsEmpty(true);
+                                    });
                                   }
-                                });
-                                print("wewe, rimossa");
                                 Navigator.of(context).pop();
                               },
                             )

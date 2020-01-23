@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/prenotazione.dart';
+import 'package:an_avis/models/questionario.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
@@ -8,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import "package:http/http.dart" as http;
 import 'package:provider/provider.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:uuid/uuid.dart';
 
 class SchermataSceltaData extends StatefulWidget {
   @override
@@ -18,17 +20,19 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   String _oraSelezionata;
   bool _isEmpty = true;
 
-  void setPrenotazione() async {
+  void _setPrenotazione() async {
     String idPrenotazione;
+    String idQuestionario = Uuid().v4();
     var responseGet = await http.get("http://10.0.2.2:8080/prenotazioni");
     if (responseGet.statusCode == 200) {
       var data = jsonDecode(responseGet.body);
-      for (var d in data) {
-        if (d["idSede"] ==
+      for (var prenotazione in data) {
+        if (prenotazione["idSede"] ==
                 Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-            d["data"] == Provider.of<PrenotazioneProvider>(context).getData() &&
-            d["orario"] == _oraSelezionata) {
-          idPrenotazione = d["id"];
+            prenotazione["data"] ==
+                Provider.of<PrenotazioneProvider>(context).getData() &&
+            prenotazione["orario"] == _oraSelezionata) {
+          idPrenotazione = prenotazione["id"];
         }
       }
     }
@@ -40,6 +44,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       "tipoDonazione":
           Provider.of<PrenotazioneProvider>(context).getTipoDonazione(),
       "disponibilita": false,
+      "idQuestionario": idQuestionario,
+      "id": idPrenotazione,
     });
     var responsePut = await http.put(
       Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
@@ -49,8 +55,30 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         "accept": "application/json; charset=utf-8",
       },
     );
-    print(responsePut.statusCode);
-    if (responsePut.statusCode == 200) {
+    var questionario = json.encode({
+      "buonaSalute":
+          Provider.of<QuestionarioProvider>(context).getBuonaSalute(),
+      "ricoveratoOspedale":
+          Provider.of<QuestionarioProvider>(context).getRicoveroOspedale(),
+      "allergie": Provider.of<QuestionarioProvider>(context).getAllergie(),
+      "condizioniSaluteRecenti": Provider.of<QuestionarioProvider>(context)
+          .getCondizioniSaluteRecenti(),
+      "perditaPeso":
+          Provider.of<QuestionarioProvider>(context).getPerditaPeso(),
+      "motiviRicovero":
+          Provider.of<QuestionarioProvider>(context).getMotiviRicovero(),
+      "qualiAllergie":
+          Provider.of<QuestionarioProvider>(context).getQualiAllergie(),
+    });
+    var responsePost = await http.post(
+      Uri.parse("http://10.0.2.2:8080/questionari"),
+      body: questionario,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "accept": "application/json; charset=utf-8",
+      },
+    );
+    if (responsePut.statusCode == 200 && responsePost.statusCode == 200) {
       Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
@@ -67,7 +95,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   String _getData(String data) {
     List<String> temp = data.split("-");
-    return temp[2];
+    return temp[0];
   }
 
   String _getMese(String data) {
@@ -77,7 +105,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   int _getAnno(String data) {
     List<String> temp = data.split("-");
-    return int.parse(temp[0]);
+    return int.parse(temp[2]);
   }
 
   bool _checkGiornoDoppio(List<PulsanteGiorno> list, String giorno) {
@@ -100,24 +128,25 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<PulsanteGiorno> giorniPrenotazioni = [];
-      for (var d in data) {
-        if (d["disponibilita"] &&
-            d["tipoDonazione"] ==
+      for (var prenotazione in data) {
+        if (prenotazione["disponibilita"] &&
+            prenotazione["tipoDonazione"] ==
                 Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
-            _checkGiornoDoppio(giorniPrenotazioni, _getData(d["data"])) &&
-            d["idSede"] ==
+            _checkGiornoDoppio(
+                giorniPrenotazioni, _getData(prenotazione["data"])) &&
+            prenotazione["idSede"] ==
                 Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-            _getAnno(d["data"]) == DateTime.now().year &&
-            _getMese(d["data"]) ==
+            _getAnno(prenotazione["data"]) == DateTime.now().year &&
+            _getMese(prenotazione["data"]) ==
                 Provider.of<PrenotazioneProvider>(context).getMese()) {
           _isEmpty = false;
           giorniPrenotazioni.add(PulsanteGiorno(
-            text: _getData(d["data"]) +
+            text: _getData(prenotazione["data"]) +
                 " " +
                 Provider.of<PrenotazioneProvider>(context).getMeseCompleto(),
             function: () {
               Provider.of<PrenotazioneProvider>(context)
-                  .setGiorno(((_getData(d["data"]))));
+                  .setGiorno(((_getData(prenotazione["data"]))));
               Provider.of<PrenotazioneProvider>(context).setData();
               showModalBottomSheet(
                 context: context,
@@ -243,13 +272,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                         Provider.of<PrenotazioneProvider>(
                                                 context)
                                             .setQuestionarioCompilato(null);
-                                        //WEWE TODO
-                                        //setPrenotazione();
-                                        Flushbar(
-                                          duration: Duration(seconds: 2),
-                                          backgroundColor: Colors.green,
-                                          message: "Prenotazione confermata!",
-                                        ).show(context);
+                                        _setPrenotazione();
                                         Future.delayed(Duration(seconds: 2),
                                             () {
                                           Navigator.pushNamedAndRemoveUntil(
@@ -351,8 +374,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         int minutiA = int.parse(oraEMinutiA[1]);
         int oraB = int.parse(oraEMinutiB[0]);
         int minutiB = int.parse(oraEMinutiB[1]);
-        if ((oraA == oraB &&
-            minutiA > minutiB) || oraA > oraB) {
+        if ((oraA == oraB && minutiA > minutiB) || oraA > oraB) {
           return 1;
         } else
           return -1;

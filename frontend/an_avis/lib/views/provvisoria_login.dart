@@ -56,9 +56,6 @@ class _SchermataLoginState extends State<SchermataLogin> {
                         .setEmail("matteo.bianchi@gmail.com");
                     Provider.of<DonatoreProvider>(context)
                         .setPassword("abcd123");
-                    Provider.of<SedeProvider>(context)
-                        .setId("330c20eb-b8be-489b-a8f8-967385aa675e");
-                    Provider.of<SedeProvider>(context).setCitta("Tolentino");
                     Navigator.pushNamed(context, "/donatore");
                   }),
               SizedBox(
