@@ -16,16 +16,19 @@ public class DonatoreDataAccessService implements DonatoreDao {
 
 	public DonatoreDataAccessService() {
 		db = new ArrayList<>();
-		db.add(new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "a@a.a", "aaa", true));
-		db.add(new Donatore(UUID.fromString("4919c392-e09b-4690-88bf-ea5d1a82c862"), "Luca", "Cervioni", "A+", "b@b.b", "bbb", true));
-		db.add(new Donatore(UUID.fromString("795c942c-b729-4c7e-ad2d-d065d040d3c5"), "Pippo", "Franco", "AB+", "c@c.c", "ccc", true));
-		db.add(new Donatore(UUID.fromString("09da317e-11ec-414d-a0ee-f2a3fcd92a6a"), "Matteo", "Bianchi", "A+", "matteo.bianchi@gmail.com", "abcd123", true));
+		db.add(new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "0+", "20-01-2020", true));
+		db.add(new Donatore(UUID.fromString("4919c392-e09b-4690-88bf-ea5d1a82c862"), "Luca", "Cervioni", "A+",
+				"01-03-2020", true));
+		db.add(new Donatore(UUID.fromString("795c942c-b729-4c7e-ad2d-d065d040d3c5"), "Pippo", "Franco", "AB+",
+				"05-03-2020", true));
+		db.add(new Donatore(UUID.fromString("09da317e-11ec-414d-a0ee-f2a3fcd92a6a"), "Matteo", "Bianchi", "A+",
+				"08-03-2020", true));
 	}
 
 	@Override
 	public Donatore creaDonatore(UUID id, Donatore donatore) {
 		dona = new Donatore(id, donatore.getNome(), donatore.getCognome(), donatore.getGruppoSanguigno(),
-				donatore.getEmail(), donatore.getPassword(), donatore.getPuoPrenotare());
+				donatore.getDataUltimaDonazione(), donatore.getPuoPrenotare());
 		db.add(dona);
 		return dona;
 	}
@@ -37,7 +40,7 @@ public class DonatoreDataAccessService implements DonatoreDao {
 
 	@Override
 	public Donatore getById(UUID idDonatore) {
-		return db.stream().filter(b -> b.getIdDonatore().equals(idDonatore)).findFirst().orElse(null);
+		return db.stream().filter(b -> b.getId().equals(idDonatore)).findFirst().orElse(null);
 	}
 
 	@Override

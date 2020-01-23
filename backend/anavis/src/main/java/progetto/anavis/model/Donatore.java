@@ -15,7 +15,7 @@ public class Donatore {
 	@Id
 	private UUID id;
 	@NotBlank
-	private String nome, cognome, gruppoSanguigno, email, password;
+	private String nome, cognome, gruppoSanguigno, dataUltimaDonazione;
 	@NotNull
 	private boolean puoPrenotare;
 
@@ -25,18 +25,17 @@ public class Donatore {
 
 	public Donatore(@JsonProperty("id") UUID idDonatore, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
-			@JsonProperty("email") String email, @JsonProperty("password") String password,
+			@JsonProperty("data ultima prenotazione") String data,
 			@JsonProperty(value = "puoPrenotare", defaultValue = "false") boolean puoPrenotare) {
 		this.id = idDonatore;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.gruppoSanguigno = gruppoSanguigno;
-		this.email = email;
-		this.password = password;
+		this.dataUltimaDonazione = data;
 		this.puoPrenotare = puoPrenotare;
 	}
 
-	public UUID getIdDonatore() {
+	public UUID getId() {
 		return id;
 	}
 
@@ -67,27 +66,19 @@ public class Donatore {
 	public void setGruppoSanguigno(String gruppoSanguigno) {
 		this.gruppoSanguigno = gruppoSanguigno;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	
+	public String getDataUltimaDonazione() {
+		return dataUltimaDonazione;
 	}
 	
+	public void setDataUltimaDonazione(String dataUltimaDonazione) {
+		this.dataUltimaDonazione = dataUltimaDonazione;
+	}
+
 	public boolean getPuoPrenotare() {
 		return puoPrenotare;
 	}
-	
+
 	public void setPuoPrenotare(boolean puoPrenotare) {
 		this.puoPrenotare = puoPrenotare;
 	}
