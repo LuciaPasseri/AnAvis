@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Questionario {
 
 	@Id
-	private UUID idPrenotazione;
+	private UUID id;
 	@NotBlank
-	private String data, motiviRicovero, qualiAllergie;
+	private String motiviRicovero, qualiAllergie;
 	@NotBlank
 	private boolean buonaSalute, ricoveratoOspedale, condizioniSaluteRecenti, allergie, perditaPeso;
 
@@ -22,14 +22,12 @@ public class Questionario {
 
 	}
 
-	public Questionario(@JsonProperty("id") UUID id, @JsonProperty("data") String dataQuestionario,
-			@JsonProperty("salute attuale") boolean saluteAttuale, @JsonProperty("ricovero") boolean ricoverato,
-			@JsonProperty("motivi ricovero") String motiviRicovero,
+	public Questionario(@JsonProperty("id") UUID id, @JsonProperty("salute attuale") boolean saluteAttuale,
+			@JsonProperty("ricovero") boolean ricoverato, @JsonProperty("motivi ricovero") String motiviRicovero,
 			@JsonProperty("salute recente") boolean recentiCondizioni, @JsonProperty("allergie") boolean allergie,
 			@JsonProperty("elenco allergie") String elencoAllergie,
 			@JsonProperty("perdita di peso") boolean perditaDiPeso) {
-		this.idPrenotazione = id;
-		this.data = dataQuestionario;
+		this.id = id;
 		this.buonaSalute = saluteAttuale;
 		this.ricoveratoOspedale = ricoverato;
 		this.motiviRicovero = motiviRicovero;
@@ -40,19 +38,11 @@ public class Questionario {
 	}
 
 	public UUID getIdPrenotazione() {
-		return idPrenotazione;
+		return id;
 	}
 
 	public void setIdPrenotazione(UUID idPrenotazione) {
-		this.idPrenotazione = idPrenotazione;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
+		this.id = idPrenotazione;
 	}
 
 	public String getMotiviRicovero() {

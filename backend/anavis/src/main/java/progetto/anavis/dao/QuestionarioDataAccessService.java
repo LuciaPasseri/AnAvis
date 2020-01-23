@@ -16,14 +16,17 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 
 	public QuestionarioDataAccessService() {
 		db = new ArrayList<>();
-		db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), "01-03-2020", false, false, null, true, false, null, false));
-		db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), "05-03-2020", true, false, null, true, false, null, false));
-		db.add(new Questionario(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"), "08-03-2020", true, false, null, true, false, null, false));
+		db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), false, false, null, true,
+				false, null, false));
+		db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), true, false, null, true, false,
+				null, false));
+		db.add(new Questionario(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"), true, false, null, true, false,
+				null, false));
 	}
 
 	@Override
 	public Questionario creaQuestionario(UUID id, Questionario quest) {
-		questionario = new Questionario(id, quest.getData(), quest.isBuonaSalute(), quest.isRicoveratoOspedale(),
+		questionario = new Questionario(id, quest.isBuonaSalute(), quest.isRicoveratoOspedale(),
 				quest.getMotiviRicovero(), quest.isCondizioniSaluteRecenti(), quest.isAllergie(),
 				quest.getQualiAllergie(), quest.isPerditaPeso());
 		db.add(questionario);
