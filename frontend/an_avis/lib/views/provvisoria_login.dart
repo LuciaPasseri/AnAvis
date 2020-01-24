@@ -4,12 +4,12 @@ import 'package:an_avis/widgets/pulsante.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SchermataLogin extends StatefulWidget {
+class SchermataLogin2 extends StatefulWidget {
   @override
-  _SchermataLoginState createState() => _SchermataLoginState();
+  _SchermataLogin2State createState() => _SchermataLogin2State();
 }
 
-class _SchermataLoginState extends State<SchermataLogin> {
+class _SchermataLogin2State extends State<SchermataLogin2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

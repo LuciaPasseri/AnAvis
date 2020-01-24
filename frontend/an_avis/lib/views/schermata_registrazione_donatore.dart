@@ -257,13 +257,12 @@ class _SchermataRegistrazioneDonatoreState
                     icon: Icon(Icons.lock),
                     hiddenText: _hiddenText,
                     iconButton: IconButton(
-                        icon: Icon(
-                          _hiddenText ? Icons.visibility : Icons.visibility_off,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        onPressed: () {
-                          _toggleHidden();
-                        }),
+                      icon: Icon(
+                        _hiddenText ? Icons.visibility_off : Icons.visibility,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: _toggleHidden,
+                    ),
                     alignment: TextAlign.left,
                     validator: (value) {
                       if (value.isEmpty) {
