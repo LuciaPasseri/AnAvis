@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,24 +14,23 @@ public class Donatore {
 	@Id
 	private UUID id;
 	@NotBlank
-	private String nome, cognome, gruppoSanguigno, dataUltimaDonazione;
-	@NotNull
-	private boolean puoPrenotare;
+	private String nome, cognome, gruppoSanguigno, email;
+	private String dataUltimaDonazione;
 
 	public Donatore() {
 
 	}
 
 	public Donatore(@JsonProperty("id") UUID idDonatore, @JsonProperty("nome") String nome,
-			@JsonProperty("cognome") String cognome, @JsonProperty("gruppoSanguigno") String gruppoSanguigno,
-			@JsonProperty("data ultima prenotazione") String data,
-			@JsonProperty(value = "puoPrenotare", defaultValue = "false") boolean puoPrenotare) {
+			@JsonProperty("cognome") String cognome, @JsonProperty("email") String email,
+			@JsonProperty("gruppoSanguigno") String gruppoSanguigno,
+			@JsonProperty("data ultima prenotazione") String data) {
 		this.id = idDonatore;
 		this.nome = nome;
 		this.cognome = cognome;
+		this.email = email;
 		this.gruppoSanguigno = gruppoSanguigno;
 		this.dataUltimaDonazione = data;
-		this.puoPrenotare = puoPrenotare;
 	}
 
 	public UUID getId() {
@@ -59,6 +57,14 @@ public class Donatore {
 		this.cognome = cognome;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getGruppoSanguigno() {
 		return gruppoSanguigno;
 	}
@@ -66,21 +72,13 @@ public class Donatore {
 	public void setGruppoSanguigno(String gruppoSanguigno) {
 		this.gruppoSanguigno = gruppoSanguigno;
 	}
-	
+
 	public String getDataUltimaDonazione() {
 		return dataUltimaDonazione;
 	}
-	
+
 	public void setDataUltimaDonazione(String dataUltimaDonazione) {
 		this.dataUltimaDonazione = dataUltimaDonazione;
-	}
-
-	public boolean getPuoPrenotare() {
-		return puoPrenotare;
-	}
-
-	public void setPuoPrenotare(boolean puoPrenotare) {
-		this.puoPrenotare = puoPrenotare;
 	}
 
 }

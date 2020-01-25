@@ -12,18 +12,19 @@ public class SedeAvis {
 	@Id
 	private UUID idSede;
 	@NotBlank
-	private String citta;
+	private String citta, email;
 
 	public SedeAvis() {
 
 	}
 
-	public SedeAvis(@JsonProperty("idSede") UUID idSede, @JsonProperty("citta") String citta) {
+	public SedeAvis(@JsonProperty("idSede") UUID idSede, @JsonProperty("citta") String citta,
+			@JsonProperty("email") String email) {
 		this.idSede = idSede;
 		this.citta = citta;
+		this.email = email;
 	}
 
-	
 	public UUID getId() {
 		return idSede;
 	}
@@ -38,6 +39,14 @@ public class SedeAvis {
 
 	public void setCitta(String citta) {
 		this.citta = citta;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
