@@ -28,7 +28,7 @@ class _SchermataSceltaTipoDonazioneState
             fontSize: 22,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),

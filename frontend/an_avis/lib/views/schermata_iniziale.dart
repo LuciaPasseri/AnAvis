@@ -1,4 +1,4 @@
-import 'package:an_avis/views/remove_glow.dart';
+import 'package:an_avis/widgets/remove_glow.dart';
 import "package:flutter/material.dart";
 
 class SchermataIniziale extends StatefulWidget {
