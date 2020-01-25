@@ -72,7 +72,7 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
             fontSize: 22,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
@@ -88,12 +88,13 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
                 child: TextField(
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: "Roboto",
+                    fontFamily: "Nunito",
                   ),
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                       prefixIcon: Icon(Icons.search),
                       hintText: "Cerca sede",
+                      hintStyle: TextStyle(fontFamily: "Nunito"),
                       fillColor: Colors.red,
                       border: OutlineInputBorder(
                           borderSide:

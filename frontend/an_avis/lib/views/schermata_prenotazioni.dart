@@ -116,7 +116,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
               fontSize: 22,
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: "Roboto",
+              fontFamily: "Nunito",
             ),
           ),
         ),
@@ -151,7 +151,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                   fontSize: 19,
                                   color: Colors.blue[900],
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
+                                  fontFamily: "Nunito",
                                 ),
                               )
                             : Text(
@@ -160,7 +160,7 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                   fontSize: 19,
                                   color: Colors.blue[900],
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "Roboto",
+                                  fontFamily: "Nunito",
                                 ),
                               ),
                         onPressed: () async {
@@ -239,7 +239,10 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                     child: Padding(
                                         padding: EdgeInsets.all(10),
                                         child: Text(
-                                            "Nessuna prenotazione disponibile"))),
+                                          "Nessuna prenotazione disponibile",
+                                          style:
+                                              TextStyle(fontFamily: "Nunito"),
+                                        ))),
                               ],
                             ),
                           );
@@ -310,27 +313,39 @@ class CardPrenotazione extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "Data: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontFamily: "Nunito", fontWeight: FontWeight.bold),
                       ),
-                      Text(data),
+                      Text(
+                        data,
+                        style: TextStyle(fontFamily: "Nunito"),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text(
                         "Orario: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontFamily: "Nunito", fontWeight: FontWeight.bold),
                       ),
-                      Text(orario),
+                      Text(
+                        orario,
+                        style: TextStyle(fontFamily: "Nunito"),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text(
                         "Tipo: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontFamily: "Nunito", fontWeight: FontWeight.bold),
                       ),
-                      Text(prenotazione["tipoDonazione"].toLowerCase()),
+                      Text(
+                        prenotazione["tipoDonazione"].toLowerCase(),
+                        style: TextStyle(fontFamily: "Nunito"),
+                      ),
                     ],
                   ),
                   !prenotazione["disponibilita"]
@@ -339,17 +354,23 @@ class CardPrenotazione extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               "Prenotazione effettuata da: ",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontWeight: FontWeight.bold),
                             ),
-                            Text(donatore["nome"] +
-                                " " +
-                                donatore["cognome"] +
-                                " (" +
-                                donatore["gruppoSanguigno"] +
-                                ")"),
+                            Text(
+                              donatore["nome"] +
+                                  " " +
+                                  donatore["cognome"] +
+                                  " (" +
+                                  donatore["gruppoSanguigno"] +
+                                  ")",
+                              style: TextStyle(fontFamily: "Nunito"),
+                            ),
                           ],
                         )
-                      : Text("Prenotazione ancora disponibile"),
+                      : Text("Prenotazione ancora disponibile",
+                          style: TextStyle(fontFamily: "Nunito")),
                 ],
               ),
               Spacer(),
@@ -365,27 +386,38 @@ class CardPrenotazione extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: new Text("Cancellare prenotazione?"),
+                          title: new Text(
+                            "Cancellare prenotazione?",
+                            style: TextStyle(fontFamily: "Nunito"),
+                          ),
                           content: new Text(
-                              "Così facendo la prenotazione verrà eliminata dal sistema."),
+                            "Così facendo la prenotazione verrà eliminata dal sistema.",
+                            style: TextStyle(fontFamily: "Nunito"),
+                          ),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text("Chiudi"),
+                              child: Text(
+                                "Chiudi",
+                                style: TextStyle(fontFamily: "Nunito"),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             FlatButton(
-                              child: Text("Accetta"),
+                              child: Text(
+                                "Accetta",
+                                style: TextStyle(fontFamily: "Nunito"),
+                              ),
                               onPressed: () {
-                                  http.delete(
-                                      "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}");
-                                  parent.decrementCountPrenotazioni();
-                                  if (parent.getCountPrenotazioni() == 0) {
-                                    this.parent.setState(() {
-                                      parent.setIsEmpty(true);
-                                    });
-                                  }
+                                http.delete(
+                                    "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}");
+                                parent.decrementCountPrenotazioni();
+                                if (parent.getCountPrenotazioni() == 0) {
+                                  this.parent.setState(() {
+                                    parent.setIsEmpty(true);
+                                  });
+                                }
                                 Navigator.of(context).pop();
                               },
                             )

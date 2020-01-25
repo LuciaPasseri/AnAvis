@@ -31,6 +31,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: icon,
         suffixIcon: iconButton == null ? null : iconButton,
         hintText: text,
+        hintStyle: TextStyle(fontFamily: "Nunito"),
         helperText: "",
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

@@ -29,12 +29,12 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
             fontSize: 23,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
       body: SingleChildScrollView(
-              child: Column(
+        child: Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(25, 20, 25, 10),
@@ -45,14 +45,14 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        fontFamily: "Roboto"),
+                        fontFamily: "Nunito"),
                   ),
                   Spacer(),
                   Text("SI      NO",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          fontFamily: "Roboto")),
+                          fontFamily: "Nunito")),
                 ],
               ),
             ),
@@ -69,6 +69,7 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     child: Text(
                       "Conferma",
                       style: TextStyle(
+                        fontFamily: "Nunito",
                         fontSize: 18,
                         color: Colors.white,
                       ),
@@ -91,6 +92,7 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     child: Text(
                       "Annulla",
                       style: TextStyle(
+                        fontFamily: "Nunito",
                         fontSize: 18,
                         color: Colors.white,
                       ),

@@ -29,7 +29,7 @@ class PulsanteSede extends StatelessWidget {
                 SizedBox(width: 15),
                 Text(
                   text,
-                  style: TextStyle(fontSize: 17),
+                  style: TextStyle(fontFamily: "Nunito", fontSize: 17),
                 ),
                 Spacer(),
                 Icon(

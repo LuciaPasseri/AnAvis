@@ -24,7 +24,7 @@ class _SchermataSceltaMeseState extends State<SchermataSceltaMese> {
             fontSize: 25,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),

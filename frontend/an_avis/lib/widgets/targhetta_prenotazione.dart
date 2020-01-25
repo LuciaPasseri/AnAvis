@@ -40,7 +40,7 @@ class TargettaPrenotazione extends StatelessWidget {
             ),
             label: Text(
               label,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(fontFamily: "Nunito", color: Colors.white),
             ),
           ),
           SizedBox(
@@ -68,7 +68,7 @@ class TargettaPrenotazione extends StatelessWidget {
                       ? data[jsonTag]
                       : data[jsonTag][0] +
                           data[jsonTag].substring(1).toLowerCase(),
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(fontFamily: "Nunito", fontSize: 14),
                 ),
               ],
             ),

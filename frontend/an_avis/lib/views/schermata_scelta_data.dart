@@ -24,16 +24,14 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
     String idPrenotazione;
     String idQuestionario = Uuid().v4();
     var responseGet = await http.get("http://10.0.2.2:8080/prenotazioni");
-    if (responseGet.statusCode == 200) {
-      var data = jsonDecode(responseGet.body);
-      for (var prenotazione in data) {
-        if (prenotazione["idSede"] ==
-                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-            prenotazione["data"] ==
-                Provider.of<PrenotazioneProvider>(context).getData() &&
-            prenotazione["orario"] == _oraSelezionata) {
-          idPrenotazione = prenotazione["id"];
-        }
+    var data = jsonDecode(responseGet.body);
+    for (var prenotazione in data) {
+      if (prenotazione["idSede"] ==
+              Provider.of<PrenotazioneProvider>(context).getIdSede() &&
+          prenotazione["data"] ==
+              Provider.of<PrenotazioneProvider>(context).getData() &&
+          prenotazione["orario"] == _oraSelezionata) {
+        idPrenotazione = prenotazione["id"];
       }
     }
     var prenotazione = json.encode({
@@ -47,9 +45,28 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       "idQuestionario": "$idQuestionario",
       "id": "$idPrenotazione"
     });
-    var responsePut = await http.put(
+    var donatore = json.encode({
+      "id": "${Provider.of<DonatoreProvider>(context).getId()}",
+      "email": "${Provider.of<DonatoreProvider>(context).getEmail()}",
+      "nome": "${Provider.of<DonatoreProvider>(context).getNome()}",
+      "cognome": "${Provider.of<DonatoreProvider>(context).getCognome()}",
+      "gruppoSanguigno":
+          "${Provider.of<DonatoreProvider>(context).getGruppoSanguigno()}",
+      "dataUltimaDonazione":
+          "${Provider.of<PrenotazioneProvider>(context).getData()}",
+    });
+    var responsePutPrenotazione = await http.put(
       Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
       body: prenotazione,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "accept": "application/json; charset=utf-8",
+      },
+    );
+    var responsePutDonazione = await http.put(
+      Uri.parse(
+          "http://10.0.2.2:8080/donatori/${Provider.of<DonatoreProvider>(context).getId()}"),
+      body: donatore,
       headers: {
         "content-type": "application/json; charset=utf-8",
         "accept": "application/json; charset=utf-8",
@@ -61,8 +78,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       "ricoveratoOspedale":
           Provider.of<QuestionarioProvider>(context).getRicoveroOspedale(),
       "allergie": Provider.of<QuestionarioProvider>(context).getAllergie(),
-      "condizioniSaluteRecenti":
-          Provider.of<QuestionarioProvider>(context).getCondizioniSaluteRecenti(),
+      "condizioniSaluteRecenti": Provider.of<QuestionarioProvider>(context)
+          .getCondizioniSaluteRecenti(),
       "perditaPeso":
           Provider.of<QuestionarioProvider>(context).getPerditaPeso(),
       "motiviRicovero":
@@ -78,17 +95,21 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         "accept": "application/json; charset=utf-8",
       },
     );
-    if (responsePut.statusCode == 200 && responsePost.statusCode == 200) {
+    if (responsePutPrenotazione.statusCode == 200 &&
+        responsePutDonazione.statusCode == 200 &&
+        responsePost.statusCode == 200) {
       Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
-        message: "Prenotazione confermata!",
+        messageText: Text("Prenotazione confermata!",
+            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
       ).show(context);
     } else {
       Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
-        message: "Errore",
+        messageText: Text("Errore",
+            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
       ).show(context);
     }
   }
@@ -168,7 +189,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                             Text(
                               "Scegli l'orario",
                               style: TextStyle(
-                                fontFamily: "Roboto",
+                                fontFamily: "Nunito",
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -202,7 +223,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton(
                                               style: TextStyle(
-                                                fontFamily: "Roboto",
+                                                fontFamily: "Nunito",
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
@@ -234,7 +255,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                 child: Text(
                                   "Compila questionario",
                                   style: TextStyle(
-                                    fontFamily: "Roboto",
+                                    fontFamily: "Nunito",
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -287,14 +308,21 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                         Flushbar(
                                           duration: Duration(seconds: 3),
                                           backgroundColor: Colors.red,
-                                          message:
+                                          messageText: Text(
                                               "Compilare prima il questionario!",
+                                              style: TextStyle(
+                                                  fontFamily: "Nunito",
+                                                  color: Colors.white)),
                                         ).show(context);
                                       } else {
                                         Flushbar(
                                           duration: Duration(seconds: 3),
                                           backgroundColor: Colors.red,
-                                          message: "Inserire un orario!",
+                                          messageText: Text(
+                                              "Inserire un orario!",
+                                              style: TextStyle(
+                                                  fontFamily: "Nunito",
+                                                  color: Colors.white)),
                                         ).show(context);
                                       }
                                     },
@@ -361,8 +389,12 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                 Provider.of<PrenotazioneProvider>(context).getIdSede() &&
             d["data"] == Provider.of<PrenotazioneProvider>(context).getData()) {
           orari.add(DropdownMenuItem(
-            child:
-                Padding(padding: EdgeInsets.all(0), child: Text(d["orario"])),
+            child: Padding(
+                padding: EdgeInsets.all(0),
+                child: Text(
+                  d["orario"],
+                  style: TextStyle(fontFamily: "Nunito"),
+                )),
             value: d["orario"],
           ));
         }
@@ -388,9 +420,6 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   @override
   Widget build(BuildContext context) {
-    print("BuonaSal " + Provider.of<QuestionarioProvider>(context).getBuonaSalute().toString());
-    print("Ricovero " + Provider.of<QuestionarioProvider>(context).getRicoveroOspedale().toString());
-    print("Allergie " + Provider.of<QuestionarioProvider>(context).getAllergie().toString());
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
@@ -406,7 +435,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
             fontSize: 25,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
@@ -448,7 +477,10 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                     child: Padding(
                                         padding: EdgeInsets.all(10),
                                         child: Text(
-                                            "Nessuna prenotazione disponibile"))),
+                                          "Nessuna prenotazione disponibile",
+                                          style:
+                                              TextStyle(fontFamily: "Nunito"),
+                                        ))),
                               ],
                             ),
                           );
