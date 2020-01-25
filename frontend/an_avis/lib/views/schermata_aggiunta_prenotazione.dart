@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
+import 'package:flushbar/flushbar.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import "package:http/http.dart" as http;
@@ -15,7 +16,6 @@ class SchermataAggiuntaPrenotazione extends StatefulWidget {
 class _SchermataAggiuntaPrenotazioneState
     extends State<SchermataAggiuntaPrenotazione> {
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _data;
   String _tipoDonazione;
   String _dropdownError;
@@ -75,17 +75,23 @@ class _SchermataAggiuntaPrenotazioneState
     );
     print(response.statusCode);
     if (response.statusCode == 200) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
-        content: Text("Prenotazione aggiunta!"),
-      ));
+        messageText: Text(
+          "Prenotazione aggiunta!",
+          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
+        ),
+      ).show(context);
     } else {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
-        content: Text("Errore"),
-      ));
+        messageText: Text(
+          "Errore",
+          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
+        ),
+      ).show(context);
     }
   }
 
@@ -116,7 +122,6 @@ class _SchermataAggiuntaPrenotazioneState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         bottom: PreferredSize(
             child: Container(
@@ -131,7 +136,7 @@ class _SchermataAggiuntaPrenotazioneState
             fontSize: 23,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
@@ -140,7 +145,7 @@ class _SchermataAggiuntaPrenotazioneState
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(35, 40, 35, 5),
+              padding: EdgeInsets.fromLTRB(32, 40, 32, 5),
               child: InkWell(
                 onTap: () {
                   _selezionaData();
@@ -158,6 +163,7 @@ class _SchermataAggiuntaPrenotazioneState
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.calendar_today),
                       hintText: "Inserire una data",
+                      hintStyle: TextStyle(fontFamily: "Nunito"),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -174,7 +180,7 @@ class _SchermataAggiuntaPrenotazioneState
               children: <Widget>[
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(35, 25, 30, 10),
+                    padding: EdgeInsets.fromLTRB(32, 25, 30, 10),
                     child: Theme(
                       data: Theme.of(context)
                           .copyWith(primaryColor: Colors.blue[900]),
@@ -206,6 +212,7 @@ class _SchermataAggiuntaPrenotazioneState
                   child: Text(
                     ":",
                     style: TextStyle(
+                      fontFamily: "Nunito",
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
                     ),
@@ -213,7 +220,7 @@ class _SchermataAggiuntaPrenotazioneState
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(30, 25, 35, 10),
+                    padding: EdgeInsets.fromLTRB(30, 25, 32, 10),
                     child: CustomTextField(
                       text: "Minuti",
                       alignment: TextAlign.center,
@@ -235,7 +242,7 @@ class _SchermataAggiuntaPrenotazioneState
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(35, 0, 35, 8),
+              padding: EdgeInsets.fromLTRB(32, 0, 32, 8),
               child: FormField(
                 builder: (FormFieldState state) {
                   return InputDecorator(
@@ -252,9 +259,20 @@ class _SchermataAggiuntaPrenotazioneState
                       ),
                       child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                        hint: Text(
-                          "Scegliere tipo di donazione",
-                          style: TextStyle(),
+                        hint: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.invert_colors,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              "Scegliere tipo di donazione",
+                              style: TextStyle(fontFamily: "Nunito"),
+                            ),
+                          ],
                         ),
                         value: _tipoDonazione,
                         isDense: true,
@@ -266,11 +284,17 @@ class _SchermataAggiuntaPrenotazioneState
                         items: [
                           DropdownMenuItem(
                             value: "Sangue",
-                            child: Text("Sangue intero"),
+                            child: Text(
+                              "Sangue intero",
+                              style: TextStyle(fontFamily: "Nunito"),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "Plasma",
-                            child: Text("Plasma"),
+                            child: Text(
+                              "Plasma",
+                              style: TextStyle(fontFamily: "Nunito"),
+                            ),
                           )
                         ],
                       )));

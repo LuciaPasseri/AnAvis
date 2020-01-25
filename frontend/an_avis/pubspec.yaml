@@ -32,6 +32,7 @@ dependencies:
   uuid: ^2.0.4
   firebase_auth: ^0.15.3+1
   cloud_firestore: ^0.13.0+1
+  email_validator: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -56,3 +57,6 @@ flutter:
   - family: Roboto
     fonts:
     - asset: assets/fonts/Roboto-Regular.ttf
+  - family: Nunito
+    fonts:
+    - asset: assets/fonts/Nunito-Regular.ttf

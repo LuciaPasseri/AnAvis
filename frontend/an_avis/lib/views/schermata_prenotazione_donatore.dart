@@ -75,7 +75,9 @@ class _SchermataPrenotazioneDonatoreState
                           Text(
                             "Donazione prenotata per il:",
                             style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
+                                fontFamily: "Nunito",
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold),
                           ),
                           TargettaPrenotazione(
                             isType: false,
@@ -129,7 +131,9 @@ class _SchermataPrenotazioneDonatoreState
                                       Text(
                                         "Disdici",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
+                                            fontFamily: "Nunito",
+                                            color: Colors.white,
+                                            fontSize: 16),
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -146,18 +150,33 @@ class _SchermataPrenotazioneDonatoreState
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text("Disdire prenotazione?"),
-                                          content: new Text(
-                                              "Così facendo la prenotazione verrà disdetta."),
+                                          title: Text(
+                                            "Disdire prenotazione?",
+                                            style:
+                                                TextStyle(fontFamily: "Nunito"),
+                                          ),
+                                          content: Text(
+                                            "Così facendo la prenotazione verrà disdetta.",
+                                            style:
+                                                TextStyle(fontFamily: "Nunito"),
+                                          ),
                                           actions: <Widget>[
                                             FlatButton(
-                                              child: Text("Chiudi"),
+                                              child: Text(
+                                                "Chiudi",
+                                                style: TextStyle(
+                                                    fontFamily: "Nunito"),
+                                              ),
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
                                             ),
                                             FlatButton(
-                                                child: Text("Accetta"),
+                                                child: Text(
+                                                  "Accetta",
+                                                  style: TextStyle(
+                                                      fontFamily: "Nunito"),
+                                                ),
                                                 onPressed: () async {
                                                   var prenotazione =
                                                       json.encode({
@@ -231,7 +250,10 @@ class _SchermataPrenotazioneDonatoreState
                         children: <Widget>[
                           Text(
                             "Informazioni donatore",
-                            style: TextStyle(fontSize: 22, color: Colors.white),
+                            style: TextStyle(
+                                fontFamily: "Nunito",
+                                fontSize: 22,
+                                color: Colors.white),
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -250,7 +272,9 @@ class _SchermataPrenotazioneDonatoreState
                                       " " +
                                       donatore["cognome"],
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                      fontFamily: "Nunito",
+                                      color: Colors.white,
+                                      fontSize: 16),
                                 ),
                               ],
                             ),
@@ -270,7 +294,9 @@ class _SchermataPrenotazioneDonatoreState
                                   "Gruppo sanguigno: " +
                                       donatore["gruppoSanguigno"],
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                      fontFamily: "Nunito",
+                                      color: Colors.white,
+                                      fontSize: 16),
                                 ),
                               ],
                             ),
@@ -308,7 +334,7 @@ class _SchermataPrenotazioneDonatoreState
               fontSize: 22,
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: "Roboto",
+              fontFamily: "Nunito",
             ),
           ),
         ),
@@ -348,7 +374,11 @@ class _SchermataPrenotazioneDonatoreState
                                     child: Padding(
                                         padding: EdgeInsets.all(10),
                                         child: Text(
-                                            "Nessuna prenotazione effettuata"))),
+                                          "Nessuna prenotazione effettuata",
+                                          style: TextStyle(
+                                            fontFamily: "Nunito",
+                                          ),
+                                        ))),
                               ],
                             ),
                           );

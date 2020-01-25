@@ -86,7 +86,7 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
                     widget.question,
                     style: TextStyle(
                       fontSize: 18,
-                      fontFamily: "Roboto",
+                      fontFamily: "Nunito",
                     ),
                   )),
               Spacer(),
@@ -128,6 +128,7 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
                     cursorColor: Colors.blue[900],
                     decoration: InputDecoration(
                       hintText: widget.optionalQuestion,
+                      hintStyle: TextStyle(fontFamily: "Nunito"),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[900]),
                       ),

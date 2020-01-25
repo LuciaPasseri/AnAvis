@@ -1,4 +1,5 @@
 import 'package:an_avis/widgets/pulsante.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SchermataSede extends StatefulWidget {
@@ -20,15 +21,21 @@ class _SchermataSedeState extends State<SchermataSede> {
         backgroundColor: Colors.blue[900],
         title: Padding(
           padding: EdgeInsets.only(left: 20),
-          child: Text(
-            "AnAvis",
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Roboto",
+          child: Row(children: <Widget>[
+            Text(
+              "Avis",
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Nunito",
+              ),
             ),
-          ),
+            SizedBox(
+              width: 8,
+            ),
+            Icon(Icons.invert_colors),
+          ]),
         ),
       ),
       body: Center(
@@ -36,18 +43,21 @@ class _SchermataSedeState extends State<SchermataSede> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 40,
+                height: 35,
               ),
               Pulsante(
-                  text: "Inserisci prenotazione",
-                  function: () {
-                    Navigator.pushNamed(context, "/aggiuntaPrenotazione");
-                  }),
+                text: "Inserisci prenotazione",
+                icon: Icons.note_add,
+                function: () {
+                  Navigator.pushNamed(context, "/aggiuntaPrenotazione");
+                },
+              ),
               SizedBox(
                 height: 20,
               ),
               Pulsante(
                   text: "Visualizza prenotazioni",
+                  icon: Icons.description,
                   function: () {
                     Navigator.pushNamed(context, "/prenotazioni");
                   }),
@@ -56,9 +66,21 @@ class _SchermataSedeState extends State<SchermataSede> {
               ),
               Pulsante(
                   text: "Registra donatore",
+                  icon: Icons.person_add,
                   function: () {
                     Navigator.pushNamed(context, "/registrazioneDonatore");
                   }),
+              SizedBox(
+                height: 20,
+              ),
+              Pulsante(
+                text: "Disconnettiti",
+                icon: Icons.exit_to_app,
+                function: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacementNamed(context, "/");
+                },
+              ),
             ],
           ),
         ),

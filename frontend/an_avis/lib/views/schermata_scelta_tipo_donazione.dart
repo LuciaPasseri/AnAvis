@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 
 class SchermataSceltaTipoDonazione extends StatefulWidget {
   @override
-  _SchermataSceltaTipoDonazioneState createState() => _SchermataSceltaTipoDonazioneState();
+  _SchermataSceltaTipoDonazioneState createState() =>
+      _SchermataSceltaTipoDonazioneState();
 }
 
-class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazione> {
+class _SchermataSceltaTipoDonazioneState
+    extends State<SchermataSceltaTipoDonazione> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
             fontSize: 22,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
@@ -39,8 +41,10 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
               ),
               Pulsante(
                   text: "Sangue intero",
+                  icon: Icons.invert_colors,
                   function: () {
-                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("SANGUE");
+                    Provider.of<PrenotazioneProvider>(context)
+                        .setTipoDonazione("SANGUE");
                     Navigator.of(context).pushNamed('/sceltaSede');
                   }),
               SizedBox(
@@ -48,8 +52,10 @@ class _SchermataSceltaTipoDonazioneState extends State<SchermataSceltaTipoDonazi
               ),
               Pulsante(
                   text: "Plasma",
+                  icon: Icons.invert_colors,
                   function: () {
-                    Provider.of<PrenotazioneProvider>(context).setTipoDonazione("PLASMA");
+                    Provider.of<PrenotazioneProvider>(context)
+                        .setTipoDonazione("PLASMA");
                     Navigator.of(context).pushNamed("/sceltaSede");
                   }),
             ],

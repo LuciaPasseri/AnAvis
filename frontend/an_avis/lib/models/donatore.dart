@@ -6,8 +6,6 @@ class DonatoreProvider extends ChangeNotifier {
   String _cognome;
   String _gruppoSanguigno;
   String _email;
-  String _password;
-  bool _puoPrenotare;
 
   void setId(String id) {
     _idDonatore = id;
@@ -29,14 +27,6 @@ class DonatoreProvider extends ChangeNotifier {
     this._email = email;
   }
 
-  void setPassword(String password) {
-    this._password = password;
-  }
-
-  void setPuoPrenotare(bool puoPrenotare) {
-    this._puoPrenotare = puoPrenotare;
-  }
-
   String getId() {
     return _idDonatore;
   }
@@ -55,13 +45,5 @@ class DonatoreProvider extends ChangeNotifier {
 
   String getEmail() {
     return _email;
-  }
-
-  String getPassword() {
-    return _password;
-  }
-
-  bool getPuoPrenotare() {
-    return _puoPrenotare;
   }
 }

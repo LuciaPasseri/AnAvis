@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:an_avis/widgets/remove_glow.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:email_validator/email_validator.dart';
+import 'package:flushbar/flushbar.dart';
 import "package:http/http.dart" as http;
 
 class SchermataRegistrazioneDonatore extends StatefulWidget {
@@ -12,7 +16,6 @@ class SchermataRegistrazioneDonatore extends StatefulWidget {
 class _SchermataRegistrazioneDonatoreState
     extends State<SchermataRegistrazioneDonatore> {
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _nome;
   String _cognome;
   String _gruppoSanguigno;
@@ -49,8 +52,6 @@ class _SchermataRegistrazioneDonatoreState
       "cognome": "$_cognome",
       "gruppoSanguigno": "$_gruppoSanguigno",
       "email": "$_email",
-      "password": "$_password",
-      "puoPrenotare": true,
     });
     var response = await http.post(
       Uri.parse("http://10.0.2.2:8080/donatori"),
@@ -60,26 +61,43 @@ class _SchermataRegistrazioneDonatoreState
         "accept": "application/json",
       },
     );
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.green,
-        content: Text("Donatore aggiunto!"),
-      ));
-    } else {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+    try {
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _email, password: _password);
+    } catch (e) {
+      Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
-        content: Text("Errore"),
-      ));
+        messageText: Text(
+          e.message,
+          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
+        ),
+      ).show(context);
+    }
+    if (response.statusCode == 200) {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.green,
+        messageText: Text(
+          "Donatore aggiunto!",
+          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
+        ),
+      ).show(context);
+    } else {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        messageText: Text(
+          "Errore",
+          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
+        ),
+      ).show(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         bottom: PreferredSize(
@@ -95,190 +113,228 @@ class _SchermataRegistrazioneDonatoreState
             fontSize: 23,
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: "Roboto",
+            fontFamily: "Nunito",
           ),
         ),
       ),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(35, 30, 35, 0),
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(primaryColor: Colors.blue[900]),
-                  child: CustomTextField(
-                    icon: Icon(Icons.person),
-                    text: "Inserire nome",
-                    alignment: TextAlign.left,
-                    onSaved: (value) {
-                      _nome = value;
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Inserire valore valido";
-                      }
-                      return null;
-                    },
-                    inputType: TextInputType.text,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(primaryColor: Colors.blue[900]),
-                  child: CustomTextField(
-                    icon: Icon(Icons.person_outline),
-                    text: "Inserire cognome",
-                    alignment: TextAlign.left,
-                    onSaved: (value) {
-                      _cognome = value;
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Inserire valore valido";
-                      }
-                      return null;
-                    },
-                    inputType: TextInputType.text,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
-                child: FormField(
-                  builder: (FormFieldState state) {
-                    return InputDecorator(
-                        decoration: InputDecoration(
-                          enabledBorder: _dropdownError != null
-                              ? OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Colors.red, width: 1),
-                                  borderRadius: BorderRadius.circular(10),
-                                )
-                              : null,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                          hint: Text(
-                            "Selezionare gruppo sanguigno",
-                            style: TextStyle(),
-                          ),
-                          value: _gruppoSanguigno,
-                          isDense: true,
-                          onChanged: (value) {
-                            setState(() {
-                              _gruppoSanguigno = value;
-                            });
-                          },
-                          items: [
-                            DropdownMenuItem(
-                              value: "0+",
-                              child: Text("0+"),
-                            ),
-                            DropdownMenuItem(
-                              value: "0-",
-                              child: Text("0-"),
-                            ),
-                            DropdownMenuItem(
-                              value: "A+",
-                              child: Text("A+"),
-                            ),
-                            DropdownMenuItem(
-                              value: "A-",
-                              child: Text("A-"),
-                            ),
-                            DropdownMenuItem(
-                              value: "B+",
-                              child: Text("B+"),
-                            ),
-                            DropdownMenuItem(
-                              value: "B-",
-                              child: Text("B-"),
-                            ),
-                            DropdownMenuItem(
-                              value: "AB+",
-                              child: Text("AB+"),
-                            ),
-                            DropdownMenuItem(
-                              value: "AB-",
-                              child: Text("AB-"),
-                            )
-                          ],
-                        )));
-                  },
-                ),
-              ),
-              SizedBox(height: 7),
-              _dropdownError == null
-                  ? SizedBox(height: 15)
-                  : Align(
-                      alignment: Alignment(-0.74, 0),
-                      child: Text(
-                        _dropdownError ?? "",
-                        style: TextStyle(color: Colors.red[700], fontSize: 12),
-                      ),
+        child: ScrollConfiguration(
+          behavior: RemoveGlow(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(32, 30, 32, 0),
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(primaryColor: Colors.blue[900]),
+                    child: CustomTextField(
+                      icon: Icon(Icons.person),
+                      text: "Inserire nome",
+                      alignment: TextAlign.left,
+                      onSaved: (value) {
+                        _nome = value;
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Inserire valore valido";
+                        }
+                        return null;
+                      },
+                      inputType: TextInputType.text,
                     ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(primaryColor: Colors.blue[900]),
-                  child: CustomTextField(
-                    text: "Inserire email",
-                    alignment: TextAlign.left,
-                    icon: Icon(Icons.email),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Inserire valore valido";
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _email = value;
-                    },
-                    inputType: TextInputType.emailAddress,
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(35, 5, 35, 0),
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(primaryColor: Colors.blue[900]),
-                  child: CustomTextField(
-                    text: "Inserire password",
-                    icon: Icon(Icons.lock),
-                    hiddenText: _hiddenText,
-                    iconButton: IconButton(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(32, 5, 32, 0),
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(primaryColor: Colors.blue[900]),
+                    child: CustomTextField(
+                      icon: Icon(Icons.person_outline),
+                      text: "Inserire cognome",
+                      alignment: TextAlign.left,
+                      onSaved: (value) {
+                        _cognome = value;
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Inserire valore valido";
+                        }
+                        return null;
+                      },
+                      inputType: TextInputType.text,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(32, 5, 32, 0),
+                  child: FormField(
+                    builder: (FormFieldState state) {
+                      return InputDecorator(
+                          decoration: InputDecoration(
+                            enabledBorder: _dropdownError != null
+                                ? OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  )
+                                : null,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                            hint: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.invert_colors,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  "Selezionare gruppo sanguigno",
+                                  style: TextStyle(fontFamily: "Nunito"),
+                                ),
+                              ],
+                            ),
+                            value: _gruppoSanguigno,
+                            isDense: true,
+                            onChanged: (value) {
+                              setState(() {
+                                _gruppoSanguigno = value;
+                              });
+                            },
+                            items: [
+                              DropdownMenuItem(
+                                value: "0+",
+                                child: Text(
+                                  "0+",
+                                  style: TextStyle(fontFamily: "Nunito"),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "0-",
+                                child: Text(
+                                  "0-",
+                                  style: TextStyle(fontFamily: "Nunito"),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "A+",
+                                child: Text(
+                                  "A+",
+                                  style: TextStyle(fontFamily: "Nunito"),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "A-",
+                                child: Text("A-",
+                                    style: TextStyle(fontFamily: "Nunito")),
+                              ),
+                              DropdownMenuItem(
+                                value: "B+",
+                                child: Text("B+",
+                                    style: TextStyle(fontFamily: "Nunito")),
+                              ),
+                              DropdownMenuItem(
+                                value: "B-",
+                                child: Text("B-",
+                                    style: TextStyle(fontFamily: "Nunito")),
+                              ),
+                              DropdownMenuItem(
+                                value: "AB+",
+                                child: Text("AB+",
+                                    style: TextStyle(fontFamily: "Nunito")),
+                              ),
+                              DropdownMenuItem(
+                                value: "AB-",
+                                child: Text("AB-",
+                                    style: TextStyle(fontFamily: "Nunito")),
+                              )
+                            ],
+                          )));
+                    },
+                  ),
+                ),
+                SizedBox(height: 7),
+                _dropdownError == null
+                    ? SizedBox(height: 15)
+                    : Align(
+                        alignment: Alignment(-0.74, 0),
+                        child: Text(
+                          _dropdownError ?? "",
+                          style: TextStyle(
+                              fontFamily: "Nunito",
+                              color: Colors.red[700],
+                              fontSize: 12),
+                        ),
+                      ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(32, 5, 32, 0),
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(primaryColor: Colors.blue[900]),
+                    child: CustomTextField(
+                      text: "Inserire email",
+                      alignment: TextAlign.left,
+                      icon: Icon(Icons.email),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Inserire valore valido";
+                        }
+                        if (!EmailValidator.validate(value)) {
+                          return "Inserita email non valida";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _email = value;
+                      },
+                      inputType: TextInputType.emailAddress,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(32, 5, 32, 0),
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(primaryColor: Colors.blue[900]),
+                    child: CustomTextField(
+                      text: "Inserire password",
+                      icon: Icon(Icons.lock),
+                      hiddenText: _hiddenText,
+                      iconButton: IconButton(
                         icon: Icon(
                           _hiddenText ? Icons.visibility : Icons.visibility_off,
-                          color: Theme.of(context).primaryColorDark,
                         ),
-                        onPressed: () {
-                          _toggleHidden();
-                        }),
-                    alignment: TextAlign.left,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Inserire valore valido";
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _password = value;
-                    },
-                    inputType: TextInputType.text,
+                        onPressed: _toggleHidden,
+                      ),
+                      alignment: TextAlign.left,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Inserire valore valido";
+                        }
+                        if (value.length < 6) {
+                          return "Password troppo corta";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _password = value;
+                      },
+                      inputType: TextInputType.text,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 70,
+                ),
+              ],
+            ),
           ),
         ),
       ),
