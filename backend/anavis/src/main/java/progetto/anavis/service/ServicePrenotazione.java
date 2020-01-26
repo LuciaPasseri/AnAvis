@@ -34,9 +34,13 @@ public class ServicePrenotazione {
 	public Prenotazione update(UUID id, Prenotazione prenotazione) {
 		return prenotazioneDao.update(id, prenotazione);
 	}
-	
-	public List<Prenotazione> getByCitta(UUID idCitta){
-		return prenotazioneDao.getByCitta(idCitta);
+
+	public List<Prenotazione> getBySede(UUID idSede) {
+		return prenotazioneDao.getBySede(idSede);
+	}
+
+	public List<Prenotazione> getByDonatore(UUID idDonatore) {
+		return prenotazioneDao.getByDonatore(idDonatore);
 	}
 
 }

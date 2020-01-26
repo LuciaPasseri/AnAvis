@@ -64,8 +64,13 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 	}
 
 	@Override
-	public List<Prenotazione> getByCitta(UUID idCitta) { 
-		return db.stream().filter(p->p.getIdSede().equals(idCitta)).collect(Collectors.toList());
+	public List<Prenotazione> getBySede(UUID idSede) { 
+		return db.stream().filter(p->p.getIdSede().equals(idSede)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Prenotazione> getByDonatore(UUID idDonatore) {
+		return db.stream().filter(p->p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
 	}
 
 }

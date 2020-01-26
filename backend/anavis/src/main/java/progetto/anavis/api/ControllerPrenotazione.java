@@ -53,8 +53,14 @@ public class ControllerPrenotazione {
 		return servicePrenotazioni.update(id, prenotazione);
 	}
 
-	@GetMapping("/citta/{id}")
-	public List<Prenotazione> getByCitta(@NotBlank @PathVariable("id") UUID id) {
-		return servicePrenotazioni.getByCitta(id);
+	@GetMapping("/sede/{id}")
+	public List<Prenotazione> getBySede(@NotBlank @PathVariable("id") UUID id) {
+		return servicePrenotazioni.getBySede(id);
 	}
+
+	@GetMapping("/donatore/{id}")
+	public List<Prenotazione> getByDonatore(@NotBlank @PathVariable("id") UUID id) {
+		return servicePrenotazioni.getByDonatore(id);
+	}
+
 }

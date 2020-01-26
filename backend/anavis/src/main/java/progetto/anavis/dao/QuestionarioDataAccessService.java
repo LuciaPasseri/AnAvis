@@ -40,7 +40,7 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 
 	@Override
 	public Questionario getById(UUID idQuestionario) {
-		return db.stream().filter(p -> p.getIdPrenotazione().equals(idQuestionario)).findFirst().orElse(null);
+		return db.stream().filter(p -> p.getId().equals(idQuestionario)).findFirst().orElse(null);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 	@Override
 	public Questionario update(UUID id, Questionario questionario) {
 		db.set(db.indexOf(getById(id)), questionario);
-		questionario.setIdPrenotazione(id);
+		questionario.setId(id);
 		return getById(id);
 	}
 

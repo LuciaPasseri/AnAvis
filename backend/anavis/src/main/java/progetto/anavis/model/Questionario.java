@@ -36,12 +36,12 @@ public class Questionario {
 		this.perditaPeso = perditaDiPeso;
 	}
 
-	public UUID getIdPrenotazione() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setIdPrenotazione(UUID idPrenotazione) {
-		this.id = idPrenotazione;
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public String getMotiviRicovero() {
