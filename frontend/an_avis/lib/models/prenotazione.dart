@@ -1,6 +1,5 @@
-import "package:flutter/material.dart";
-
-class PrenotazioneProvider extends ChangeNotifier {
+class Prenotazione {
+  static final Prenotazione _prenotazione = Prenotazione._internal();
   String _tipoDonazione;
   String _idSede;
   String _data;
@@ -8,13 +7,19 @@ class PrenotazioneProvider extends ChangeNotifier {
   String _giorno;
   bool _questionarioCompilato;
 
+  factory Prenotazione() {
+    return _prenotazione;
+  }
+
+  Prenotazione._internal();
+
   void setTipoDonazione(String tipo) {
     _tipoDonazione = tipo;
   }
 
   void setIdSede(String id) {
     _idSede = id;
-  } 
+  }
 
   void setMese(String mese) {
     this._mese = mese;

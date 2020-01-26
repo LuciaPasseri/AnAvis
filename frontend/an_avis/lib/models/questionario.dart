@@ -1,6 +1,12 @@
-import "package:flutter/material.dart";
+class Questionario {
+  static final Questionario _questionario = Questionario._internal();
 
-class QuestionarioProvider extends ChangeNotifier {
+  factory Questionario() {
+    return _questionario;
+  }
+
+  Questionario._internal();
+
   bool _buonaSalute = false;
   bool _ricoveratoOspedale = false;
   bool _condizioniSaluteRecenti = false;

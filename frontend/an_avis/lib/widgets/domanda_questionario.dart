@@ -1,7 +1,6 @@
 import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/models/questionario.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DomandaQuestionario extends StatefulWidget {
   DomandaQuestionario(
@@ -22,29 +21,26 @@ class DomandaQuestionario extends StatefulWidget {
 }
 
 class _DomandaQuestionarioState extends State<DomandaQuestionario> {
+  Prenotazione _prenotazione = Prenotazione();
+  Questionario _questionario = Questionario();
   bool _value = false;
 
   _setValueByTag(bool value) {
     switch (widget.tagValue) {
       case "buonaSalute":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setBuonaSalute(value);
+        _questionario.setBuonaSalute(value);
         break;
       case "ricoveratoOspedale":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setRicoveratoOspedale(value);
+        _questionario.setRicoveratoOspedale(value);
         break;
       case "condizioniSaluteRecenti":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setCondizioniSaluteRecenti(value);
+        _questionario.setCondizioniSaluteRecenti(value);
         break;
       case "perditaPeso":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setPerditaPeso(value);
+        _questionario.setPerditaPeso(value);
         break;
       case "allergie":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setAllergie(value);
+        _questionario.setAllergie(value);
         break;
     }
   }
@@ -52,12 +48,10 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
   _setOptionalAnswerByTag(String value) {
     switch (widget.tagOptionalAnswer) {
       case "motiviRicovero":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setMotiviRicovero(value);
+        _questionario.setMotiviRicovero(value);
         break;
       case "qualiAllergie":
-        Provider.of<QuestionarioProvider>(context, listen: false)
-            .setQualiAllergie(value);
+        _questionario.setQualiAllergie(value);
         break;
     }
   }
@@ -67,7 +61,7 @@ class _DomandaQuestionarioState extends State<DomandaQuestionario> {
     super.initState();
     _setValueByTag(false);
     _setOptionalAnswerByTag("");
-    Provider.of<PrenotazioneProvider>(context, listen: false)
+    _prenotazione
         .setQuestionarioCompilato(null);
   }
 
