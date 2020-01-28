@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/models/questionario.dart';
+import 'package:an_avis/models/sede.dart';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_svg/svg.dart';
-import "package:http/http.dart" as http;
-import 'package:provider/provider.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,86 +17,60 @@ class SchermataSceltaData extends StatefulWidget {
 }
 
 class _SchermataSceltaDataState extends State<SchermataSceltaData> {
+  Prenotazione _prenotazione = Prenotazione();
+  Donatore _donatore = Donatore();
+  Questionario _questionario = Questionario();
   String _oraSelezionata;
   bool _isEmpty = true;
+  HttpService _httpService = HttpService();
 
   void _setPrenotazione() async {
     String idPrenotazione;
     String idQuestionario = Uuid().v4();
-    var responseGet = await http.get("http://10.0.2.2:8080/prenotazioni");
-    var data = jsonDecode(responseGet.body);
-    for (var prenotazione in data) {
-      if (prenotazione["idSede"] ==
-              Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-          prenotazione["data"] ==
-              Provider.of<PrenotazioneProvider>(context).getData() &&
+    var prenotazioni = await _httpService.getCall(
+        context, "http://10.0.2.2:8080/prenotazioni");
+    for (var prenotazione in prenotazioni) {
+      if (prenotazione["idSede"] == _prenotazione.getIdSede() &&
+          prenotazione["data"] == _prenotazione.getData() &&
           prenotazione["orario"] == _oraSelezionata) {
         idPrenotazione = prenotazione["id"];
       }
     }
     var prenotazione = json.encode({
-      "data": "${Provider.of<PrenotazioneProvider>(context).getData()}",
+      "data": "${_prenotazione.getData()}",
       "orario": _oraSelezionata,
-      "idDonatore": "${Provider.of<DonatoreProvider>(context).getId()}",
-      "idSede": "${Provider.of<PrenotazioneProvider>(context).getIdSede()}",
-      "tipoDonazione":
-          "${Provider.of<PrenotazioneProvider>(context).getTipoDonazione()}",
+      "idDonatore": "${_donatore.getId()}",
+      "idSede": "${_prenotazione.getIdSede()}",
+      "tipoDonazione": "${_prenotazione.getTipoDonazione()}",
       "disponibilita": false,
       "idQuestionario": "$idQuestionario",
       "id": "$idPrenotazione"
     });
     var donatore = json.encode({
-      "id": "${Provider.of<DonatoreProvider>(context).getId()}",
-      "email": "${Provider.of<DonatoreProvider>(context).getEmail()}",
-      "nome": "${Provider.of<DonatoreProvider>(context).getNome()}",
-      "cognome": "${Provider.of<DonatoreProvider>(context).getCognome()}",
-      "gruppoSanguigno":
-          "${Provider.of<DonatoreProvider>(context).getGruppoSanguigno()}",
-      "dataUltimaDonazione":
-          "${Provider.of<PrenotazioneProvider>(context).getData()}",
+      "id": "${_donatore.getId()}",
+      "email": "${_donatore.getEmail()}",
+      "nome": "${_donatore.getNome()}",
+      "cognome": "${_donatore.getCognome()}",
+      "gruppoSanguigno": "${_donatore.getGruppoSanguigno()}",
+      "dataUltimaDonazione": "${_prenotazione.getData()}",
     });
-    var responsePutPrenotazione = await http.put(
-      Uri.parse("http://10.0.2.2:8080/prenotazioni/$idPrenotazione"),
-      body: prenotazione,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "accept": "application/json; charset=utf-8",
-      },
-    );
-    var responsePutDonazione = await http.put(
-      Uri.parse(
-          "http://10.0.2.2:8080/donatori/${Provider.of<DonatoreProvider>(context).getId()}"),
-      body: donatore,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "accept": "application/json; charset=utf-8",
-      },
-    );
     var questionario = json.encode({
-      "buonaSalute":
-          Provider.of<QuestionarioProvider>(context).getBuonaSalute(),
-      "ricoveratoOspedale":
-          Provider.of<QuestionarioProvider>(context).getRicoveroOspedale(),
-      "allergie": Provider.of<QuestionarioProvider>(context).getAllergie(),
-      "condizioniSaluteRecenti": Provider.of<QuestionarioProvider>(context)
-          .getCondizioniSaluteRecenti(),
-      "perditaPeso":
-          Provider.of<QuestionarioProvider>(context).getPerditaPeso(),
-      "motiviRicovero":
-          Provider.of<QuestionarioProvider>(context).getMotiviRicovero(),
-      "qualiAllergie":
-          Provider.of<QuestionarioProvider>(context).getQualiAllergie(),
+      "buonaSalute": _questionario.getBuonaSalute(),
+      "ricoveratoOspedale": _questionario.getRicoveroOspedale(),
+      "allergie": _questionario.getAllergie(),
+      "condizioniSaluteRecenti": _questionario.getCondizioniSaluteRecenti(),
+      "perditaPeso": _questionario.getPerditaPeso(),
+      "motiviRicovero": _questionario.getMotiviRicovero(),
+      "qualiAllergie": _questionario.getQualiAllergie(),
     });
-    var responsePost = await http.post(
-      Uri.parse("http://10.0.2.2:8080/questionari"),
-      body: questionario,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "accept": "application/json; charset=utf-8",
-      },
-    );
+    var responsePutPrenotazione = await _httpService.putCall(context,
+        "http://10.0.2.2:8080/prenotazioni/$idPrenotazione", prenotazione);
+    var responsePutDonatore = await _httpService.putCall(context,
+        "http://10.0.2.2:8080/donatori/${_donatore.getId()}", donatore);
+    var responsePost = await _httpService.postCall(
+        context, "http://10.0.2.2:8080/questionari", questionario);
     if (responsePutPrenotazione.statusCode == 200 &&
-        responsePutDonazione.statusCode == 200 &&
+        responsePutDonatore.statusCode == 200 &&
         responsePost.statusCode == 200) {
       Flushbar(
         duration: Duration(seconds: 2),
@@ -144,278 +118,252 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   }
 
   Future<List<PulsanteGiorno>> _getGiorniPrenotazioni() async {
-    http.Response response =
-        await http.get("http://10.0.2.2:8080/prenotazioni");
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      List<PulsanteGiorno> giorniPrenotazioni = [];
-      for (var prenotazione in data) {
-        if (prenotazione["disponibilita"] &&
-            prenotazione["tipoDonazione"] ==
-                Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
-            _checkGiornoDoppio(
-                giorniPrenotazioni, _getData(prenotazione["data"])) &&
-            prenotazione["idSede"] ==
-                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-            _getAnno(prenotazione["data"]) == DateTime.now().year &&
-            _getMese(prenotazione["data"]) ==
-                Provider.of<PrenotazioneProvider>(context).getMese()) {
-          _isEmpty = false;
-          giorniPrenotazioni.add(PulsanteGiorno(
-            text: _getData(prenotazione["data"]) +
-                " " +
-                Provider.of<PrenotazioneProvider>(context).getMeseCompleto(),
-            function: () {
-              Provider.of<PrenotazioneProvider>(context)
-                  .setGiorno(((_getData(prenotazione["data"]))));
-              Provider.of<PrenotazioneProvider>(context).setData();
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, setState) {
-                    return Container(
-                      height: 390,
-                      color: Color(0xFF737373),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: new BorderRadius.only(
-                                topLeft: const Radius.circular(20.0),
-                                topRight: const Radius.circular(20.0))),
-                        padding: EdgeInsets.all(35),
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              "Scegli l'orario",
-                              style: TextStyle(
-                                fontFamily: "Nunito",
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
+    var prenotazioni = await _httpService.getCall(
+        context, "http://10.0.2.2:8080/prenotazioni/sede/${Sede().getId()}");
+    List<PulsanteGiorno> giorniPrenotazioni = [];
+    for (var prenotazione in prenotazioni) {
+      if (prenotazione["disponibilita"] &&
+          prenotazione["tipoDonazione"] == _prenotazione.getTipoDonazione() &&
+          _checkGiornoDoppio(
+              giorniPrenotazioni, _getData(prenotazione["data"])) &&
+          _getAnno(prenotazione["data"]) == DateTime.now().year &&
+          _getMese(prenotazione["data"]) == _prenotazione.getMese()) {
+        _isEmpty = false;
+        giorniPrenotazioni.add(PulsanteGiorno(
+          text: _getData(prenotazione["data"]) +
+              " " +
+              _prenotazione.getMeseCompleto(),
+          function: () {
+            _prenotazione.setGiorno(((_getData(prenotazione["data"]))));
+            _prenotazione.setData();
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return StatefulBuilder(
+                    builder: (BuildContext context, setState) {
+                  return Container(
+                    height: 390,
+                    color: Color(0xFF737373),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(20.0),
+                              topRight: const Radius.circular(20.0))),
+                      padding: EdgeInsets.all(35),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Scegli l'orario",
+                            style: TextStyle(
+                              fontFamily: "Nunito",
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(100, 25, 100, 35),
-                              child: FutureBuilder(
-                                  future: _getOrari(),
-                                  builder: (BuildContext mainContext,
-                                      AsyncSnapshot snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.none:
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(100, 25, 100, 35),
+                            child: FutureBuilder(
+                                future: _getOrari(),
+                                builder: (BuildContext mainContext,
+                                    AsyncSnapshot snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      return new RequestCircularLoading();
+                                    case ConnectionState.active:
+                                    case ConnectionState.waiting:
+                                      return new RequestCircularLoading();
+                                    case ConnectionState.done:
+                                      if (snapshot.hasError)
                                         return new RequestCircularLoading();
-                                      case ConnectionState.active:
-                                      case ConnectionState.waiting:
-                                        return new RequestCircularLoading();
-                                      case ConnectionState.done:
-                                        if (snapshot.hasError)
-                                          return new RequestCircularLoading();
-                                        return Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                            border: Border.all(
-                                                color: Colors.blue[900],
-                                                style: BorderStyle.solid,
-                                                width: 2),
-                                          ),
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton(
-                                              style: TextStyle(
-                                                fontFamily: "Nunito",
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                              isExpanded: true,
-                                              value: _oraSelezionata,
-                                              items: snapshot.data,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _oraSelezionata = value;
-                                                });
-                                              },
+                                      return Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          border: Border.all(
+                                              color: Colors.blue[900],
+                                              style: BorderStyle.solid,
+                                              width: 2),
+                                        ),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton(
+                                            style: TextStyle(
+                                              fontFamily: "Nunito",
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
                                             ),
+                                            isExpanded: true,
+                                            value: _oraSelezionata,
+                                            items: snapshot.data,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _oraSelezionata = value;
+                                              });
+                                            },
                                           ),
-                                        );
-                                    }
-                                    return null;
-                                  }),
-                            ),
-                            ButtonTheme(
-                              minWidth: 300,
-                              height: 50,
-                              buttonColor: Colors.blue[800],
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                ),
-                                child: Text(
-                                  "Compila questionario",
-                                  style: TextStyle(
-                                    fontFamily: "Nunito",
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, "/questionario");
-                                },
+                                        ),
+                                      );
+                                  }
+                                  return null;
+                                }),
+                          ),
+                          ButtonTheme(
+                            minWidth: 300,
+                            height: 50,
+                            buttonColor: Colors.blue[800],
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
                               ),
+                              child: Text(
+                                "Compila questionario",
+                                style: TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, "/questionario");
+                              },
                             ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                ButtonTheme(
-                                  buttonColor: Colors.greenAccent[700],
-                                  child: RaisedButton(
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100)),
-                                    ),
-                                    onPressed: () {
-                                      if (_oraSelezionata != null &&
-                                          Provider.of<PrenotazioneProvider>(
-                                                      context)
-                                                  .getQuestionarioCompilato() !=
-                                              null) {
-                                        Provider.of<PrenotazioneProvider>(
-                                                context)
-                                            .setQuestionarioCompilato(null);
-                                        _setPrenotazione();
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              "/donatore",
-                                              (route) => route.isFirst);
-                                        });
-                                      } else if (Provider.of<
-                                                  PrenotazioneProvider>(context)
-                                              .getQuestionarioCompilato() ==
-                                          null) {
-                                        Flushbar(
-                                          duration: Duration(seconds: 3),
-                                          backgroundColor: Colors.red,
-                                          messageText: Text(
-                                              "Compilare prima il questionario!",
-                                              style: TextStyle(
-                                                  fontFamily: "Nunito",
-                                                  color: Colors.white)),
-                                        ).show(context);
-                                      } else {
-                                        Flushbar(
-                                          duration: Duration(seconds: 3),
-                                          backgroundColor: Colors.red,
-                                          messageText: Text(
-                                              "Inserire un orario!",
-                                              style: TextStyle(
-                                                  fontFamily: "Nunito",
-                                                  color: Colors.white)),
-                                        ).show(context);
-                                      }
-                                    },
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              ButtonTheme(
+                                buttonColor: Colors.greenAccent[700],
+                                child: RaisedButton(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 40,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                ButtonTheme(
-                                  buttonColor: Colors.red,
-                                  child: RaisedButton(
-                                    child: Icon(
-                                      Icons.clear,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100)),
-                                    ),
-                                    onPressed: () {
-                                      Provider.of<PrenotazioneProvider>(context)
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                  ),
+                                  onPressed: () {
+                                    if (_oraSelezionata != null &&
+                                        _prenotazione
+                                                .getQuestionarioCompilato() !=
+                                            null) {
+                                      _prenotazione
                                           .setQuestionarioCompilato(null);
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          "/donatore",
-                                          (route) => route.isFirst);
-                                    },
-                                  ),
+                                      _setPrenotazione();
+                                      Future.delayed(Duration(seconds: 2), () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            "/donatore",
+                                            (route) => route.isFirst);
+                                      });
+                                    } else if (_prenotazione
+                                            .getQuestionarioCompilato() ==
+                                        null) {
+                                      Flushbar(
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.red,
+                                        messageText: Text(
+                                            "Compilare prima il questionario!",
+                                            style: TextStyle(
+                                                fontFamily: "Nunito",
+                                                color: Colors.white)),
+                                      ).show(context);
+                                    } else {
+                                      Flushbar(
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.red,
+                                        messageText: Text("Inserire un orario!",
+                                            style: TextStyle(
+                                                fontFamily: "Nunito",
+                                                color: Colors.white)),
+                                      ).show(context);
+                                    }
+                                  },
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              ButtonTheme(
+                                buttonColor: Colors.red,
+                                child: RaisedButton(
+                                  child: Icon(
+                                    Icons.clear,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                  ),
+                                  onPressed: () {
+                                    _prenotazione
+                                        .setQuestionarioCompilato(null);
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        "/donatore", (route) => route.isFirst);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    );
-                  });
-                },
-              );
-            },
-          ));
-        }
+                    ),
+                  );
+                });
+              },
+            );
+          },
+        ));
       }
-      giorniPrenotazioni.sort((a, b) => a.getDay().compareTo(b.getDay()));
-      return giorniPrenotazioni;
-    } else {
-      print(response.statusCode);
     }
-    return null;
+    giorniPrenotazioni.sort((a, b) => a.getDay().compareTo(b.getDay()));
+    return giorniPrenotazioni;
   }
 
   Future<List<DropdownMenuItem<String>>> _getOrari() async {
-    http.Response response =
-        await http.get("http://10.0.2.2:8080/prenotazioni");
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      List<DropdownMenuItem<String>> orari = [];
-      for (var d in data) {
-        if (d["disponibilita"] &&
-            _checkOrarioDoppio(orari, d["orario"]) &&
-            d["tipoDonazione"] ==
-                Provider.of<PrenotazioneProvider>(context).getTipoDonazione() &&
-            d["idSede"] ==
-                Provider.of<PrenotazioneProvider>(context).getIdSede() &&
-            d["data"] == Provider.of<PrenotazioneProvider>(context).getData()) {
-          orari.add(DropdownMenuItem(
-            child: Padding(
-                padding: EdgeInsets.all(0),
-                child: Text(
-                  d["orario"],
-                  style: TextStyle(fontFamily: "Nunito"),
-                )),
-            value: d["orario"],
-          ));
-        }
+    var prenotazioni = await _httpService.getCall(
+        context, "http://10.0.2.2:8080/prenotazioni");
+    List<DropdownMenuItem<String>> orari = [];
+    for (var prenotazione in prenotazioni) {
+      if (prenotazione["disponibilita"] &&
+          _checkOrarioDoppio(orari, prenotazione["orario"]) &&
+          prenotazione["tipoDonazione"] == _prenotazione.getTipoDonazione() &&
+          prenotazione["idSede"] == _prenotazione.getIdSede() &&
+          prenotazione["data"] == _prenotazione.getData()) {
+        orari.add(DropdownMenuItem(
+          child: Padding(
+              padding: EdgeInsets.all(0),
+              child: Text(
+                prenotazione["orario"],
+                style: TextStyle(fontFamily: "Nunito"),
+              )),
+          value: prenotazione["orario"],
+        ));
       }
-      orari.sort((a, b) {
-        List<String> oraEMinutiA = a.value.split(" : ");
-        List<String> oraEMinutiB = b.value.split(" : ");
-        int oraA = int.parse(oraEMinutiA[0]);
-        int minutiA = int.parse(oraEMinutiA[1]);
-        int oraB = int.parse(oraEMinutiB[0]);
-        int minutiB = int.parse(oraEMinutiB[1]);
-        if ((oraA == oraB && minutiA > minutiB) || oraA > oraB) {
-          return 1;
-        } else
-          return -1;
-      });
-      return orari;
-    } else {
-      print(response.statusCode);
     }
-    return null;
+    orari.sort((a, b) {
+      List<String> oraEMinutiA = a.value.split(" : ");
+      List<String> oraEMinutiB = b.value.split(" : ");
+      int oraA = int.parse(oraEMinutiA[0]);
+      int minutiA = int.parse(oraEMinutiA[1]);
+      int oraB = int.parse(oraEMinutiB[0]);
+      int minutiB = int.parse(oraEMinutiB[1]);
+      if ((oraA == oraB && minutiA > minutiB) || oraA > oraB) {
+        return 1;
+      } else
+        return -1;
+    });
+    return orari;
   }
 
   @override
