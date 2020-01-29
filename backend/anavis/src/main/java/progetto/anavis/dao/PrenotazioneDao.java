@@ -24,6 +24,8 @@ public interface PrenotazioneDao {
 	
 	public List<Prenotazione> getBySede (UUID idSede);
 	
-	public Prenotazione getByDonatore (UUID idDonatore);
+	public List<Prenotazione> getByDonatore (UUID idDonatore);
+	
+	public List<Prenotazione> getDisponibiliBySede (UUID idSede);
 	
 }

@@ -36,7 +36,8 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 		if (db.stream().filter(p -> p.getId().equals(id)).findFirst().isPresent())
 			return addPrenotazione(prenotazione);
 		else {
-			prenotazione.setId(id);;
+			prenotazione.setId(id);
+			;
 			db.add(prenotazione);
 			return prenotazione;
 		}
@@ -74,8 +75,13 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 	}
 
 	@Override
-	public Prenotazione getByDonatore(UUID idDonatore) {
-		return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).findFirst().orElse(null);
+	public List<Prenotazione> getByDonatore(UUID idDonatore) {
+		return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Prenotazione> getDisponibiliBySede(UUID idSede) {
+		return getBySede(idSede).stream().filter(p -> p.getDisponibilita() == true).collect(Collectors.toList());
 	}
 
 }

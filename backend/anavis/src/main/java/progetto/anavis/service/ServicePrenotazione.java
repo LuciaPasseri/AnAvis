@@ -39,8 +39,12 @@ public class ServicePrenotazione {
 		return prenotazioneDao.getBySede(idSede);
 	}
 
-	public Prenotazione getByDonatore(UUID idDonatore) {
+	public List<Prenotazione> getByDonatore(UUID idDonatore) {
 		return prenotazioneDao.getByDonatore(idDonatore);
+	}
+	
+	public List<Prenotazione> getDisponibiliBySede(UUID idSede) {
+		return prenotazioneDao.getDisponibiliBySede(idSede);
 	}
 
 }
