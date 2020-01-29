@@ -45,6 +45,7 @@ class HttpService {
     );
     if (responsePost.statusCode == 200) {
       Flushbar(
+        
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
         messageText: Text(message,
@@ -60,8 +61,7 @@ class HttpService {
     }
   }
 
-  Future putCall(
-      BuildContext context, String url, var data) async {
+  Future putCall(BuildContext context, String url, var data) async {
     return http.put(
       Uri.parse(url),
       body: data,
@@ -99,7 +99,22 @@ class HttpService {
     }
   }
 
-  void deleteCall(BuildContext context, String url, String message) async {
+  Future deleteCall(BuildContext context, String url) async {
+    http.Response responseDelete = await http.delete(url);
+    if (responseDelete.statusCode != 200) {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        messageText: Text("Errore nelle modifica dei dati",
+            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
+      ).show(context);
+    } else {
+      return responseDelete;
+    }
+  }
+
+  void deleteCallWithSnackbar(
+      BuildContext context, String url, String message) async {
     http.Response responseDelete = await http.delete(url);
     if (responseDelete.statusCode == 200) {
       Flushbar(

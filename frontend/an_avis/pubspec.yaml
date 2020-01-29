@@ -29,7 +29,6 @@ dependencies:
   random_string: ^2.0.0
   flutter_svg: ^0.15.0
   flushbar: ^1.9.1
-  uuid: ^2.0.4
   firebase_auth: ^0.15.3+1
   cloud_firestore: ^0.13.0+1
   email_validator: ^1.0.4

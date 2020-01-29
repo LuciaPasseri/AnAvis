@@ -55,8 +55,8 @@ class _SchermataRegistrazioneDonatoreState
       "gruppoSanguigno": "$_gruppoSanguigno",
       "email": "$_email",
     });
-    _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/donatori", donatore,
-        "Donatore aggiunto correttamente!");
+    _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/donatori",
+        donatore, "Donatore aggiunto correttamente!");
     try {
       FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
@@ -327,8 +327,9 @@ class _SchermataRegistrazioneDonatoreState
             onPressed: () {
               if (_validateForm()) {
                 addDonatore(context);
-                Future.delayed(Duration(seconds: 1), () {
-                  Navigator.pop(context);
+                setState(() {
+                  _formKey.currentState.reset();
+                  _gruppoSanguigno = null;
                 });
               }
             }),

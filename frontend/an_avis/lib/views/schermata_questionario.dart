@@ -47,7 +47,7 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                         fontFamily: "Nunito"),
                   ),
                   Spacer(),
-                  Text("SI      NO",
+                  Text("SI     NO",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

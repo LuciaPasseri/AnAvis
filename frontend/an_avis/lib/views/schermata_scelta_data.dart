@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/models/questionario.dart';
-import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_giorno.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_svg/svg.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:uuid/uuid.dart';
 
 class SchermataSceltaData extends StatefulWidget {
   @override
@@ -26,16 +24,29 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   void _setPrenotazione() async {
     String idPrenotazione;
-    String idQuestionario = Uuid().v4();
-    var prenotazioni = await _httpService.getCall(
-        context, "http://10.0.2.2:8080/prenotazioni");
+    String idQuestionario;
+    var prenotazioni = await _httpService.getCall(context,
+        "http://10.0.2.2:8080/prenotazioni/sede/${_prenotazione.getIdSede()}");
     for (var prenotazione in prenotazioni) {
-      if (prenotazione["idSede"] == _prenotazione.getIdSede() &&
-          prenotazione["data"] == _prenotazione.getData() &&
+      if (prenotazione["data"] == _prenotazione.getData() &&
           prenotazione["orario"] == _oraSelezionata) {
         idPrenotazione = prenotazione["id"];
       }
     }
+    var questionario = json.encode({
+      "buonaSalute": _questionario.getBuonaSalute(),
+      "ricoveratoOspedale": _questionario.getRicoveroOspedale(),
+      "allergie": _questionario.getAllergie(),
+      "condizioniSaluteRecenti": _questionario.getCondizioniSaluteRecenti(),
+      "perditaPeso": _questionario.getPerditaPeso(),
+      "motiviRicovero": _questionario.getMotiviRicovero(),
+      "qualiAllergie": _questionario.getQualiAllergie(),
+    });
+    var responsePostQuestionario = await _httpService.postCall(
+        context, "http://10.0.2.2:8080/questionari", questionario);
+    var questionari =
+        await _httpService.getCall(context, "http://10.0.2.2:8080/questionari");
+    idQuestionario = questionari.last["id"];
     var prenotazione = json.encode({
       "data": "${_prenotazione.getData()}",
       "orario": _oraSelezionata,
@@ -53,25 +64,17 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
       "cognome": "${_donatore.getCognome()}",
       "gruppoSanguigno": "${_donatore.getGruppoSanguigno()}",
       "dataUltimaDonazione": "${_prenotazione.getData()}",
+      "tipoUltimaDonazione": "${_prenotazione.getTipoDonazione()}",
     });
-    var questionario = json.encode({
-      "buonaSalute": _questionario.getBuonaSalute(),
-      "ricoveratoOspedale": _questionario.getRicoveroOspedale(),
-      "allergie": _questionario.getAllergie(),
-      "condizioniSaluteRecenti": _questionario.getCondizioniSaluteRecenti(),
-      "perditaPeso": _questionario.getPerditaPeso(),
-      "motiviRicovero": _questionario.getMotiviRicovero(),
-      "qualiAllergie": _questionario.getQualiAllergie(),
-    });
+
     var responsePutPrenotazione = await _httpService.putCall(context,
         "http://10.0.2.2:8080/prenotazioni/$idPrenotazione", prenotazione);
     var responsePutDonatore = await _httpService.putCall(context,
         "http://10.0.2.2:8080/donatori/${_donatore.getId()}", donatore);
-    var responsePost = await _httpService.postCall(
-        context, "http://10.0.2.2:8080/questionari", questionario);
+
     if (responsePutPrenotazione.statusCode == 200 &&
         responsePutDonatore.statusCode == 200 &&
-        responsePost.statusCode == 200) {
+        responsePostQuestionario.statusCode == 200) {
       Flushbar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
@@ -118,8 +121,8 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   }
 
   Future<List<PulsanteGiorno>> _getGiorniPrenotazioni() async {
-    var prenotazioni = await _httpService.getCall(
-        context, "http://10.0.2.2:8080/prenotazioni/sede/${Sede().getId()}");
+    var prenotazioni = await _httpService.getCall(context,
+        "http://10.0.2.2:8080/prenotazioni/sede/${Prenotazione().getIdSede()}");
     List<PulsanteGiorno> giorniPrenotazioni = [];
     for (var prenotazione in prenotazioni) {
       if (prenotazione["disponibilita"] &&
@@ -398,49 +401,39 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
               child: FutureBuilder(
                   future: _getGiorniPrenotazioni(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                        return new RequestCircularLoading();
-                      case ConnectionState.active:
-                      case ConnectionState.waiting:
-                        return new RequestCircularLoading();
-                      case ConnectionState.done:
-                        if (snapshot.hasError)
-                          return new RequestCircularLoading();
-                        if (_isEmpty) {
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset(
-                                  "assets/images/no_data.svg",
-                                  height: 240,
-                                  width: 240,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Card(
-                                    elevation: 3,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Text(
-                                          "Nessuna prenotazione disponibile",
-                                          style:
-                                              TextStyle(fontFamily: "Nunito"),
-                                        ))),
-                              ],
+                    if (_isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              "assets/images/no_data.svg",
+                              height: 240,
+                              width: 240,
                             ),
-                          );
-                        } else {
-                          return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return snapshot.data[index];
-                            },
-                          );
-                        }
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Card(
+                                elevation: 3,
+                                child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      "Nessuna prenotazione disponibile",
+                                      style: TextStyle(fontFamily: "Nunito"),
+                                    ))),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return snapshot.data[index];
+                        },
+                      );
                     }
+
                     return null;
                   }),
             ),
