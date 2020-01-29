@@ -16,6 +16,7 @@ public class Donatore {
 	@NotBlank
 	private String nome, cognome, gruppoSanguigno, email;
 	private String dataUltimaDonazione;
+	private TipoDonazione tipoUltimaDonazione;
 
 	public Donatore() {
 
@@ -24,13 +25,15 @@ public class Donatore {
 	public Donatore(@JsonProperty("id") UUID idDonatore, @JsonProperty("nome") String nome,
 			@JsonProperty("cognome") String cognome, @JsonProperty("email") String email,
 			@JsonProperty("gruppoSanguigno") String gruppoSanguigno,
-			@JsonProperty("data ultima prenotazione") String data) {
+			@JsonProperty("data ultima prenotazione") String data,
+			@JsonProperty("tipo ultima donazione") TipoDonazione tipo) {
 		this.id = idDonatore;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.email = email;
 		this.gruppoSanguigno = gruppoSanguigno;
 		this.dataUltimaDonazione = data;
+		this.tipoUltimaDonazione = tipo;
 	}
 
 	public UUID getId() {
@@ -79,6 +82,14 @@ public class Donatore {
 
 	public void setDataUltimaDonazione(String dataUltimaDonazione) {
 		this.dataUltimaDonazione = dataUltimaDonazione;
+	}
+
+	public TipoDonazione getTipoUltimaDonazione() {
+		return tipoUltimaDonazione;
+	}
+
+	public void setTipoUltimaDonazione(TipoDonazione tipo) {
+		this.tipoUltimaDonazione = tipo;
 	}
 
 }

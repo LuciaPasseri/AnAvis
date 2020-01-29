@@ -17,7 +17,6 @@ public class Prenotazione {
 	@NotBlank
 	private String data, orario;
 	private UUID idDonatore, idSede, idQuestionario;
-	@NotNull
 	private TipoDonazione tipoDonazione;
 	@NotNull
 	private boolean disponibilita = false;

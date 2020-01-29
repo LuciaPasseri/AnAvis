@@ -26,9 +26,12 @@ public class SediDataAccessService implements SedeAvisDao {
 
 	@Override
 	public SedeAvis creaSede(UUID id, SedeAvis sedeAvis) {
-		this.sede = new SedeAvis(id, sedeAvis.getCitta(), sedeAvis.getEmail());
-		db.add(sede);
-		return sede;
+		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
+			this.sede = new SedeAvis(id, sedeAvis.getCitta(), sedeAvis.getEmail());
+			db.add(sede);
+			return sede;
+		} else
+			return creaSede(id, sedeAvis);
 	}
 
 	@Override

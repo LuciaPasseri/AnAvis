@@ -25,12 +25,15 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 	}
 
 	@Override
-	public Questionario creaQuestionario(UUID id, Questionario quest) {
-		questionario = new Questionario(id, quest.isBuonaSalute(), quest.isRicoveratoOspedale(),
-				quest.getMotiviRicovero(), quest.isCondizioniSaluteRecenti(), quest.isAllergie(),
-				quest.getQualiAllergie(), quest.isPerditaPeso());
-		db.add(questionario);
-		return questionario;
+	public Questionario creaQuestionario(UUID id, Questionario questionario) {
+		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
+			this.questionario = new Questionario(id, questionario.isBuonaSalute(), questionario.isRicoveratoOspedale(),
+					questionario.getMotiviRicovero(), questionario.isCondizioniSaluteRecenti(), questionario.isAllergie(),
+					questionario.getQualiAllergie(), questionario.isPerditaPeso());
+			db.add(this.questionario);
+			return this.questionario;
+		} else
+			return creaQuestionario(id, questionario);
 	}
 
 	@Override

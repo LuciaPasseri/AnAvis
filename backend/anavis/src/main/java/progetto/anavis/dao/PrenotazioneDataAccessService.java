@@ -14,7 +14,7 @@ import progetto.anavis.model.TipoDonazione;
 public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	private List<Prenotazione> db;
-	private Prenotazione prenot;
+	private Prenotazione prenotazione;
 
 	public PrenotazioneDataAccessService() {
 		db = new ArrayList<>();
@@ -34,15 +34,30 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	@Override
 	public Prenotazione creaPrenotazione(UUID id, Prenotazione prenotazione) {
-		prenot = new Prenotazione(id, prenotazione.getData(), prenotazione.getOrario(), prenotazione.getIdDonatore(),
-				prenotazione.getIdSede(), prenotazione.getTipoDonazione(), prenotazione.getDisponibilita(),
-				prenotazione.getIdQuestionario());
-		db.add(prenot);
-		return prenot;
+		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
+			this.prenotazione = new Prenotazione(id, prenotazione.getData().toString(), prenotazione.getOrario(),
+					prenotazione.getIdDonatore(), prenotazione.getIdSede(), prenotazione.getTipoDonazione(),
+					prenotazione.getDisponibilita(), prenotazione.getIdQuestionario());
+			db.add(this.prenotazione);
+			return this.prenotazione;
+		} else
+			return creaPrenotazione(id, prenotazione);
 	}
 
 	@Override
 	public List<Prenotazione> getPrenotazioni() {
+
+		// db.sort(c) {
+		//
+		// };
+		//
+		// //CAZZATA
+		// Collections.sort(db, new Comparator<Prenotazione>() {
+		// @Override
+		// public int compare(Prenotazione o1, Prenotazione o2) {
+		// return o1.getData().compareTo(o2.getData());
+		// }
+		// });
 		return db;
 	}
 
@@ -64,13 +79,13 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 	}
 
 	@Override
-	public List<Prenotazione> getBySede(UUID idSede) { 
-		return db.stream().filter(p->p.getIdSede().equals(idSede)).collect(Collectors.toList());
+	public List<Prenotazione> getBySede(UUID idSede) {
+		return db.stream().filter(p -> p.getIdSede().equals(idSede)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Prenotazione> getByDonatore(UUID idDonatore) {
-		return db.stream().filter(p->p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
+	public Prenotazione getByDonatore(UUID idDonatore) {
+		return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).findFirst().orElse(null);
 	}
 
 }

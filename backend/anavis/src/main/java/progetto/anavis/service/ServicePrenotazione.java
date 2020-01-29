@@ -39,7 +39,7 @@ public class ServicePrenotazione {
 		return prenotazioneDao.getBySede(idSede);
 	}
 
-	public List<Prenotazione> getByDonatore(UUID idDonatore) {
+	public Prenotazione getByDonatore(UUID idDonatore) {
 		return prenotazioneDao.getByDonatore(idDonatore);
 	}
 
