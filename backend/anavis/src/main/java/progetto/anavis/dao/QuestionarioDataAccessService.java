@@ -12,7 +12,6 @@ import progetto.anavis.model.Questionario;
 public class QuestionarioDataAccessService implements QuestionarioDao {
 
 	private List<Questionario> db;
-	private Questionario questionario;
 
 	public QuestionarioDataAccessService() {
 		db = new ArrayList<>();
@@ -26,14 +25,13 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 
 	@Override
 	public Questionario creaQuestionario(UUID id, Questionario questionario) {
-		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
-			this.questionario = new Questionario(id, questionario.isBuonaSalute(), questionario.isRicoveratoOspedale(),
-					questionario.getMotiviRicovero(), questionario.isCondizioniSaluteRecenti(), questionario.isAllergie(),
-					questionario.getQualiAllergie(), questionario.isPerditaPeso());
-			db.add(this.questionario);
-			return this.questionario;
-		} else
-			return creaQuestionario(id, questionario);
+		if (db.stream().filter(p -> p.getId().equals(id)).findFirst().isPresent())
+			return addQuestionario(questionario);
+		else {
+			questionario.setId(id);
+			db.add(questionario);
+			return questionario;
+		}
 	}
 
 	@Override

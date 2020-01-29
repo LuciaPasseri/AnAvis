@@ -12,7 +12,6 @@ import progetto.anavis.model.SedeAvis;
 public class SediDataAccessService implements SedeAvisDao {
 
 	private List<SedeAvis> db;
-	private SedeAvis sede;
 
 	public SediDataAccessService() {
 		db = new ArrayList<>();
@@ -26,12 +25,13 @@ public class SediDataAccessService implements SedeAvisDao {
 
 	@Override
 	public SedeAvis creaSede(UUID id, SedeAvis sedeAvis) {
-		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
-			this.sede = new SedeAvis(id, sedeAvis.getCitta(), sedeAvis.getEmail());
-			db.add(sede);
-			return sede;
-		} else
-			return creaSede(id, sedeAvis);
+		if (db.stream().filter(p -> p.getId().equals(id)).findFirst().isPresent())
+			return addSede(sedeAvis);
+		else {
+			sedeAvis.setId(id);
+			db.add(sedeAvis);
+			return sedeAvis;
+		}
 	}
 
 	@Override

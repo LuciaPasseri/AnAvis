@@ -14,7 +14,6 @@ import progetto.anavis.model.TipoDonazione;
 public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	private List<Prenotazione> db;
-	private Prenotazione prenotazione;
 
 	public PrenotazioneDataAccessService() {
 		db = new ArrayList<>();
@@ -34,29 +33,20 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	@Override
 	public Prenotazione creaPrenotazione(UUID id, Prenotazione prenotazione) {
-		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
-			this.prenotazione = new Prenotazione(id, prenotazione.getData().toString(), prenotazione.getOrario(),
-					prenotazione.getIdDonatore(), prenotazione.getIdSede(), prenotazione.getTipoDonazione(),
-					prenotazione.getDisponibilita(), prenotazione.getIdQuestionario());
-			db.add(this.prenotazione);
-			return this.prenotazione;
-		} else
-			return creaPrenotazione(id, prenotazione);
+		if (db.stream().filter(p -> p.getId().equals(id)).findFirst().isPresent())
+			return addPrenotazione(prenotazione);
+		else {
+			prenotazione.setId(id);;
+			db.add(prenotazione);
+			return prenotazione;
+		}
 	}
 
 	@Override
 	public List<Prenotazione> getPrenotazioni() {
-
-		// db.sort(c) {
+		// db.sort((a,b) -> {
+		// List<String> dataA= a.getData().split("-");
 		//
-		// };
-		//
-		// //CAZZATA
-		// Collections.sort(db, new Comparator<Prenotazione>() {
-		// @Override
-		// public int compare(Prenotazione o1, Prenotazione o2) {
-		// return o1.getData().compareTo(o2.getData());
-		// }
 		// });
 		return db;
 	}

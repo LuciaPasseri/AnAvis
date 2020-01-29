@@ -13,7 +13,6 @@ import progetto.anavis.model.TipoDonazione;
 public class DonatoreDataAccessService implements DonatoreDao {
 
 	private List<Donatore> db;
-	private Donatore donatore;
 
 	public DonatoreDataAccessService() {
 		db = new ArrayList<>();
@@ -29,14 +28,13 @@ public class DonatoreDataAccessService implements DonatoreDao {
 
 	@Override
 	public Donatore creaDonatore(UUID id, Donatore donatore) {
-		if (db.stream().filter(d -> d.getId().equals(id)) == null) {
-			this.donatore = new Donatore(id, donatore.getNome(), donatore.getCognome(), donatore.getEmail(),
-					donatore.getGruppoSanguigno(), donatore.getDataUltimaDonazione(),
-					donatore.getTipoUltimaDonazione());
-			db.add(this.donatore);
-			return this.donatore;
-		} else
-			return creaDonatore(UUID.randomUUID(), donatore);
+		if (db.stream().filter(p -> p.getId().equals(id)).findFirst().isPresent())
+			return addDonatore(donatore);
+		else {
+			donatore.setIdDonatore(id);
+			db.add(donatore);
+			return donatore;
+		}
 	}
 
 	@Override
