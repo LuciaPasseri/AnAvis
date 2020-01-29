@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/remove_glow.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,13 @@ class _SchermataRegistrazioneDonatoreState
   String _password;
   String _dropdownError;
   bool _hiddenText = true;
+  HttpService _httpService = HttpService();
+
+  void _toggleHidden() {
+    setState(() {
+      _hiddenText = !_hiddenText;
+    });
+  }
 
   bool _validateForm() {
     bool _isValid = _formKey.currentState.validate();
@@ -40,12 +48,6 @@ class _SchermataRegistrazioneDonatoreState
     return _isValid;
   }
 
-  void _toggleHidden() {
-    setState(() {
-      _hiddenText = !_hiddenText;
-    });
-  }
-
   void addDonatore(BuildContext context) async {
     var donatore = json.encode({
       "nome": "$_nome",
@@ -53,14 +55,8 @@ class _SchermataRegistrazioneDonatoreState
       "gruppoSanguigno": "$_gruppoSanguigno",
       "email": "$_email",
     });
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:8080/donatori"),
-      body: donatore,
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
+    _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/donatori", donatore,
+        "Donatore aggiunto correttamente!");
     try {
       FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
@@ -70,25 +66,6 @@ class _SchermataRegistrazioneDonatoreState
         backgroundColor: Colors.red,
         messageText: Text(
           e.message,
-          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
-        ),
-      ).show(context);
-    }
-    if (response.statusCode == 200) {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.green,
-        messageText: Text(
-          "Donatore aggiunto!",
-          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
-        ),
-      ).show(context);
-    } else {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-        messageText: Text(
-          "Errore",
           style: TextStyle(fontFamily: "Nunito", color: Colors.white),
         ),
       ).show(context);

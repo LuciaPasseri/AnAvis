@@ -1,6 +1,5 @@
 import 'package:an_avis/models/prenotazione.dart';
 import "package:flutter/material.dart";
-import 'package:provider/provider.dart';
 
 class PulsanteMese extends StatelessWidget {
   const PulsanteMese({
@@ -30,7 +29,7 @@ class PulsanteMese extends StatelessWidget {
       textColor: Colors.white,
       color: Colors.white,
       onPressed: () {
-        Provider.of<PrenotazioneProvider>(context).setMese(meseNumero);
+        Prenotazione().setMese(meseNumero);
         Navigator.of(context).pushNamed("/sceltaData");
       },
     );

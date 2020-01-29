@@ -1,11 +1,8 @@
 import 'package:an_avis/models/prenotazione.dart';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:an_avis/widgets/pulsante_sede.dart';
 import "package:flutter/material.dart";
-import "package:http/http.dart" as http;
-import "dart:convert";
-
-import 'package:provider/provider.dart';
 
 class SchermataSceltaSede extends StatefulWidget {
   @override
@@ -15,26 +12,21 @@ class SchermataSceltaSede extends StatefulWidget {
 class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
   TextEditingController _controller = new TextEditingController();
   String _filtro;
+  HttpService _httpService = HttpService();
 
   Future<List<PulsanteSede>> _getSediAvis() async {
-    http.Response response = await http.get("http://10.0.2.2:8080/sedi");
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      List<PulsanteSede> sediAvis = [];
-      for (var d in data) {
-        sediAvis.add(PulsanteSede(
-            text: d["citta"],
-            function: () {
-              Provider.of<PrenotazioneProvider>(context).setIdSede(d["id"]);
-              Navigator.pushNamed(context, "/sceltaMese");
-            }));
-      }
-      sediAvis.sort((a, b) => a.text.compareTo(b.text));
-      return sediAvis;
-    } else {
-      print(response.statusCode);
-      return null;
+    var sedi = await _httpService.getCall(context, "http://10.0.2.2:8080/sedi");
+    List<PulsanteSede> sediAvis = [];
+    for (var sede in sedi) {
+      sediAvis.add(PulsanteSede(
+          text: sede["citta"],
+          function: () {
+            Prenotazione().setIdSede(sede["id"]);
+            Navigator.pushNamed(context, "/sceltaMese");
+          }));
     }
+    sediAvis.sort((a, b) => a.text.compareTo(b.text));
+    return sediAvis;
   }
 
   @override
@@ -56,7 +48,6 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<PrenotazioneProvider>(context).getTipoDonazione());
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(

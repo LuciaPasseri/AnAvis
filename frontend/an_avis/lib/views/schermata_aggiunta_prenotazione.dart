@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:an_avis/models/sede.dart';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/custom_text_field.dart';
-import 'package:flushbar/flushbar.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
-import "package:http/http.dart" as http;
-import 'package:provider/provider.dart';
 
 class SchermataAggiuntaPrenotazione extends StatefulWidget {
   @override
@@ -16,10 +14,12 @@ class SchermataAggiuntaPrenotazione extends StatefulWidget {
 class _SchermataAggiuntaPrenotazioneState
     extends State<SchermataAggiuntaPrenotazione> {
   final _formKey = GlobalKey<FormState>();
+  Sede _sede = Sede();
   DateTime _data;
   String _tipoDonazione;
   String _dropdownError;
   TextEditingController _controllerDate = TextEditingController();
+  HttpService _httpService = HttpService();
 
   @override
   void dispose() {
@@ -61,38 +61,12 @@ class _SchermataAggiuntaPrenotazioneState
     var prenotazione = json.encode({
       "data": "${DateFormat('dd-MM-yyyy').format(_data)}",
       "orario": _getOra(_data.hour) + " : " + _getMinuti(_data.minute),
-      "idSede": Provider.of<SedeProvider>(context).getId(),
+      "idSede": _sede.getId(),
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilita": true,
     });
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:8080/prenotazioni"),
-      body: prenotazione,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "accept": "application/json; charset=utf-8",
-      },
-    );
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.green,
-        messageText: Text(
-          "Prenotazione aggiunta!",
-          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
-        ),
-      ).show(context);
-    } else {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-        messageText: Text(
-          "Errore",
-          style: TextStyle(fontFamily: "Nunito", color: Colors.white),
-        ),
-      ).show(context);
-    }
+    _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/prenotazioni",
+        prenotazione, "Prenotazione aggiunta!");
   }
 
   Future _selezionaData() async {

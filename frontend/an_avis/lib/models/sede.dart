@@ -1,9 +1,14 @@
-import "package:flutter/material.dart";
-
-class SedeProvider extends ChangeNotifier {
+class Sede {
+  static final Sede _sede = Sede._internal();
   String _idSede;
   String _cittaSede;
   String _email;
+
+  factory Sede() {
+    return _sede;
+  }
+
+  Sede._internal();
 
   void setId(String id) {
     _idSede = id;
@@ -28,5 +33,4 @@ class SedeProvider extends ChangeNotifier {
   String getEmail() {
     return _email;
   }
-
 }

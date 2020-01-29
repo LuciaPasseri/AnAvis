@@ -1,11 +1,16 @@
-import "package:flutter/material.dart";
-
-class DonatoreProvider extends ChangeNotifier {
+class Donatore {
+  static final Donatore _donatore = Donatore._internal();
   String _idDonatore;
   String _nome;
   String _cognome;
   String _gruppoSanguigno;
   String _email;
+
+  factory Donatore() {
+    return _donatore;
+  }
+
+  Donatore._internal();
 
   void setId(String id) {
     _idDonatore = id;

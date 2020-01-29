@@ -1,12 +1,10 @@
+import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/targhetta_prenotazione.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import "package:flutter/material.dart";
-import "package:http/http.dart" as http;
-import "dart:convert";
-import 'package:provider/provider.dart';
 
 class SchermataPrenotazioneDonatore extends StatefulWidget {
   @override
@@ -16,304 +14,237 @@ class SchermataPrenotazioneDonatore extends StatefulWidget {
 
 class _SchermataPrenotazioneDonatoreState
     extends State<SchermataPrenotazioneDonatore> {
-  dynamic _dataDonatori;
-  dynamic _dataSedi;
-  dynamic _prenotazione;
   bool _isEmpty = true;
+  HttpService _httpService = HttpService();
 
-  dynamic _getDonatore(String idDonatore) {
-    for (var donatore in _dataDonatori) {
-      if (donatore["idDonatore"] == idDonatore) {
-        return donatore;
-      }
-    }
-    return null;
-  }
-
-  dynamic _getSede(String idSede) {
-    for (var sede in _dataSedi) {
-      if (sede["id"] == idSede) {
-        return sede;
-      }
-    }
-  }
-
-  Future _getPrenotazioni() async {
-    http.Response responsePrenotazioni =
-        await http.get("http://10.0.2.2:8080/prenotazioni");
-    http.Response responseDonatori =
-        await http.get("http://10.0.2.2:8080/donatori");
-    http.Response responseSedi = await http.get("http://10.0.2.2:8080/sedi");
-    if (responsePrenotazioni.statusCode == 200 &&
-        responseDonatori.statusCode == 200 &&
-        responseSedi.statusCode == 200) {
-      var dataPrenotazioni = jsonDecode(responsePrenotazioni.body);
-      _dataDonatori = jsonDecode(responseDonatori.body);
-      _dataSedi = jsonDecode(responseSedi.body);
-      for (var prenotazione in dataPrenotazioni) {
-        if (prenotazione["idDonatore"] ==
-            Provider.of<DonatoreProvider>(context).getId()) {
-          var donatore = _getDonatore(prenotazione["idDonatore"]);
-          var sede = _getSede(prenotazione["idSede"]);
-          if (donatore != null) {
-            _prenotazione = prenotazione;
-            _isEmpty = false;
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
+  Future _getPrenotazione() async {
+    var prenotazione = await _httpService.getCall(context,
+        "http://10.0.2.2:8080/prenotazioni/donatore/${Donatore().getId()}");
+    var donatore = await _httpService.getCall(
+        context, "http://10.0.2.2:8080/donatori/${prenotazione["idDonatore"]}");
+    var sede = await _httpService.getCall(
+        context, "http://10.0.2.2:8080/sedi/${prenotazione["idSede"]}");
+    if (donatore != null) {
+      _isEmpty = false;
+      return SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 6,
+              margin: EdgeInsets.fromLTRB(20, 15, 20, 30),
+              child: Padding(
+                padding: EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Donazione prenotata per il:",
+                      style: TextStyle(
+                          fontFamily: "Nunito",
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
                     ),
-                    elevation: 6,
-                    margin: EdgeInsets.fromLTRB(20, 15, 20, 30),
-                    child: Padding(
-                      padding: EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    TargettaPrenotazione(
+                      isType: false,
+                      data: prenotazione,
+                      label: "Data",
+                      icon: Icons.calendar_today,
+                      edgeInsets1: EdgeInsets.fromLTRB(5, 15, 0, 0),
+                      edgeInsets2: EdgeInsets.fromLTRB(8.5, 0, 8.5, 0),
+                      jsonTag: "data",
+                    ),
+                    TargettaPrenotazione(
+                      isType: false,
+                      data: prenotazione,
+                      label: "Orario",
+                      icon: Icons.access_time,
+                      edgeInsets1: EdgeInsets.only(left: 5),
+                      edgeInsets2: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                      jsonTag: "orario",
+                    ),
+                    TargettaPrenotazione(
+                      isType: false,
+                      data: sede,
+                      label: "Sede",
+                      icon: Icons.domain,
+                      edgeInsets1: EdgeInsets.only(left: 5),
+                      edgeInsets2: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                      jsonTag: "citta",
+                    ),
+                    TargettaPrenotazione(
+                      isType: true,
+                      data: prenotazione,
+                      label: "Tipo",
+                      icon: Icons.invert_colors,
+                      edgeInsets1: EdgeInsets.only(left: 5),
+                      edgeInsets2: EdgeInsets.fromLTRB(9, 0, 9, 0),
+                      jsonTag: "tipoDonazione",
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Spacer(),
+                        RaisedButton(
+                            elevation: 4,
+                            color: Colors.red[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "Disdici",
+                                  style: TextStyle(
+                                      fontFamily: "Nunito",
+                                      color: Colors.white,
+                                      fontSize: 16),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "Disdire prenotazione?",
+                                      style: TextStyle(fontFamily: "Nunito"),
+                                    ),
+                                    content: Text(
+                                      "Così facendo la prenotazione verrà disdetta.",
+                                      style: TextStyle(fontFamily: "Nunito"),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          "Chiudi",
+                                          style:
+                                              TextStyle(fontFamily: "Nunito"),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      FlatButton(
+                                          child: Text(
+                                            "Accetta",
+                                            style:
+                                                TextStyle(fontFamily: "Nunito"),
+                                          ),
+                                          onPressed: () async {
+                                            var prenotazioneToPut =
+                                                json.encode({
+                                              "data": prenotazione["data"],
+                                              "orario": prenotazione["orario"],
+                                              "idSede": prenotazione["idSede"],
+                                              "tipoDonazione":
+                                                  prenotazione["tipoDonazione"],
+                                              "disponibilita": true,
+                                              "id": prenotazione["id"],
+                                            });
+                                            _httpService.putCallWithSnackBar(
+                                                context,
+                                                "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
+                                                prenotazioneToPut,
+                                                "Prenotazione cancellata con successo");
+                                          })
+                                    ],
+                                  );
+                                },
+                              );
+                            }),
+                        SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 6,
+              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              color: Colors.red[900],
+              child: Padding(
+                padding: EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Informazioni donatore",
+                      style: TextStyle(
+                          fontFamily: "Nunito",
+                          fontSize: 22,
+                          color: Colors.white),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: Row(
                         children: <Widget>[
-                          Text(
-                            "Donazione prenotata per il:",
-                            style: TextStyle(
-                                fontFamily: "Nunito",
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TargettaPrenotazione(
-                            isType: false,
-                            data: prenotazione,
-                            label: "Data",
-                            icon: Icons.calendar_today,
-                            edgeInsets1: EdgeInsets.fromLTRB(5, 15, 0, 0),
-                            edgeInsets2: EdgeInsets.fromLTRB(8.5, 0, 8.5, 0),
-                            jsonTag: "data",
-                          ),
-                          TargettaPrenotazione(
-                            isType: false,
-                            data: prenotazione,
-                            label: "Orario",
-                            icon: Icons.access_time,
-                            edgeInsets1: EdgeInsets.only(left: 5),
-                            edgeInsets2: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            jsonTag: "orario",
-                          ),
-                          TargettaPrenotazione(
-                            isType: false,
-                            data: sede,
-                            label: "Sede",
-                            icon: Icons.domain,
-                            edgeInsets1: EdgeInsets.only(left: 5),
-                            edgeInsets2: EdgeInsets.fromLTRB(7, 0, 7, 0),
-                            jsonTag: "citta",
-                          ),
-                          TargettaPrenotazione(
-                            isType: true,
-                            data: prenotazione,
-                            label: "Tipo",
-                            icon: Icons.invert_colors,
-                            edgeInsets1: EdgeInsets.only(left: 5),
-                            edgeInsets2: EdgeInsets.fromLTRB(9, 0, 9, 0),
-                            jsonTag: "tipoDonazione",
+                          Icon(
+                            Icons.person,
+                            color: Colors.white,
                           ),
                           SizedBox(
-                            height: 5,
+                            width: 12,
                           ),
-                          Row(
-                            children: <Widget>[
-                              Spacer(),
-                              RaisedButton(
-                                  elevation: 4,
-                                  color: Colors.red[900],
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "Disdici",
-                                        style: TextStyle(
-                                            fontFamily: "Nunito",
-                                            color: Colors.white,
-                                            fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Icon(
-                                        Icons.clear,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            "Disdire prenotazione?",
-                                            style:
-                                                TextStyle(fontFamily: "Nunito"),
-                                          ),
-                                          content: Text(
-                                            "Così facendo la prenotazione verrà disdetta.",
-                                            style:
-                                                TextStyle(fontFamily: "Nunito"),
-                                          ),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              child: Text(
-                                                "Chiudi",
-                                                style: TextStyle(
-                                                    fontFamily: "Nunito"),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            FlatButton(
-                                                child: Text(
-                                                  "Accetta",
-                                                  style: TextStyle(
-                                                      fontFamily: "Nunito"),
-                                                ),
-                                                onPressed: () async {
-                                                  var prenotazione =
-                                                      json.encode({
-                                                    "data":
-                                                        _prenotazione["data"],
-                                                    "orario":
-                                                        _prenotazione["orario"],
-                                                    "idSede":
-                                                        _prenotazione["idSede"],
-                                                    "tipoDonazione":
-                                                        _prenotazione[
-                                                            "tipoDonazione"],
-                                                    "disponibilita": true,
-                                                    "id": _prenotazione["id"],
-                                                  });
-                                                  http.Response
-                                                      putPrenotazione =
-                                                      await http.put(
-                                                    Uri.parse(
-                                                        "http://10.0.2.2:8080/prenotazioni/${_prenotazione["id"]}"),
-                                                    body: prenotazione,
-                                                    headers: {
-                                                      "content-type":
-                                                          "application/json; charset=utf-8",
-                                                      "accept":
-                                                          "application/json; charset=utf-8",
-                                                    },
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                  if (putPrenotazione
-                                                          .statusCode ==
-                                                      200) {
-                                                    Flushbar(
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                      duration:
-                                                          Duration(seconds: 2),
-                                                      message:
-                                                          "Prenotazione cancellata",
-                                                    ).show(context);
-                                                    setState(() {
-                                                      _isEmpty = true;
-                                                    });
-                                                  }
-                                                })
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }),
-                              SizedBox(
-                                width: 10,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                    ),
-                    elevation: 6,
-                    margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    color: Colors.red[900],
-                    child: Padding(
-                      padding: EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
                           Text(
-                            "Informazioni donatore",
+                            "Nome e cognome: " +
+                                donatore["nome"] +
+                                " " +
+                                donatore["cognome"],
                             style: TextStyle(
                                 fontFamily: "Nunito",
-                                fontSize: 22,
-                                color: Colors.white),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Text(
-                                  "Nome e cognome: " +
-                                      donatore["nome"] +
-                                      " " +
-                                      donatore["cognome"],
-                                  style: TextStyle(
-                                      fontFamily: "Nunito",
-                                      color: Colors.white,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.invert_colors,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Text(
-                                  "Gruppo sanguigno: " +
-                                      donatore["gruppoSanguigno"],
-                                  style: TextStyle(
-                                      fontFamily: "Nunito",
-                                      color: Colors.white,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
+                                color: Colors.white,
+                                fontSize: 16),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.invert_colors,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            "Gruppo sanguigno: " + donatore["gruppoSanguigno"],
+                            style: TextStyle(
+                                fontFamily: "Nunito",
+                                color: Colors.white,
+                                fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            );
-          }
-        }
-      }
-    } else {
-      print(responsePrenotazioni.statusCode);
-      return null;
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -345,7 +276,7 @@ class _SchermataPrenotazioneDonatoreState
             ),
             Expanded(
               child: FutureBuilder(
-                  future: _getPrenotazioni(),
+                  future: _getPrenotazione(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:

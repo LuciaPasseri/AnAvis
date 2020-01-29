@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'package:flushbar/flushbar.dart';
-import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/widgets/pulsante.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
-import 'package:provider/provider.dart';
 
 class SchermataDonatori extends StatefulWidget {
   @override
@@ -13,6 +8,7 @@ class SchermataDonatori extends StatefulWidget {
 }
 
 class _SchermataDonatoriState extends State<SchermataDonatori> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,38 +50,7 @@ class _SchermataDonatoriState extends State<SchermataDonatori> {
                   text: "Prenota donazione",
                   icon: Icons.calendar_today,
                   function: () async {
-                    var response =
-                        await http.get("http://10.0.2.2:8080/donatori");
-                    var donatori = jsonDecode(response.body);
-                    for (var donatore in donatori) {
-                      if (donatore["email"] ==
-                          Provider.of<DonatoreProvider>(context).getEmail()) {
-                        List<String> tempDate =
-                            donatore["dataUltimaDonazione"].split("-");
-                        String formattedDate =
-                            tempDate[2] + tempDate[1] + tempDate[0];
-                        Duration difference = DateTime.now()
-                            .difference(DateTime.parse(formattedDate));
-                        if (difference.inDays < 90) {
-                          Flushbar(
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Colors.red,
-                            titleText: Text(
-                              "Azione non possibile",
-                              style: TextStyle(
-                                  fontFamily: "Nunito", color: Colors.white),
-                            ),
-                            messageText: Text(
-                              "Non puoi prenotare perché non sono passati 90 giorni dalla tua ultima donazione",
-                              style: TextStyle(
-                                  fontFamily: "Nunito", color: Colors.white),
-                            ),
-                          ).show(context);
-                        } else {
-                          Navigator.pushNamed(context, "/sceltaTipoDonazione");
-                        }
-                      }
-                    }
+                    Navigator.pushNamed(context, "/sceltaTipoDonazione");
                   }),
               SizedBox(
                 height: 20,

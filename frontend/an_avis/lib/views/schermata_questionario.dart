@@ -1,7 +1,6 @@
 import 'package:an_avis/models/prenotazione.dart';
 import 'package:an_avis/widgets/listview_questionario.dart';
 import "package:flutter/material.dart";
-import 'package:provider/provider.dart';
 
 class SchermataQuestionario extends StatefulWidget {
   @override
@@ -79,8 +78,7 @@ class _SchermataQuestionarioState extends State<SchermataQuestionario> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        Provider.of<PrenotazioneProvider>(context)
-                            .setQuestionarioCompilato(true);
+                        Prenotazione().setQuestionarioCompilato(true);
                         Navigator.pop(context);
                       }
                     },

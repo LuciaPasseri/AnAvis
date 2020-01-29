@@ -1,13 +1,11 @@
-import 'dart:convert';
 import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/models/sede.dart';
+import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/remove_glow.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
 import 'package:flushbar/flushbar.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
-import "package:http/http.dart" as http;
-import 'package:provider/provider.dart';
 
 class SchermataLogin extends StatefulWidget {
   SchermataLogin({@required this.isDonatore});
@@ -22,12 +20,14 @@ class _SchermataLoginState extends State<SchermataLogin> {
   final _formKey = GlobalKey<FormState>();
   bool _hiddenText = true;
   bool _isLoading = false;
-  String _errorLogin;
   String _email;
   String _password;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  Donatore _donatoreSingleton = Donatore();
+  Sede _sedeSingleton = Sede();
   var _donatore;
   var _sede;
+  HttpService _httpService = HttpService();
 
   void _toggleHidden() {
     setState(() {
@@ -36,17 +36,16 @@ class _SchermataLoginState extends State<SchermataLogin> {
   }
 
   Future<bool> _isRuoloGiusto() async {
-    var responseGetDonatori = await http.get("http://10.0.2.2:8080/donatori");
-    var responseGetSedi = await http.get("http://10.0.2.2:8080/sedi");
-    var dataDonatori = jsonDecode(responseGetDonatori.body);
-    var dataSedi = jsonDecode(responseGetSedi.body);
-    for (var donatore in dataDonatori) {
+    var donatori =
+        await _httpService.getCall(context, "http://10.0.2.2:8080/donatori");
+    var sedi = await _httpService.getCall(context, "http://10.0.2.2:8080/sedi");
+    for (var donatore in donatori) {
       if (widget.isDonatore && donatore["email"] == _email) {
         _donatore = donatore;
         return true;
       }
     }
-    for (var sede in dataSedi) {
+    for (var sede in sedi) {
       if (!(widget.isDonatore) && sede["email"] == _email) {
         _sede = sede;
         return true;
@@ -81,34 +80,30 @@ class _SchermataLoginState extends State<SchermataLogin> {
         await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
         if (widget.isDonatore) {
-          Provider.of<DonatoreProvider>(context).setId(_donatore["id"]);
-          Provider.of<DonatoreProvider>(context).setNome(_donatore["nome"]);
-          Provider.of<DonatoreProvider>(context)
-              .setCognome(_donatore["cognome"]);
-          Provider.of<DonatoreProvider>(context)
-              .setGruppoSanguigno(_donatore["gruppoSanguigno"]);
-          Provider.of<DonatoreProvider>(context).setEmail(_email);
+          _donatoreSingleton.setId(_donatore["id"]);
+          _donatoreSingleton.setNome(_donatore["nome"]);
+          _donatoreSingleton.setCognome(_donatore["cognome"]);
+          _donatoreSingleton.setGruppoSanguigno(_donatore["gruppoSanguigno"]);
+          _donatoreSingleton.setEmail(_email);
           Navigator.of(context).pushNamedAndRemoveUntil(
               '/donatore', (Route<dynamic> route) => false);
         } else {
-          Provider.of<SedeProvider>(context).setId(_sede["id"]);
-          Provider.of<SedeProvider>(context).setCitta(_sede["citta"]);
-          Provider.of<SedeProvider>(context).setEmail(_sede["email"]);
+          _sedeSingleton.setId(_sede["id"]);
+          _sedeSingleton.setCitta(_sede["citta"]);
+          _sedeSingleton.setEmail(_sede["email"]);
           Navigator.of(context).pushNamedAndRemoveUntil(
               '/sede', (Route<dynamic> route) => false);
         }
       } catch (e) {
         setState(() {
-          if (e.message ==
-              "The password is invalid or the user does not have a password.")
-            _errorLogin = "Password inserita non valida";
           _isLoading = false;
         });
+        print(e.message);
         Flushbar(
           duration: Duration(seconds: 3),
           backgroundColor: Colors.red,
           messageText: Text(
-            _errorLogin,
+            "Password errata",
             style: TextStyle(fontFamily: "Nunito", color: Colors.white),
           ),
         ).show(context);
