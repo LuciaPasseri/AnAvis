@@ -114,7 +114,7 @@ public class ControllerPrenotazione {
 	 *         come parametro.
 	 */
 	@GetMapping("/donatore/{id}")
-	public Prenotazione getByDonatore(@NotBlank @PathVariable("id") UUID id) {
+	public List<Prenotazione> getByDonatore(@NotBlank @PathVariable("id") UUID id) {
 		return servicePrenotazioni.getByDonatore(id);
 	}
 

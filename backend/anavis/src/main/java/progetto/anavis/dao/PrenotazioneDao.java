@@ -89,7 +89,7 @@ public interface PrenotazioneDao {
 	 * @return la lista delle prenotazioni del donatore con id come quello passato
 	 *         come parametro.
 	 */
-	public Prenotazione getByDonatore(UUID idDonatore);
+	public List<Prenotazione> getByDonatore(UUID idDonatore);
 
 	/**
 	 * Questo metodo viene utilizzato per ottenere la lista delle prenotazioni che
