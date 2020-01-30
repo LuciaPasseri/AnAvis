@@ -162,12 +162,15 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                               onPressed: () async {
                                 if (!prenotazione["disponibilita"]) {
                                   var donatoreToPut = jsonEncode({
-                                    "id": donatore["id"],
-                                    "nome": donatore["nome"],
-                                    "cognome": donatore["cognome"],
-                                    "email": donatore["email"],
+                                    "id": "${donatore["id"]}",
+                                    "nome": "${donatore["nome"]}",
+                                    "cognome": "${donatore["cognome"]}",
+                                    "email": "${donatore["email"]}",
                                     "gruppoSanguigno":
-                                        donatore["gruppoSanguigno"],
+                                        "${donatore["gruppoSanguigno"]}",
+                                    "dataUltimaDonazione": "15-11-2019",
+                                    "tipoUltimaDonazione":
+                                        "${donatore["tipoUltimaDonazione"]}",
                                   });
                                   var responsePutDonatore =
                                       await _httpService.putCall(
@@ -182,6 +185,9 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                     context,
                                     "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
                                   );
+                                  print("PORCOSIDODOOD " + donatore["id"]);
+                                  print(responsePutDonatore.statusCode);
+                                  print(responseDeletePrenotazione.statusCode);
                                   if (responsePutDonatore.statusCode == 200 &&
                                       responseDeleteQuestionario.statusCode ==
                                           200 &&

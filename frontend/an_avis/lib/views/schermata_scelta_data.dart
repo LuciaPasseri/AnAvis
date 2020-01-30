@@ -433,8 +433,6 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                         },
                       );
                     }
-
-                    return null;
                   }),
             ),
           ),
