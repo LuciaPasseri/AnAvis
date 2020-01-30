@@ -25,8 +25,12 @@ public interface PrenotazioneDao {
 	 * @return la chiamata al metodo che inserisce la prenotazione nel db.
 	 */
 	default Prenotazione addPrenotazione(Prenotazione prenotazione) {
-		UUID id = UUID.randomUUID();
+		UUID id;
+		do {
+			id = UUID.randomUUID();
+		} while (id == UUID.fromString("00000000-0000-0000-0000-000000000000"));
 		return creaPrenotazione(id, prenotazione);
+
 	}
 
 	/**

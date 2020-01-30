@@ -48,7 +48,6 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 			return addPrenotazione(prenotazione);
 		else {
 			prenotazione.setId(id);
-			;
 			db.add(prenotazione);
 			return prenotazione;
 		}
@@ -82,29 +81,17 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	@Override
 	public List<Prenotazione> getBySede(UUID idSede) {
-		try {
-			return db.stream().filter(p -> p.getIdSede().equals(idSede)).collect(Collectors.toList());
-		} catch (NullPointerException e) {
-			return new ArrayList<Prenotazione>();
-		}
+		return db.stream().filter(p -> p.getIdSede().equals(idSede)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Prenotazione> getByDonatore(UUID idDonatore) {
-		try {
-			return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
-		} catch (NullPointerException e) {
-			return new ArrayList<Prenotazione>();
-		}
+		return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Prenotazione> getDisponibiliBySede(UUID idSede) {
-		try {
-			return getBySede(idSede).stream().filter(p -> p.getDisponibilita() == true).collect(Collectors.toList());
-		} catch (NullPointerException e) {
-			return new ArrayList<Prenotazione>();
-		}
+		return getBySede(idSede).stream().filter(p -> p.getDisponibilita() == true).collect(Collectors.toList());
 	}
 
 }

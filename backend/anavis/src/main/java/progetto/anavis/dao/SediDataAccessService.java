@@ -32,6 +32,8 @@ public class SediDataAccessService implements SedeAvisDao {
 				"sede.civitanova@gmail.com"));
 		db.add(new SedeAvis(UUID.fromString("693bfa33-435f-4ddc-be20-6740b6687f7d"), "Camerino",
 				"sede.camerino@gmail.com"));
+		db.add(new SedeAvis(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"), "Ancona",
+				"sede.ancona@gmail.com"));
 	}
 
 	@Override

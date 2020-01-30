@@ -35,7 +35,7 @@ public class Prenotazione {
 	}
 
 	public Prenotazione(@JsonProperty("idPrenotazione") UUID id, @JsonProperty("data") String data,
-			@JsonProperty("orario") String orario, @JsonProperty(value = "idDonatore", defaultValue = "null") UUID idD,
+			@JsonProperty("orario") String orario, @JsonProperty(value = "idDonatore", defaultValue = "00000000-0000-0000-0000-000000000000") UUID idD,
 			@JsonProperty(value = "idSede", defaultValue = "null") UUID idS,
 			@JsonProperty(value = "tipoDonazione", defaultValue = "SANGUE_INTERO") TipoDonazione tipoDonazione,
 			@JsonProperty(value = "disponibilita", defaultValue = "false") boolean disponibilita,

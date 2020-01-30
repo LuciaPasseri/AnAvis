@@ -127,7 +127,7 @@ public class ControllerPrenotazione {
 	 * @return la lista delle prenotazioni, non prenotate da alcun donatore, della
 	 *         sede avis con id come quello passato come parametro.
 	 */
-	@GetMapping("/disponibili/sede/{id}")
+	@GetMapping("/sede/{id}/disponibili")
 	public List<Prenotazione> getDisponibiliBySede(@NotBlank @PathVariable("id") UUID id) {
 		return servicePrenotazioni.getDisponibiliBySede(id);
 	}
