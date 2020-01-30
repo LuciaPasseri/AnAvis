@@ -63,7 +63,7 @@ class _SchermataSceltaTipoDonazioneState
                   text: "Sangue intero",
                   icon: Icons.invert_colors,
                   function: () async {
-                    if (await _checkPossibilitaDonazione()) {
+                    if (!await _checkPossibilitaDonazione()) {
                       Flushbar(
                         duration: Duration(seconds: 3),
                         backgroundColor: Colors.red,
@@ -73,7 +73,9 @@ class _SchermataSceltaTipoDonazioneState
                               fontFamily: "Nunito", color: Colors.white),
                         ),
                         messageText: Text(
-                          "Non puoi prenotare perché non sono passati 90 giorni dalla tua ultima donazione",
+                          "Non puoi prenotare perché non sono passati " +
+                              _giorniPerPoterPrenotare.toString() +
+                              " giorni dalla tua ultima donazione",
                           style: TextStyle(
                               fontFamily: "Nunito", color: Colors.white),
                         ),
@@ -90,7 +92,7 @@ class _SchermataSceltaTipoDonazioneState
                   text: "Plasma",
                   icon: Icons.invert_colors,
                   function: () async {
-                    if (await _checkPossibilitaDonazione()) {
+                    if (!await _checkPossibilitaDonazione()) {
                       Flushbar(
                         duration: Duration(seconds: 3),
                         backgroundColor: Colors.red,
@@ -100,7 +102,9 @@ class _SchermataSceltaTipoDonazioneState
                               fontFamily: "Nunito", color: Colors.white),
                         ),
                         messageText: Text(
-                          "Non puoi prenotare perché non sono passati 90 giorni dalla tua ultima donazione",
+                          "Non puoi prenotare perché non sono passati " +
+                              _giorniPerPoterPrenotare.toString() +
+                              " giorni dalla tua ultima donazione",
                           style: TextStyle(
                               fontFamily: "Nunito", color: Colors.white),
                         ),

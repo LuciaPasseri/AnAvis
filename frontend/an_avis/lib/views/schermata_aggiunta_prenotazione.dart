@@ -18,8 +18,14 @@ class _SchermataAggiuntaPrenotazioneState
   DateTime _data;
   String _tipoDonazione;
   String _dropdownError;
-  TextEditingController _controllerDate = TextEditingController();
+  TextEditingController _controllerDate;
   HttpService _httpService = HttpService();
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerDate = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -65,8 +71,11 @@ class _SchermataAggiuntaPrenotazioneState
       "tipoDonazione": "${_tipoDonazione.toUpperCase()}",
       "disponibilita": true,
     });
-    _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/prenotazioni",
-        prenotazione, "Prenotazione aggiunta!");
+    _httpService.postCallWithSnackBar(
+        context,
+        "http://10.0.2.2:8080/prenotazioni",
+        prenotazione,
+        "Prenotazione aggiunta!");
   }
 
   Future _selezionaData() async {
@@ -296,8 +305,11 @@ class _SchermataAggiuntaPrenotazioneState
             onPressed: () {
               if (_validateForm()) {
                 addPrenotazione(context);
-                Future.delayed(Duration(seconds: 2), () {
-                  Navigator.pop(context);
+                setState(() {
+                  _data = null;
+                  _controllerDate = TextEditingController();
+                  _formKey.currentState.reset();
+                  _tipoDonazione = null;
                 });
               }
             }),

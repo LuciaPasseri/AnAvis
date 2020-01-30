@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:an_avis/services/http_service.dart';
+import 'package:an_avis/widgets/remove_glow.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:an_avis/models/sede.dart';
 import 'package:an_avis/widgets/circular_loading.dart';
@@ -23,8 +27,11 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
         context, "http://10.0.2.2:8080/prenotazioni/sede/${Sede().getId()}");
     List<Card> prenotazioni = [];
     for (var prenotazione in dataPrenotazioni) {
-      var donatore = await _httpService.getCall(context,
-          "http://10.0.2.2:8080/donatori/${prenotazione["idDonatore"]}");
+      var donatore;
+      if (prenotazione["idDonatore"] != null) {
+        donatore = await _httpService.getCall(context,
+            "http://10.0.2.2:8080/donatori/${prenotazione["idDonatore"]}");
+      }
       _countPrenotazioni++;
       _isEmpty = false;
       prenotazioni.add(Card(
@@ -125,53 +132,91 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                     size: 26,
                   ),
                   onPressed: () {
-                    setState(() {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: new Text(
-                              "Cancellare prenotazione?",
-                              style: TextStyle(fontFamily: "Nunito"),
-                            ),
-                            content: new Text(
-                              "Così facendo la prenotazione verrà eliminata dal sistema.",
-                              style: TextStyle(fontFamily: "Nunito"),
-                            ),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  "Chiudi",
-                                  style: TextStyle(fontFamily: "Nunito"),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: new Text(
+                            "Cancellare prenotazione?",
+                            style: TextStyle(fontFamily: "Nunito"),
+                          ),
+                          content: new Text(
+                            "Così facendo la prenotazione verrà eliminata dal sistema.",
+                            style: TextStyle(fontFamily: "Nunito"),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text(
+                                "Chiudi",
+                                style: TextStyle(fontFamily: "Nunito"),
                               ),
-                              FlatButton(
-                                child: Text(
-                                  "Accetta",
-                                  style: TextStyle(fontFamily: "Nunito"),
-                                ),
-                                onPressed: () {
-                                  _httpService.deleteCall(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text(
+                                "Accetta",
+                                style: TextStyle(fontFamily: "Nunito"),
+                              ),
+                              onPressed: () async {
+                                if (!prenotazione["disponibilita"]) {
+                                  var donatoreToPut = jsonEncode({
+                                    "id": donatore["id"],
+                                    "nome": donatore["nome"],
+                                    "cognome": donatore["cognome"],
+                                    "email": donatore["email"],
+                                    "gruppoSanguigno":
+                                        donatore["gruppoSanguigno"],
+                                  });
+                                  var responsePutDonatore =
+                                      await _httpService.putCall(
+                                          context,
+                                          "http://10.0.2.2:8080/donatori/${donatore["id"]}}",
+                                          donatoreToPut);
+                                  var responseDeleteQuestionario =
+                                      await _httpService.deleteCall(context,
+                                          "http://10.0.2.2:8080/questionari/${prenotazione["idQuestionario"]}");
+                                  var responseDeletePrenotazione =
+                                      await _httpService.deleteCall(
+                                    context,
+                                    "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
+                                  );
+                                  if (responsePutDonatore.statusCode == 200 &&
+                                      responseDeleteQuestionario.statusCode ==
+                                          200 &&
+                                      responseDeletePrenotazione.statusCode ==
+                                          200) {
+                                    Flushbar(
+                                      isDismissible: true,
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor: Colors.green,
+                                      messageText: Text(
+                                          "Prenotazione eliminata correttamente",
+                                          style: TextStyle(
+                                              fontFamily: "Nunito",
+                                              color: Colors.white)),
+                                    ).show(context);
+                                  }
+                                } else {
+                                  _httpService.deleteCallWithSnackbar(
                                       context,
                                       "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
                                       "Prenotazione eliminata correttamente");
-                                  _countPrenotazioni--;
-                                  if (_countPrenotazioni == 0) {
-                                    setState(() {
-                                      _isEmpty = true;
-                                    });
-                                  }
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    });
+                                }
+                                _countPrenotazioni--;
+                                if (_countPrenotazioni == 0) {
+                                  setState(() {
+                                    _isEmpty = true;
+                                  });
+                                }
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],
@@ -354,17 +399,21 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                             ),
                           );
                         } else {
-                          return ListView.builder(
-                            padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return !_isFiltered
-                                  ? snapshot.data[index]
-                                  : snapshot.data[index].data ==
-                                          DateFormat('dd-MM-yyyy').format(_data)
-                                      ? snapshot.data[index]
-                                      : Container();
-                            },
+                          return ScrollConfiguration(
+                            behavior: RemoveGlow(),
+                            child: ListView.builder(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return !_isFiltered
+                                    ? snapshot.data[index]
+                                    : snapshot.data[index].data ==
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(_data)
+                                        ? snapshot.data[index]
+                                        : Container();
+                              },
+                            ),
                           );
                         }
                     }

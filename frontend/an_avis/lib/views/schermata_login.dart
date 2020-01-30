@@ -63,6 +63,7 @@ class _SchermataLoginState extends State<SchermataLogin> {
       });
       bool isRuoloGiusto = await _isRuoloGiusto();
       if (!isRuoloGiusto) {
+        print(isRuoloGiusto);
         setState(() {
           _isLoading = false;
         });
@@ -98,7 +99,6 @@ class _SchermataLoginState extends State<SchermataLogin> {
         setState(() {
           _isLoading = false;
         });
-        print(e.message);
         Flushbar(
           duration: Duration(seconds: 3),
           backgroundColor: Colors.red,
