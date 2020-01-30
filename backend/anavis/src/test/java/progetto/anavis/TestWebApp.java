@@ -35,7 +35,7 @@ public class TestWebApp extends AnavisApplicationTests {
 	}
 	
 	@Test
-	void testGetPren() throws Exception {
+	public void testGetPrenotazioni() throws Exception {
 
 		Mockito.when(controller.getPrenotazioni()).thenReturn(Collections.emptyList());
 

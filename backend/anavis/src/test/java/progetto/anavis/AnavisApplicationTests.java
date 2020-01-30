@@ -7,10 +7,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class AnavisApplicationTests {
+public class AnavisApplicationTests {
 
 	@Test
-	void contextLoads() throws Exception {
+	public void contextLoads() throws Exception {
 
 	}
 
