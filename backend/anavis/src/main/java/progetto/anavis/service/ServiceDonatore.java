@@ -9,9 +9,17 @@ import org.springframework.stereotype.Service;
 import progetto.anavis.dao.DonatoreDao;
 import progetto.anavis.model.Donatore;
 
+/**
+ * Questa classe gestisce le richieste del controller dirette alla repository
+ * che contiene dati dei donatori.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Service
 public class ServiceDonatore {
-	
+
 	@Autowired
 	DonatoreDao donatoreDao;
 

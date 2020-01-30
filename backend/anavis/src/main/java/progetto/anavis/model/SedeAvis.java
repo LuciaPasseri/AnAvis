@@ -2,11 +2,21 @@ package progetto.anavis.model;
 
 import java.util.UUID;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Questa classe definisce l'oggetto sede avis che il luogo in cui possono
+ * essere effettuate le donazioni.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
+@Entity
 public class SedeAvis {
 
 	@Id

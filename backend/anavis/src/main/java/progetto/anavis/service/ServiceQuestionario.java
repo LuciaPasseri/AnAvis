@@ -9,6 +9,14 @@ import org.springframework.stereotype.Service;
 import progetto.anavis.dao.QuestionarioDao;
 import progetto.anavis.model.Questionario;
 
+/**
+ * Questa classe gestisce le richieste del controller dirette alla repository
+ * che contiene dati dei questionari.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Service
 public class ServiceQuestionario {
 

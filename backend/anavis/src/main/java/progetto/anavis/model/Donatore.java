@@ -8,6 +8,16 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Questa classe definisce l'oggetto donatore che è una persona iscritta ad una
+ * sede avis. Il donatore, a seguito di una prenotazione e della compilazione
+ * del questionario sulle condizioni di salute, può effettuare una donazione di
+ * sangue intero o plasma.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Entity
 public class Donatore {
 

@@ -20,6 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import progetto.anavis.model.Donatore;
 import progetto.anavis.service.ServiceDonatore;
 
+/**
+ * Questa classe è il controller che gestisce le richieste http lato
+ * user-interface, riguardanti le operazioni sui donatori.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @RestController
 @RequestMapping("/donatori")
 public class ControllerDonatore {
@@ -27,28 +35,60 @@ public class ControllerDonatore {
 	@Autowired
 	ServiceDonatore serviceDonatore;
 
+	/**
+	 * Questo metodo permette di richiedere la lista dei donatori che sono nel
+	 * sistema.
+	 * 
+	 * @return la lista dei donatori nel sistema.
+	 */
 	@GetMapping
 	public List<Donatore> getDonatori() {
-		 return serviceDonatore.getDonatori();
+		return serviceDonatore.getDonatori();
 	}
 
+	/**
+	 * Questo metodo permette di visualizzare le informazioni riguardanti uno
+	 * specifico donatore.
+	 * 
+	 * @param id
+	 * @return il donatore che ha come id quello passato come parametro.
+	 */
 	@GetMapping("/{id}")
-	public Donatore getDonatore(@NotBlank@PathVariable("id") UUID idDonatore){
+	public Donatore getDonatore(@NotBlank @PathVariable("id") UUID idDonatore) {
 		return serviceDonatore.getById(idDonatore);
 	}
-	
+
+	/**
+	 * Questo metodo permette di richiedere l'inserimento nel sistema di un nuovo
+	 * donatore.
+	 * 
+	 * @param donatore
+	 * @return il donatore che è appena stato inserito.
+	 */
 	@PostMapping
-	public Donatore create(@Valid@NotNull@RequestBody Donatore donatore) {
+	public Donatore create(@Valid @NotNull @RequestBody Donatore donatore) {
 		return serviceDonatore.creaDonatore(donatore);
 	}
-	
+
+	/**
+	 * Questo metodo permette di eliminare un donatore dal sistema.
+	 * 
+	 * @param id
+	 */
 	@DeleteMapping("/{id}")
-	public void delete(@NotBlank@PathVariable("id") UUID id) {
-		serviceDonatore.delete(id);;
+	public void delete(@NotBlank @PathVariable("id") UUID id) {
+		serviceDonatore.delete(id);
+		;
 	}
 
+	/**
+	 * Questo metodo permette di modificare i dati di un donatore nel sistema.
+	 * 
+	 * @param id
+	 * @return il donatore che è appena stato modificato.
+	 */
 	@PutMapping("/{id}")
-	public Donatore update(@NotBlank@PathVariable("id") UUID id, @Valid@NotNull@RequestBody Donatore donatore) {
+	public Donatore update(@NotBlank @PathVariable("id") UUID id, @Valid @NotNull @RequestBody Donatore donatore) {
 		return serviceDonatore.update(id, donatore);
 	}
 }

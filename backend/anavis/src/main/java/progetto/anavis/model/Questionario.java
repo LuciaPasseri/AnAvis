@@ -8,6 +8,15 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Questa classe definisce l'oggetto questionario che comprende un insieme di
+ * domande alle quali il donatore deve rispondere per fornire informazioni
+ * riguardo il suo stato di salute prima di effettuare la donazione.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Entity
 public class Questionario {
 

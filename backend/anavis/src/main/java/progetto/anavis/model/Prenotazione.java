@@ -9,6 +9,15 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Questa classe definisce l'oggetto prenotazione che viene emesso dalle sedi
+ * avis, nella data e nell'orario che hanno a disposizione, per far effettuare
+ * una donazione e che può essere prenotato da un solo donatore.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Entity
 public class Prenotazione {
 

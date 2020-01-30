@@ -8,9 +8,20 @@ import org.springframework.stereotype.Repository;
 
 import progetto.anavis.model.Questionario;
 
+/**
+ * Questa classe è la repository che contiene i questionari inseriti nel sistema e
+ * i relativi dati.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Repository("QuestionarioDataAccess")
 public class QuestionarioDataAccessService implements QuestionarioDao {
 
+	/**
+	 * è il database dove vengono inseriti i questionari.
+	 */
 	private List<Questionario> db;
 
 	public QuestionarioDataAccessService() {

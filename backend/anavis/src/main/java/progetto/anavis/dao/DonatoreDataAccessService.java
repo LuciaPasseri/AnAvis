@@ -9,9 +9,20 @@ import org.springframework.stereotype.Repository;
 import progetto.anavis.model.Donatore;
 import progetto.anavis.model.TipoDonazione;
 
+/**
+ * Questa classe è la repository che contiene i donatori inseriti nel sistema e
+ * i relativi dati.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Repository("DonatoreDataAccess")
 public class DonatoreDataAccessService implements DonatoreDao {
 
+	/**
+	 * è il database dove vengono inseriti i donatori.
+	 */
 	private List<Donatore> db;
 
 	public DonatoreDataAccessService() {

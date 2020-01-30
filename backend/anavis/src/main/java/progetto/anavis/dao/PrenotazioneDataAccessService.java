@@ -10,9 +10,20 @@ import org.springframework.stereotype.Repository;
 import progetto.anavis.model.Prenotazione;
 import progetto.anavis.model.TipoDonazione;
 
+/**
+ * Questa classe è la repository che contiene le prenotazioni inserite nel
+ * sistema e i relativi dati.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Repository("PrenotazioneDataAccess")
 public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
+	/**
+	 * è il database dove vengono inserite le prenotazioni.
+	 */
 	private List<Prenotazione> db;
 
 	public PrenotazioneDataAccessService() {
@@ -71,17 +82,29 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 
 	@Override
 	public List<Prenotazione> getBySede(UUID idSede) {
-		return db.stream().filter(p -> p.getIdSede().equals(idSede)).collect(Collectors.toList());
+		try {
+			return db.stream().filter(p -> p.getIdSede().equals(idSede)).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+			return new ArrayList<Prenotazione>();
+		}
 	}
 
 	@Override
 	public List<Prenotazione> getByDonatore(UUID idDonatore) {
-		return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
+		try {
+			return db.stream().filter(p -> p.getIdDonatore().equals(idDonatore)).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+			return new ArrayList<Prenotazione>();
+		}
 	}
 
 	@Override
 	public List<Prenotazione> getDisponibiliBySede(UUID idSede) {
-		return getBySede(idSede).stream().filter(p -> p.getDisponibilita() == true).collect(Collectors.toList());
+		try {
+			return getBySede(idSede).stream().filter(p -> p.getDisponibilita() == true).collect(Collectors.toList());
+		} catch (NullPointerException e) {
+			return new ArrayList<Prenotazione>();
+		}
 	}
 
 }

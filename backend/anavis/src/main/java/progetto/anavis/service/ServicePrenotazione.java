@@ -9,6 +9,14 @@ import org.springframework.stereotype.Service;
 import progetto.anavis.dao.PrenotazioneDao;
 import progetto.anavis.model.Prenotazione;
 
+/**
+ * Questa classe gestisce le richieste del controller dirette alla repository
+ * che contiene dati delle prenotazioni.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Service
 public class ServicePrenotazione {
 

@@ -8,9 +8,20 @@ import org.springframework.stereotype.Repository;
 
 import progetto.anavis.model.SedeAvis;
 
+/**
+ * Questa classe è la repository che contiene le sedi avis inserite nel sistema
+ * e i relativi dati.
+ * 
+ * @author Lucia e Luca
+ *
+ */
+
 @Repository("SediDataAccess")
 public class SediDataAccessService implements SedeAvisDao {
 
+	/**
+	 * è il database dove vengono inserite le sedi avis.
+	 */
 	private List<SedeAvis> db;
 
 	public SediDataAccessService() {
