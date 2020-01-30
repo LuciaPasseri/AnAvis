@@ -45,7 +45,6 @@ class HttpService {
     );
     if (responsePost.statusCode == 200) {
       Flushbar(
-        
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
         messageText: Text(message,

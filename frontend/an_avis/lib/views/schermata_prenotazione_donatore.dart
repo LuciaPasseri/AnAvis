@@ -163,6 +163,9 @@ class _SchermataPrenotazioneDonatoreState
                                             "email": "${donatore["email"]}",
                                             "gruppoSanguigno":
                                                 "${donatore["gruppoSanguigno"]}",
+                                            "dataUltimaDonazione": "15-11-2019",
+                                            "tipoUltimaDonazione":
+                                                "${donatore["tipoUltimaDonazione"]}",
                                           });
                                           var responsePutPrenotazione =
                                               await _httpService.putCall(

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:email_validator/email_validator.dart';
 import 'package:flushbar/flushbar.dart';
-import "package:http/http.dart" as http;
 
 class SchermataRegistrazioneDonatore extends StatefulWidget {
   @override
