@@ -63,7 +63,6 @@ class _SchermataLoginState extends State<SchermataLogin> {
       });
       bool isRuoloGiusto = await _isRuoloGiusto();
       if (!isRuoloGiusto) {
-        print(isRuoloGiusto);
         setState(() {
           _isLoading = false;
         });
@@ -175,7 +174,7 @@ class _SchermataLoginState extends State<SchermataLogin> {
                                 return null;
                               },
                               onSaved: (value) {
-                                _email = value;
+                                _email = value.toLowerCase();
                               },
                             ),
                           ),

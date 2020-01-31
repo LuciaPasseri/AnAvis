@@ -154,16 +154,14 @@ class _SchermataPrenotazioneDonatoreState
                                             "tipoDonazione":
                                                 "${prenotazione["tipoDonazione"]}",
                                             "disponibilita": true,
-                                            "id": "${prenotazione["id"]}",
                                           });
                                           var donatoreToPut = json.encode({
-                                            "id": "${donatore["id"]}",
                                             "nome": "${donatore["nome"]}",
                                             "cognome": "${donatore["cognome"]}",
                                             "email": "${donatore["email"]}",
                                             "gruppoSanguigno":
                                                 "${donatore["gruppoSanguigno"]}",
-                                            "dataUltimaDonazione": "15-11-2019",
+                                            "dataUltimaDonazione": "01-10-2019",
                                             "tipoUltimaDonazione":
                                                 "${donatore["tipoUltimaDonazione"]}",
                                           });

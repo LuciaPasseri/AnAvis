@@ -28,7 +28,8 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
     List<Card> prenotazioni = [];
     for (var prenotazione in dataPrenotazioni) {
       var donatore;
-      if (prenotazione["idDonatore"] != null) {
+      if (prenotazione["idDonatore"] !=
+          "00000000-0000-0000-0000-000000000000") {
         donatore = await _httpService.getCall(context,
             "http://10.0.2.2:8080/donatori/${prenotazione["idDonatore"]}");
       }
@@ -162,7 +163,6 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                               onPressed: () async {
                                 if (!prenotazione["disponibilita"]) {
                                   var donatoreToPut = jsonEncode({
-                                    "id": "${donatore["id"]}",
                                     "nome": "${donatore["nome"]}",
                                     "cognome": "${donatore["cognome"]}",
                                     "email": "${donatore["email"]}",
@@ -185,9 +185,6 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                     context,
                                     "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
                                   );
-                                  print("PORCOSIDODOOD " + donatore["id"]);
-                                  print(responsePutDonatore.statusCode);
-                                  print(responseDeletePrenotazione.statusCode);
                                   if (responsePutDonatore.statusCode == 200 &&
                                       responseDeleteQuestionario.statusCode ==
                                           200 &&
@@ -229,31 +226,6 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
             )),
       ));
     }
-    /*prenotazioni.sort((a, b) {
-      List<String> dataA = a.data.split("-");
-      List<String> dataB = b.data.split("-");
-      List<String> oraEMinutiA = a.orario.split(" : ");
-      List<String> oraEMinutiB = b.orario.split(" : ");
-      int annoA = int.parse(dataA[0]);
-      int meseA = int.parse(dataA[1]);
-      int giornoA = int.parse(dataA[2]);
-      int annoB = int.parse(dataB[0]);
-      int meseB = int.parse(dataB[1]);
-      int giornoB = int.parse(dataB[2]);
-      int oraA = int.parse(oraEMinutiA[0]);
-      int minutiA = int.parse(oraEMinutiA[1]);
-      int oraB = int.parse(oraEMinutiB[0]);
-      int minutiB = int.parse(oraEMinutiB[1]);
-      if ((annoA > annoB) ||
-          ((annoA == annoB) && meseA > meseB) ||
-          (annoA == annoB && meseA == meseB && giornoA > giornoB) ||
-          (a.data == b.data && oraA > oraB ||
-              oraA == oraB && minutiA > minutiB)) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });*/
     return prenotazioni;
   }
 
