@@ -53,6 +53,8 @@ class _SchermataRegistrazioneDonatoreState
       "cognome": "$_cognome",
       "gruppoSanguigno": "$_gruppoSanguigno",
       "email": "$_email",
+      "dataUltimaDonazione": "01-10-2019",
+      "tipoUltimaDonazione": "Sangue",
     });
     _httpService.postCallWithSnackBar(context, "http://10.0.2.2:8080/donatori",
         donatore, "Donatore aggiunto correttamente!");
