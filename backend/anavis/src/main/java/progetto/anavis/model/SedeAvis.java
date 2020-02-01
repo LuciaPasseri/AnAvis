@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SedeAvis {
 
 	@Id
-	private UUID idSede;
+	private UUID id;
 	@NotBlank
 	private String citta, email;
 
@@ -30,17 +30,17 @@ public class SedeAvis {
 
 	public SedeAvis(@JsonProperty("idSede") UUID idSede, @JsonProperty("citta") String citta,
 			@JsonProperty("email") String email) {
-		this.idSede = idSede;
+		this.id = idSede;
 		this.citta = citta;
 		this.email = email;
 	}
 
 	public UUID getId() {
-		return idSede;
+		return id;
 	}
 
 	public void setId(UUID id) {
-		this.idSede = id;
+		this.id = id;
 	}
 
 	public String getCitta() {
@@ -66,7 +66,7 @@ public class SedeAvis {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		SedeAvis sede = (SedeAvis) obj;
-		return this.idSede.equals(sede.idSede);
+		return this.id.equals(sede.id);
 	}
 
 	@Override
