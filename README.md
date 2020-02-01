@@ -23,8 +23,31 @@ I **dottori**, grazie a una dashboard, avranno la possibilità di controllare lo
 
 Le **sedi Avis** risparmieranno tempo in quanto interagiranno con il sistema solo per inserire gli orari e le date disponibili per le donazioni, senza più occuparsi direttamente delle prenotazioni che vedranno in un elenco. Infine il sistema permetterà ai dottori di pronto soccorso di inviare una **notifica di “carenza sangue”** ai donatori i quali potranno contribuire a far rientrare questa emergenza.
 
+## Iterazioni
 
-## Casi d'uso implementati
+(Nota: i lavori al codice o piccoli cambiamenti al vpp non sono qui sotto riportati)  
+
+**Prima iterazione (dal 19/11/19 al 05/12/19):**
+- Incontro 1 (19/11) -> identificazione attori e parte dei casi d'uso
+- Incontro 2 (20/11) -> identificazione altri casi d'uso
+- Incontro 3 (21/11) -> Flow of events di alcuni casi d'uso
+- Incontro 4 (26/11) -> Creazione class diagram e alcuni sequence diagram
+- Incontro 5 (28/11) -> Continuo dei lavori sul class diagram e sui sequence diagram
+- Incontro 6 (04/12) -> Revisione del diagramma dei casi d'uso
+- Incontro 7 (05/12) -> Revisione del class diagram e dei sequence diagram
+
+**Seconda iterazione (dal 10/12/19 al 11/01/20):**
+- Incontro 1 (10/12) -> Lavoro ai casi d'uso
+- Incontro 2 (03/01) -> Lavoro al class diagram e ai sequence diagram
+
+**Terza iterazione (dal 13/01/20 al 01/02/20):**
+- Incontro 1 (13/01) -> Revisione dei sequence diagram
+- Incontro 2 (20/01) -> Revisione dei sequence diagram e lavoro ai casi d'uso
+- Incontro 3 (22/01) -> Revisione di alcuni diagrammi
+- Incontro 4 (29/01) -> Revisione di alcuni diagrammi
+- Incontro 5 (01/02) -> Lavoro ai sequence diagram e controllo generale
+
+## Casi d'uso implementati a fine terza iterazione
 Per l'**utente non autenticato**:
 - Scelta del ruolo
 - Effettua l'autenticazione
