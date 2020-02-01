@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import progetto.anavis.model.Questionario;
 
 /**
- * Questa classe è la repository che contiene i questionari inseriti nel sistema e
- * i relativi dati.
+ * Questa classe è la repository che contiene i questionari inseriti nel sistema
+ * e i relativi dati.
  * 
  * @author Lucia e Luca
  *
@@ -22,16 +22,10 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 	/**
 	 * è il database dove vengono inseriti i questionari.
 	 */
-	private List<Questionario> db;
+	private List<Questionario> db = new ArrayList<>();
 
 	public QuestionarioDataAccessService() {
-		db = new ArrayList<>();
-		db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), false, false, null, true,
-				false, null, false));
-		db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), true, false, null, true, false,
-				null, false));
-		db.add(new Questionario(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"), true, false, null, true, false,
-				null, false));
+		reset();
 	}
 
 	@Override
@@ -65,6 +59,16 @@ public class QuestionarioDataAccessService implements QuestionarioDao {
 		db.set(db.indexOf(getById(id)), questionario);
 		questionario.setId(id);
 		return getById(id);
+	}
+
+	public void reset() {
+		db.clear();
+		db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), false, false, null, true,
+				false, null, false));
+		db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), true, false, null, true, false,
+				null, false));
+		db.add(new Questionario(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"), true, false, null, true, false,
+				null, false));
 	}
 
 }

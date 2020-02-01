@@ -114,4 +114,20 @@ public class Prenotazione {
 		this.idQuestionario = idQuestionario;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Prenotazione prenotazione = (Prenotazione) obj;
+		return this.id.equals(prenotazione.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Data: " + this.data + ", Orario: " + this.orario + ", id Sede: " + this.idSede + ", Disponibilità: "
+				+ this.disponibilita;
+	}
+
 }

@@ -59,4 +59,19 @@ public class SedeAvis {
 		this.email = email;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		SedeAvis sede = (SedeAvis) obj;
+		return this.idSede.equals(sede.idSede);
+	}
+
+	@Override
+	public String toString() {
+		return "Citta: " + this.citta;
+	}
+
 }

@@ -109,4 +109,19 @@ public class Questionario {
 		this.perditaPeso = perditaPeso;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Questionario questionario = (Questionario) obj;
+		return this.id.equals(questionario.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Id: " + this.id;
+	}
+
 }

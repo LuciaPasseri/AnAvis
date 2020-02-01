@@ -1,6 +1,7 @@
 package progetto.anavis.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,18 +23,10 @@ public class SediDataAccessService implements SedeAvisDao {
 	/**
 	 * è il database dove vengono inserite le sedi avis.
 	 */
-	private List<SedeAvis> db;
+	private List<SedeAvis> db = new ArrayList<>();
 
 	public SediDataAccessService() {
-		db = new ArrayList<>();
-		db.add(new SedeAvis(UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e"), "Tolentino",
-				"sede.tolentino@gmail.com"));
-		db.add(new SedeAvis(UUID.fromString("1a60b7bc-1afd-451c-bb06-368c0b6142c6"), "Civitanova",
-				"sede.civitanova@gmail.com"));
-		db.add(new SedeAvis(UUID.fromString("693bfa33-435f-4ddc-be20-6740b6687f7d"), "Camerino",
-				"sede.camerino@gmail.com"));
-		db.add(new SedeAvis(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"), "Ancona",
-				"sede.ancona@gmail.com"));
+		reset();
 	}
 
 	@Override
@@ -49,7 +42,7 @@ public class SediDataAccessService implements SedeAvisDao {
 
 	@Override
 	public List<SedeAvis> getSedi() {
-		return db;
+		return sort(db);
 	}
 
 	@Override
@@ -67,6 +60,23 @@ public class SediDataAccessService implements SedeAvisDao {
 		db.set(db.indexOf(getById(idSede)), sede);
 		sede.setId(idSede);
 		return getById(idSede);
+	}
+
+	public List<SedeAvis> sort(List<SedeAvis> sedi) {
+		Collections.sort(db, (a, b) -> a.getCitta().compareTo(b.getCitta()));
+		return db;
+	}
+
+	public void reset() {
+		db.clear();
+		db.add(new SedeAvis(UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e"), "Tolentino",
+				"sede.tolentino@gmail.com"));
+		db.add(new SedeAvis(UUID.fromString("1a60b7bc-1afd-451c-bb06-368c0b6142c6"), "Civitanova",
+				"sede.civitanova@gmail.com"));
+		db.add(new SedeAvis(UUID.fromString("693bfa33-435f-4ddc-be20-6740b6687f7d"), "Camerino",
+				"sede.camerino@gmail.com"));
+		db.add(new SedeAvis(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"), "Ancona",
+				"sede.ancona@gmail.com"));
 	}
 
 }

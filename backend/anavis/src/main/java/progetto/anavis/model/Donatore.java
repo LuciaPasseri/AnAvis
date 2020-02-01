@@ -102,4 +102,19 @@ public class Donatore {
 		this.tipoUltimaDonazione = tipo;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Donatore donatore = (Donatore) obj;
+		return this.id.equals(donatore.id);
+	}
+
+	@Override
+	public String toString() {
+		return "\n" + "Nome: " + this.nome + ", Cognome: " + this.cognome + ", Gruppo sanguigno: " + this.gruppoSanguigno;
+	}
+
 }
