@@ -59,7 +59,7 @@ Per l'**utente autenticato**:
 Per il **donatore**:
 - Prenota donazione
 - Visualizza prenotazione effettuata
-- Disdici prenotazione
+- Disdice prenotazione
 
 Per le **sede avis**:
 - Inserisce prenotazione
