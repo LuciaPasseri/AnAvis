@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"progetto.anavis"},{"l":"progetto.anavis.api"},{"l":"progetto.anavis.dao"},{"l":"progetto.anavis.model"},{"l":"progetto.anavis.service"}]
