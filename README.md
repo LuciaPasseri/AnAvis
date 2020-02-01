@@ -11,7 +11,7 @@ lucia.passeri@studenti.unicam.it
 ## Sviluppato in 
 - **Flutter** (per la parte *frontend*, realizzata principalmente da **Luca Cervioni**)
 - **Spring Boot** (per la parte *backend*, realizzata principalmente da **Lucia Passeri**)
-
+- **Firebase** (per l'*autenticazione*)
 
 ## Descrizione
 Il progetto si basa sullo sviluppo di un'**applicazione mobile** che consente ai **donatori Avis** di prenotare le donazioni on-line e di poter controllare lo storico dei risultati delle proprie **analisi**. 
