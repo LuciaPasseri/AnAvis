@@ -159,7 +159,7 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 	}
 
 	private List<Prenotazione> sort(List<Prenotazione> database) {
-		Collections.sort(db, (a, b) -> {
+		Collections.sort(database, (a, b) -> {
 			String[] dataA = a.getData().split("-");
 			String[] dataB = b.getData().split("-");
 			String[] oraEMinutiA = a.getOrario().split(" : ");
@@ -182,7 +182,7 @@ public class PrenotazioneDataAccessService implements PrenotazioneDao {
 				return -1;
 			}
 		});
-		return db;
+		return database;
 	}
 
 }
