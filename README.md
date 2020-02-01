@@ -28,8 +28,8 @@ Le **sedi Avis** risparmieranno tempo in quanto interagiranno con il sistema sol
 (Nota: i lavori al codice o piccoli cambiamenti al vpp non sono qui sotto riportati)  
 
 **Prima iterazione (dal 19/11/19 al 05/12/19):**
-- Incontro 1 (19/11) -> identificazione attori e parte dei casi d'uso
-- Incontro 2 (20/11) -> identificazione altri casi d'uso
+- Incontro 1 (19/11) -> Identificazione attori e parte dei casi d'uso
+- Incontro 2 (20/11) -> Identificazione altri casi d'uso
 - Incontro 3 (21/11) -> Flow of events di alcuni casi d'uso
 - Incontro 4 (26/11) -> Creazione class diagram e alcuni sequence diagram
 - Incontro 5 (28/11) -> Continuo dei lavori sul class diagram e sui sequence diagram
