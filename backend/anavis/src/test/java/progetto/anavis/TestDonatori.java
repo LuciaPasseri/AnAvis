@@ -32,7 +32,15 @@ public class TestDonatori {
 
 	@Before
 	public void set() {
-		repo.reset();
+		repo.db.clear();
+		repo.db.add(new Donatore(UUID.randomUUID(), "Lucia", "Passeri", "lucia.passeri@gmail.com", "0+", "20-01-2020",
+				TipoDonazione.SANGUE));
+		repo.db.add(new Donatore(UUID.fromString("4919c392-e09b-4690-88bf-ea5d1a82c862"), "Luca", "Cervioni",
+				"luca.cervioni@gmail.com", "A+", "05-03-2020", TipoDonazione.SANGUE));
+		repo.db.add(new Donatore(UUID.fromString("795c942c-b729-4c7e-ad2d-d065d040d3c5"), "Roberto", "Rossi",
+				"roberto.rossi@gmail.com", "AB+", "08-03-2020", TipoDonazione.SANGUE));
+		repo.db.add(new Donatore(UUID.fromString("09da317e-11ec-414d-a0ee-f2a3fcd92a6a"), "Matteo", "Bianchi",
+				"matteo.bianchi@gmail.com", "A+", "01-03-2020", TipoDonazione.PLASMA));
 	}
 
 	@Test

@@ -31,7 +31,13 @@ public class TestQuestionari {
 
 	@Before
 	public void set() {
-		repo.reset();
+		repo.db.clear();
+		repo.db.add(new Questionario(UUID.fromString("f00e544f-9a60-4002-8d92-24258cae39a0"), false, false, null, true,
+				false, null, false));
+		repo.db.add(new Questionario(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"), true, false, null, true, false,
+				null, false));
+		repo.db.add(new Questionario(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"), true, false, null, true, false,
+				null, false));
 	}
 
 	@Test
@@ -52,13 +58,13 @@ public class TestQuestionari {
 				"Id: 35b1c1e1-6e26-466a-9621-cf64632cff9a");
 	}
 
-//	@Test
-//	public void testPostQuestionari() {
-//		uno = service.creaQuestionario(new Questionario(null, true, false, null, true, false, null, false));
-//		uno = service.creaQuestionario(new Questionario(null, true, false, null, true, false, null, false));
-//		assertEquals(1, service.getQuestionari().stream().filter(p -> p.getId().equals(uno.getId())).count());
-//		assertEquals(1, service.getQuestionari().stream().filter(p -> p.getId().equals(due.getId())).count());
-//	}
+	@Test
+	public void testPostQuestionari() {
+		uno = service.creaQuestionario(new Questionario(null, true, false, null, true, false, null, false));
+		due = service.creaQuestionario(new Questionario(null, true, false, null, true, false, null, false));
+		assertEquals(1, service.getQuestionari().stream().filter(p -> p.getId().equals(uno.getId())).count());
+		assertEquals(1, service.getQuestionari().stream().filter(p -> p.getId().equals(due.getId())).count());
+	}
 
 	@Test
 	public void testDeleteQuestionari() {
@@ -66,13 +72,13 @@ public class TestQuestionari {
 		assertEquals(0, service.getQuestionari().stream()
 				.filter(p -> p.getId().equals(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a"))).count());
 	}
-//
-//	@Test
-//	public void testPutQuestionari() {
-//		service.update(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"),
-//				service.getById(UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e")));
-//		assertEquals(2, service.getQuestionari().stream()
-//				.filter(p -> p.getId().equals(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"))).count());
-//	}
+
+	@Test
+	public void testPutQuestionari() {
+		service.update(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"),
+				service.getById(UUID.fromString("35b1c1e1-6e26-466a-9621-cf64632cff9a")));
+		assertEquals(2, service.getQuestionari().stream()
+				.filter(p -> p.getId().equals(UUID.fromString("243426a6-eae5-4c16-bc8f-5b051e7e2400"))).count());
+	}
 
 }

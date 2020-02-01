@@ -126,8 +126,8 @@ public class Prenotazione {
 
 	@Override
 	public String toString() {
-		return "Data: " + this.data + ", Orario: " + this.orario + ", id Sede: " + this.idSede + ", Disponibilità: "
-				+ this.disponibilita;
+		return "\n" + "Data: " + this.data + ", Orario: " + this.orario + ", id Sede: " + this.idSede
+				+ ", Disponibilità: " + this.disponibilita;
 	}
 
 }

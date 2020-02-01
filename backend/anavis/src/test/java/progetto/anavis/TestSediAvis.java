@@ -31,9 +31,17 @@ public class TestSediAvis {
 
 	@Before
 	public void set() {
-		repo.reset();
+		repo.db.clear();
+		repo.db.add(new SedeAvis(UUID.fromString("330c20eb-b8be-489b-a8f8-967385aa675e"), "Tolentino",
+				"sede.tolentino@gmail.com"));
+		repo.db.add(new SedeAvis(UUID.fromString("1a60b7bc-1afd-451c-bb06-368c0b6142c6"), "Civitanova",
+				"sede.civitanova@gmail.com"));
+		repo.db.add(new SedeAvis(UUID.fromString("693bfa33-435f-4ddc-be20-6740b6687f7d"), "Camerino",
+				"sede.camerino@gmail.com"));
+		repo.db.add(new SedeAvis(UUID.fromString("6e705b80-bd4e-4854-8138-a5617695c012"), "Ancona",
+				"sede.ancona@gmail.com"));
 	}
-	
+
 	@Test
 	public void testGetSedi() {
 		final List<SedeAvis> test = service.getSedi();
