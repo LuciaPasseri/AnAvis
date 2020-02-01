@@ -39,6 +39,7 @@ Le **sedi Avis** risparmieranno tempo in quanto interagiranno con il sistema sol
 **Seconda iterazione (dal 10/12/19 al 11/01/20):**
 - Incontro 1 (10/12) -> Lavoro ai casi d'uso
 - Incontro 2 (03/01) -> Lavoro al class diagram e ai sequence diagram
+- Incontro 3 (11/01) -> Revisione di alcuni diagrammi
 
 **Terza iterazione (dal 13/01/20 al 01/02/20):**
 - Incontro 1 (13/01) -> Revisione dei sequence diagram
