@@ -22,76 +22,7 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
   bool _isEmpty = true;
   HttpService _httpService = HttpService();
 
-  void _setPrenotazione() async {
-    String idPrenotazione;
-    String idQuestionario;
-    var prenotazioni = await _httpService.getCall(context,
-        "http://10.0.2.2:8080/prenotazioni/sede/${_prenotazione.getIdSede()}");
-    for (var prenotazione in prenotazioni) {
-      if (prenotazione["data"] == _prenotazione.getData() &&
-          prenotazione["orario"] == _oraSelezionata) {
-        idPrenotazione = prenotazione["id"];
-      }
-    }
-    var questionario = json.encode({
-      "buonaSalute": _questionario.getBuonaSalute(),
-      "ricoveratoOspedale": _questionario.getRicoveroOspedale(),
-      "allergie": _questionario.getAllergie(),
-      "condizioniSaluteRecenti": _questionario.getCondizioniSaluteRecenti(),
-      "perditaPeso": _questionario.getPerditaPeso(),
-      "motiviRicovero": _questionario.getMotiviRicovero(),
-      "qualiAllergie": _questionario.getQualiAllergie(),
-    });
-    var responsePostQuestionario = await _httpService.postCall(
-        context, "http://10.0.2.2:8080/questionari", questionario);
-    var questionari =
-        await _httpService.getCall(context, "http://10.0.2.2:8080/questionari");
-    idQuestionario = questionari.last["id"];
-    var prenotazione = json.encode({
-      "data": "${_prenotazione.getData()}",
-      "orario": _oraSelezionata,
-      "idDonatore": "${_donatore.getId()}",
-      "idSede": "${_prenotazione.getIdSede()}",
-      "tipoDonazione": "${_prenotazione.getTipoDonazione()}",
-      "disponibilita": false,
-      "idQuestionario": "$idQuestionario",
-      "id": "$idPrenotazione"
-    });
-    var donatore = json.encode({
-      "id": "${_donatore.getId()}",
-      "email": "${_donatore.getEmail()}",
-      "nome": "${_donatore.getNome()}",
-      "cognome": "${_donatore.getCognome()}",
-      "gruppoSanguigno": "${_donatore.getGruppoSanguigno()}",
-      "dataUltimaDonazione": "${_prenotazione.getData()}",
-      "tipoUltimaDonazione": "${_prenotazione.getTipoDonazione()}",
-    });
-
-    var responsePutPrenotazione = await _httpService.putCall(context,
-        "http://10.0.2.2:8080/prenotazioni/$idPrenotazione", prenotazione);
-    var responsePutDonatore = await _httpService.putCall(context,
-        "http://10.0.2.2:8080/donatori/${_donatore.getId()}", donatore);
-
-    if (responsePutPrenotazione.statusCode == 200 &&
-        responsePutDonatore.statusCode == 200 &&
-        responsePostQuestionario.statusCode == 200) {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.green,
-        messageText: Text("Prenotazione confermata!",
-            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
-      ).show(context);
-    } else {
-      Flushbar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-        messageText: Text("Errore",
-            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
-      ).show(context);
-    }
-  }
-
-  String _getData(String data) {
+  String _getGiorno(String data) {
     List<String> temp = data.split("-");
     return temp[0];
   }
@@ -122,22 +53,21 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
 
   Future<List<PulsanteGiorno>> _getGiorniPrenotazioni() async {
     var prenotazioni = await _httpService.getCall(context,
-        "http://10.0.2.2:8080/prenotazioni/sede/${Prenotazione().getIdSede()}");
+        "http://10.0.2.2:8080/prenotazioni/sede/${_prenotazione.getIdSede()}/disponibili");
     List<PulsanteGiorno> giorniPrenotazioni = [];
     for (var prenotazione in prenotazioni) {
-      if (prenotazione["disponibilita"] &&
-          prenotazione["tipoDonazione"] == _prenotazione.getTipoDonazione() &&
+      if (prenotazione["tipoDonazione"] == _prenotazione.getTipoDonazione() &&
           _checkGiornoDoppio(
-              giorniPrenotazioni, _getData(prenotazione["data"])) &&
+              giorniPrenotazioni, _getGiorno(prenotazione["data"])) &&
           _getAnno(prenotazione["data"]) == DateTime.now().year &&
           _getMese(prenotazione["data"]) == _prenotazione.getMese()) {
         _isEmpty = false;
         giorniPrenotazioni.add(PulsanteGiorno(
-          text: _getData(prenotazione["data"]) +
+          text: _getGiorno(prenotazione["data"]) +
               " " +
               _prenotazione.getMeseCompleto(),
           function: () {
-            _prenotazione.setGiorno(((_getData(prenotazione["data"]))));
+            _prenotazione.setGiorno(((_getGiorno(prenotazione["data"]))));
             _prenotazione.setData();
             showModalBottomSheet(
               context: context,
@@ -261,12 +191,10 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
                                             null) {
                                       _prenotazione
                                           .setQuestionarioCompilato(null);
-                                      _setPrenotazione();
+                                      _setPrenotazione(prenotazione["id"]);
                                       Future.delayed(Duration(seconds: 2), () {
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            "/donatore",
-                                            (route) => route.isFirst);
+                                        Navigator.popUntil(
+                                            context, (route) => route.isFirst);
                                       });
                                     } else if (_prenotazione
                                             .getQuestionarioCompilato() ==
@@ -329,19 +257,16 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         ));
       }
     }
-    giorniPrenotazioni.sort((a, b) => a.getDay().compareTo(b.getDay()));
     return giorniPrenotazioni;
   }
 
   Future<List<DropdownMenuItem<String>>> _getOrari() async {
-    var prenotazioni = await _httpService.getCall(
-        context, "http://10.0.2.2:8080/prenotazioni");
+    var prenotazioni = await _httpService.getCall(context,
+        "http://10.0.2.2:8080/prenotazioni/sede/${_prenotazione.getIdSede()}/disponibili");
     List<DropdownMenuItem<String>> orari = [];
     for (var prenotazione in prenotazioni) {
-      if (prenotazione["disponibilita"] &&
-          _checkOrarioDoppio(orari, prenotazione["orario"]) &&
+      if (_checkOrarioDoppio(orari, prenotazione["orario"]) &&
           prenotazione["tipoDonazione"] == _prenotazione.getTipoDonazione() &&
-          prenotazione["idSede"] == _prenotazione.getIdSede() &&
           prenotazione["data"] == _prenotazione.getData()) {
         orari.add(DropdownMenuItem(
           child: Padding(
@@ -354,19 +279,62 @@ class _SchermataSceltaDataState extends State<SchermataSceltaData> {
         ));
       }
     }
-    orari.sort((a, b) {
-      List<String> oraEMinutiA = a.value.split(" : ");
-      List<String> oraEMinutiB = b.value.split(" : ");
-      int oraA = int.parse(oraEMinutiA[0]);
-      int minutiA = int.parse(oraEMinutiA[1]);
-      int oraB = int.parse(oraEMinutiB[0]);
-      int minutiB = int.parse(oraEMinutiB[1]);
-      if ((oraA == oraB && minutiA > minutiB) || oraA > oraB) {
-        return 1;
-      } else
-        return -1;
-    });
     return orari;
+  }
+
+  void _setPrenotazione(String idPrenotazione) async {
+    var questionario = json.encode({
+      "buonaSalute": _questionario.getBuonaSalute(),
+      "ricoveratoOspedale": _questionario.getRicoveroOspedale(),
+      "allergie": _questionario.getAllergie(),
+      "condizioniSaluteRecenti": _questionario.getCondizioniSaluteRecenti(),
+      "perditaPeso": _questionario.getPerditaPeso(),
+      "motiviRicovero": _questionario.getMotiviRicovero(),
+      "qualiAllergie": _questionario.getQualiAllergie(),
+    });
+    var responsePostQuestionario = await _httpService.postCall(
+        context, "http://10.0.2.2:8080/questionari", questionario);
+    var questionari =
+        await _httpService.getCall(context, "http://10.0.2.2:8080/questionari");
+    String idQuestionario = questionari.last["id"];
+    var prenotazione = json.encode({
+      "data": "${_prenotazione.getData()}",
+      "orario": _oraSelezionata,
+      "idDonatore": "${_donatore.getId()}",
+      "idSede": "${_prenotazione.getIdSede()}",
+      "tipoDonazione": "${_prenotazione.getTipoDonazione()}",
+      "disponibilita": false,
+      "idQuestionario": "$idQuestionario",
+    });
+    var donatore = json.encode({
+      "email": "${_donatore.getEmail()}",
+      "nome": "${_donatore.getNome()}",
+      "cognome": "${_donatore.getCognome()}",
+      "gruppoSanguigno": "${_donatore.getGruppoSanguigno()}",
+      "dataUltimaDonazione": "${_prenotazione.getData()}",
+      "tipoUltimaDonazione": "${_prenotazione.getTipoDonazione()}",
+    });
+    var responsePutPrenotazione = await _httpService.putCall(context,
+        "http://10.0.2.2:8080/prenotazioni/$idPrenotazione", prenotazione);
+    var responsePutDonatore = await _httpService.putCall(context,
+        "http://10.0.2.2:8080/donatori/${_donatore.getId()}", donatore);
+    if (responsePutPrenotazione.statusCode == 200 &&
+        responsePutDonatore.statusCode == 200 &&
+        responsePostQuestionario.statusCode == 200) {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.green,
+        messageText: Text("Prenotazione confermata!",
+            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
+      ).show(context);
+    } else {
+      Flushbar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        messageText: Text("Errore",
+            style: TextStyle(fontFamily: "Nunito", color: Colors.white)),
+      ).show(context);
+    }
   }
 
   @override

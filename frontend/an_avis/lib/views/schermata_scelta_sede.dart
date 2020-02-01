@@ -25,7 +25,6 @@ class _SchermataSceltaSedeState extends State<SchermataSceltaSede> {
             Navigator.pushNamed(context, "/sceltaMese");
           }));
     }
-    sediAvis.sort((a, b) => a.text.compareTo(b.text));
     return sediAvis;
   }
 

@@ -28,7 +28,7 @@ class _SchermataSceltaTipoDonazioneState
     String formattedDate = tempDate[2] + tempDate[1] + tempDate[0];
     Duration difference =
         DateTime.now().difference(DateTime.parse(formattedDate));
-    return difference.inDays < _giorniPerPoterPrenotare;
+    return difference.inDays > _giorniPerPoterPrenotare;
   }
 
   @override
@@ -63,7 +63,10 @@ class _SchermataSceltaTipoDonazioneState
                   text: "Sangue intero",
                   icon: Icons.invert_colors,
                   function: () async {
-                    if (!await _checkPossibilitaDonazione()) {
+                    if (await _checkPossibilitaDonazione()) {
+                      Prenotazione().setTipoDonazione("SANGUE");
+                      Navigator.of(context).pushNamed('/sceltaSede');
+                    } else {
                       Flushbar(
                         duration: Duration(seconds: 3),
                         backgroundColor: Colors.red,
@@ -80,9 +83,6 @@ class _SchermataSceltaTipoDonazioneState
                               fontFamily: "Nunito", color: Colors.white),
                         ),
                       ).show(context);
-                    } else {
-                      Prenotazione().setTipoDonazione("SANGUE");
-                      Navigator.of(context).pushNamed('/sceltaSede');
                     }
                   }),
               SizedBox(
@@ -92,7 +92,10 @@ class _SchermataSceltaTipoDonazioneState
                   text: "Plasma",
                   icon: Icons.invert_colors,
                   function: () async {
-                    if (!await _checkPossibilitaDonazione()) {
+                    if (await _checkPossibilitaDonazione()) {
+                      Prenotazione().setTipoDonazione("PLASMA");
+                      Navigator.of(context).pushNamed('/sceltaSede');
+                    } else {
                       Flushbar(
                         duration: Duration(seconds: 3),
                         backgroundColor: Colors.red,
@@ -109,9 +112,6 @@ class _SchermataSceltaTipoDonazioneState
                               fontFamily: "Nunito", color: Colors.white),
                         ),
                       ).show(context);
-                    } else {
-                      Prenotazione().setTipoDonazione("PLASMA");
-                      Navigator.of(context).pushNamed('/sceltaSede');
                     }
                   }),
             ],
