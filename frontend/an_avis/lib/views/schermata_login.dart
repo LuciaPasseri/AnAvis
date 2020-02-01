@@ -36,19 +36,23 @@ class _SchermataLoginState extends State<SchermataLogin> {
   }
 
   Future<bool> _isRuoloGiusto() async {
-    var donatori =
-        await _httpService.getCall(context, "http://10.0.2.2:8080/donatori");
-    var sedi = await _httpService.getCall(context, "http://10.0.2.2:8080/sedi");
-    for (var donatore in donatori) {
-      if (widget.isDonatore && donatore["email"] == _email) {
-        _donatore = donatore;
-        return true;
+    if (widget.isDonatore) {
+      var donatori =
+          await _httpService.getCall(context, "http://10.0.2.2:8080/donatori/");
+      for (var donatore in donatori) {
+        if (donatore["email"] == _email) {
+          _donatore = donatore;
+          return true;
+        }
       }
-    }
-    for (var sede in sedi) {
-      if (!(widget.isDonatore) && sede["email"] == _email) {
-        _sede = sede;
-        return true;
+    } else {
+      var sedi =
+          await _httpService.getCall(context, "http://10.0.2.2:8080/sedi");
+      for (var sede in sedi) {
+        if (sede["email"] == _email) {
+          _sede = sede;
+          return true;
+        }
       }
     }
     return false;

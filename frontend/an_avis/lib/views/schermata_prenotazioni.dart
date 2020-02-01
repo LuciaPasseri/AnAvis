@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:an_avis/models/donatore.dart';
 import 'package:an_avis/services/http_service.dart';
 import 'package:an_avis/widgets/remove_glow.dart';
 import 'package:flushbar/flushbar.dart';
@@ -168,14 +169,14 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                     "email": "${donatore["email"]}",
                                     "gruppoSanguigno":
                                         "${donatore["gruppoSanguigno"]}",
-                                    "dataUltimaDonazione": "15-11-2019",
+                                    "dataUltimaDonazione": "01-10-2019",
                                     "tipoUltimaDonazione":
                                         "${donatore["tipoUltimaDonazione"]}",
                                   });
                                   var responsePutDonatore =
                                       await _httpService.putCall(
                                           context,
-                                          "http://10.0.2.2:8080/donatori/${donatore["id"]}}",
+                                          "http://10.0.2.2:8080/donatori/${prenotazione["idDonatore"]}",
                                           donatoreToPut);
                                   var responseDeleteQuestionario =
                                       await _httpService.deleteCall(context,
@@ -190,8 +191,8 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                           200 &&
                                       responseDeletePrenotazione.statusCode ==
                                           200) {
+                                    Navigator.pop(context);
                                     Flushbar(
-                                      isDismissible: true,
                                       duration: Duration(seconds: 2),
                                       backgroundColor: Colors.green,
                                       messageText: Text(
@@ -206,14 +207,17 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                                       context,
                                       "http://10.0.2.2:8080/prenotazioni/${prenotazione["id"]}",
                                       "Prenotazione eliminata correttamente");
+                                  Navigator.of(context).pop();
                                 }
+                                setState(() {
+                                  _isEmpty = false;
+                                });
                                 _countPrenotazioni--;
                                 if (_countPrenotazioni == 0) {
                                   setState(() {
                                     _isEmpty = true;
                                   });
                                 }
-                                Navigator.of(context).pop();
                               },
                             )
                           ],
@@ -385,7 +389,14 @@ class _SchermataPrenotazioniState extends State<SchermataPrenotazioni> {
                               itemBuilder: (BuildContext context, int index) {
                                 return !_isFiltered
                                     ? snapshot.data[index]
-                                    : snapshot.data[index].data ==
+                                    : snapshot
+                                                .data[index]
+                                                .child
+                                                .child
+                                                .children[3]
+                                                .children[0]
+                                                .children[1]
+                                                .data ==
                                             DateFormat('dd-MM-yyyy')
                                                 .format(_data)
                                         ? snapshot.data[index]
